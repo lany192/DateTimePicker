@@ -34,4 +34,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="日历calendarview" />
+
+    <Button
+        android:id="@+id/ymdhpicker_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="年月日时" />
 </LinearLayout>

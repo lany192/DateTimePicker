@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".CalendarViewActivity" >
         </activity>
+        <activity android:name=".YmdhPickerActivity" >
+        </activity>
     </application>
 
 </manifest>

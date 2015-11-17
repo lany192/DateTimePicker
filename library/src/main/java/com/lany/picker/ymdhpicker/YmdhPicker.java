@@ -71,6 +71,11 @@ public class YmdhPicker extends FrameLayout {
                            int dayOfMonth, int hourOfDay);
     }
 
+    public void setOnDateChangedListener(
+            OnDateChangedListener onDateChangedListener) {
+        mOnDateChangedListener = onDateChangedListener;
+    }
+
     public YmdhPicker(Context context) {
         this(context, null);
     }

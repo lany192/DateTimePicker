@@ -1,0 +1,15 @@
+<resources>
+    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:textColorSecondary">@color/secondary_text</item>
+        <item name="calendarViewStyle">@style/Widget.Holo.CalendarView</item>
+        <item name="datePickerStyle">@style/Widget.Holo.DatePicker</item>
+        <item name="numberPickerStyle">@style/NPWidget.Holo.NumberPicker</item>
+    </style>
+
+    <style name="AppTheme" parent="AppBaseTheme"></style>
+</resources>

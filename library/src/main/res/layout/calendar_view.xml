@@ -3,9 +3,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true" >
+    android:fillViewport="true">
 
-    <TextView android:id="@+id/cv_month_name"
+    <TextView
+        android:id="@+id/cv_month_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -13,52 +14,61 @@
         android:paddingBottom="10dp"
         style="@android:style/TextAppearance.Medium" />
 
-    <LinearLayout android:id="@+id/cv_day_names"
+    <LinearLayout
+        android:id="@+id/cv_day_names"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
         android:layout_marginLeft="2dp"
         android:layout_marginRight="2dp"
-        android:gravity="center" >
+        android:gravity="center">
 
-        <TextView android:layout_width="0dp"
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:visibility="gone" />
 
-        <TextView android:layout_width="0dp"
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center" />
 
-        <TextView android:layout_width="0dp"
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center" />
 
-        <TextView android:layout_width="0dp"
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center" />
 
-        <TextView android:layout_width="0dp"
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center" />
 
-        <TextView android:layout_width="0dp"
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center" />
 
-        <TextView android:layout_width="0dp"
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center" />
 
-        <TextView android:layout_width="0dp"
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center" />
@@ -72,7 +82,8 @@
         android:scaleType="fitXY"
         android:gravity="fill_horizontal" />
 
-    <ListView android:id="@android:id/list"
+    <ListView
+        android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:drawSelectorOnTop="false"

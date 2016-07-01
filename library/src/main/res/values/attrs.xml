@@ -69,7 +69,7 @@
     <!-- Framework styleables are not public. -->
     <declare-styleable name="TextAppearanceCompatStyleable">
         <attr name="android:textSize" />
-        <attr name="android:textColor"/>
+        <attr name="android:textColor" />
     </declare-styleable>
 
     <!-- Don't touch this -->

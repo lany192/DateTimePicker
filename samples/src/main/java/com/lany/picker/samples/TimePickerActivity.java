@@ -28,7 +28,7 @@ public class TimePickerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 new TimePickerDialog(TimePickerActivity.this,
-                        new TimePickerDialog.OnTimeSetListener(){
+                        new TimePickerDialog.OnTimeSetListener() {
 
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
@@ -36,7 +36,7 @@ public class TimePickerActivity extends AppCompatActivity {
                                 minute = minuteOfHour;
                             }
                         },
-                        hour, minute,false).show();
+                        hour, minute, false).show();
             }
         });
         TimePicker timePicker = (TimePicker) findViewById(R.id.timePicker);
@@ -44,7 +44,6 @@ public class TimePickerActivity extends AppCompatActivity {
         timePicker.setSelectionDivider(new ColorDrawable(0xffff0000));
         timePicker.setSelectionDividerHeight(2);
     }
-
 
 
     @Override

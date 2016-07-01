@@ -16,9 +16,6 @@
 
 package com.lany.picker.timepicker;
 
-import com.lany.picker.R;
-import com.lany.picker.timepicker.TimePicker.OnTimeChangedListener;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,9 +25,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.lany.picker.R;
+import com.lany.picker.timepicker.TimePicker.OnTimeChangedListener;
+
 /**
  * A dialog that prompts the user for the time of day using a {@link TimePicker}.
- *
+ * <p/>
  * <p>See the <a href="{@docRoot}guide/topics/ui/controls/pickers.html">Pickers</a>
  * guide.</p>
  */
@@ -44,9 +44,9 @@ public class TimePickerDialog extends AlertDialog
     public interface OnTimeSetListener {
 
         /**
-         * @param view The view associated with this listener.
+         * @param view      The view associated with this listener.
          * @param hourOfDay The hour that was set.
-         * @param minute The minute that was set.
+         * @param minute    The minute that was set.
          */
         void onTimeSet(TimePicker view, int hourOfDay, int minute);
     }
@@ -63,30 +63,30 @@ public class TimePickerDialog extends AlertDialog
     boolean mIs24HourView;
 
     /**
-     * @param context Parent.
-     * @param callBack How parent is notified.
-     * @param hourOfDay The initial hour.
-     * @param minute The initial minute.
+     * @param context      Parent.
+     * @param callBack     How parent is notified.
+     * @param hourOfDay    The initial hour.
+     * @param minute       The initial minute.
      * @param is24HourView Whether this is a 24 hour view, or AM/PM.
      */
     public TimePickerDialog(Context context,
-            OnTimeSetListener callBack,
-            int hourOfDay, int minute, boolean is24HourView) {
+                            OnTimeSetListener callBack,
+                            int hourOfDay, int minute, boolean is24HourView) {
         this(context, Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB ? R.style.Theme_Dialog_Alert : 0, callBack, hourOfDay, minute, is24HourView);
     }
 
     /**
-     * @param context Parent.
-     * @param theme the theme to apply to this dialog
-     * @param callBack How parent is notified.
-     * @param hourOfDay The initial hour.
-     * @param minute The initial minute.
+     * @param context      Parent.
+     * @param theme        the theme to apply to this dialog
+     * @param callBack     How parent is notified.
+     * @param hourOfDay    The initial hour.
+     * @param minute       The initial minute.
      * @param is24HourView Whether this is a 24 hour view, or AM/PM.
      */
     public TimePickerDialog(Context context,
-            int theme,
-            OnTimeSetListener callBack,
-            int hourOfDay, int minute, boolean is24HourView) {
+                            int theme,
+                            OnTimeSetListener callBack,
+                            int hourOfDay, int minute, boolean is24HourView) {
         super(context, theme);
         mCallback = callBack;
         mInitialHourOfDay = hourOfDay;

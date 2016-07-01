@@ -30,6 +30,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
 /**
  * custom year/month/day/hour picker
  */
@@ -55,7 +56,7 @@ public class YmdhPicker extends FrameLayout {
 
     private String[] mShortMonths;
 
-    private final java.text.DateFormat mDateFormat = new SimpleDateFormat(	DATE_FORMAT,Locale.getDefault());
+    private final java.text.DateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
 
     private int mNumberOfMonths;
 
@@ -519,12 +520,9 @@ public class YmdhPicker extends FrameLayout {
     /**
      * Sets the IME options for a spinner based on its ordering.
      *
-     * @param spinner
-     *            The spinner.
-     * @param spinnerCount
-     *            The total spinner count.
-     * @param spinnerIndex
-     *            The index of the given spinner.
+     * @param spinner      The spinner.
+     * @param spinnerCount The total spinner count.
+     * @param spinnerIndex The index of the given spinner.
      */
     private void setImeOptions(NumberPicker spinner, int spinnerCount,
                                int spinnerIndex) {

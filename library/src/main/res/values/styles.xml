@@ -36,7 +36,8 @@
         <item name="cv_weekNumberColor">#33FFFFFF</item>
         <item name="cv_weekSeparatorLineColor">#19FFFFFF</item>
         <item name="cv_selectedDateVerticalBar">@drawable/day_picker_week_view_dayline_holo</item>
-        <item name="cv_weekDayTextAppearance">@style/TextAppearance.Small.CalendarViewWeekDayView</item>
+        <item name="cv_weekDayTextAppearance">@style/TextAppearance.Small.CalendarViewWeekDayView
+        </item>
         <item name="cv_dateTextAppearance">?android:attr/textAppearanceSmall</item>
     </style>
 
@@ -47,7 +48,8 @@
         <item name="cv_weekNumberColor">#33FFFFFF</item>
         <item name="cv_weekSeparatorLineColor">#19FFFFFF</item>
         <item name="cv_selectedDateVerticalBar">@drawable/day_picker_week_view_dayline_holo</item>
-        <item name="cv_weekDayTextAppearance">@style/TextAppearance.Holo.CalendarViewWeekDayView</item>
+        <item name="cv_weekDayTextAppearance">@style/TextAppearance.Holo.CalendarViewWeekDayView
+        </item>
         <item name="cv_dividerHorizontal">@drawable/list_divider_holo_dark</item>
     </style>
 
@@ -57,7 +59,9 @@
         <item name="cv_unfocusedMonthDateColor">#7F08002B</item>
         <item name="cv_weekNumberColor">#7F080021</item>
         <item name="cv_weekSeparatorLineColor">#7F08002A</item>
-        <item name="cv_weekDayTextAppearance">@style/TextAppearance.Holo.Light.CalendarViewWeekDayView</item>
+        <item name="cv_weekDayTextAppearance">
+            @style/TextAppearance.Holo.Light.CalendarViewWeekDayView
+        </item>
         <item name="cv_dividerHorizontal">@drawable/list_divider_holo_light</item>
     </style>
 
@@ -70,8 +74,8 @@
     </style>
 
     <style name="TextAppearance.Holo.Light.CalendarViewWeekDayView" parent="TextAppearance.Small.CalendarViewWeekDayView"></style>
-    
-        <style name="NPWidget">
+
+    <style name="NPWidget">
         <item name="android:textAppearance">?android:attr/textAppearance</item>
     </style>
 

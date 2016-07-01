@@ -16,13 +16,6 @@
 
 package com.lany.picker.calendarview;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.TimeZone;
-
-import com.lany.picker.R;
 import android.app.Service;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -55,6 +48,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.lany.picker.R;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * This class is a calendar widget for displaying and selecting dates. The range
@@ -320,9 +321,9 @@ public class CalendarView extends FrameLayout {
         /**
          * Called upon change of the selected day.
          *
-         * @param view The view associated with this listener.
-         * @param year The year that was set.
-         * @param month The month that was set [0-11].
+         * @param view       The view associated with this listener.
+         * @param year       The year that was set.
+         * @param month      The month that was set [0-11].
          * @param dayOfMonth The day of the month that was set.
          */
         public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth);
@@ -428,7 +429,6 @@ public class CalendarView extends FrameLayout {
      * Sets the number of weeks to be shown.
      *
      * @param count The shown week count.
-     *
      * @attr ref android.R.styleable#CalendarView_shownWeekCount
      */
     public void setShownWeekCount(int count) {
@@ -442,7 +442,6 @@ public class CalendarView extends FrameLayout {
      * Gets the number of weeks to be shown.
      *
      * @return The shown week count.
-     *
      * @attr ref android.R.styleable#CalendarView_shownWeekCount
      */
     public int getShownWeekCount() {
@@ -453,7 +452,6 @@ public class CalendarView extends FrameLayout {
      * Sets the background color for the selected week.
      *
      * @param color The week background color.
-     *
      * @attr ref android.R.styleable#CalendarView_selectedWeekBackgroundColor
      */
     public void setSelectedWeekBackgroundColor(int color) {
@@ -473,7 +471,6 @@ public class CalendarView extends FrameLayout {
      * Gets the background color for the selected week.
      *
      * @return The week background color.
-     *
      * @attr ref android.R.styleable#CalendarView_selectedWeekBackgroundColor
      */
     public int getSelectedWeekBackgroundColor() {
@@ -484,7 +481,6 @@ public class CalendarView extends FrameLayout {
      * Sets the color for the dates of the focused month.
      *
      * @param color The focused month date color.
-     *
      * @attr ref android.R.styleable#CalendarView_focusedMonthDateColor
      */
     public void setFocusedMonthDateColor(int color) {
@@ -504,7 +500,6 @@ public class CalendarView extends FrameLayout {
      * Gets the color for the dates in the focused month.
      *
      * @return The focused month date color.
-     *
      * @attr ref android.R.styleable#CalendarView_focusedMonthDateColor
      */
     public int getFocusedMonthDateColor() {
@@ -515,7 +510,6 @@ public class CalendarView extends FrameLayout {
      * Sets the color for the dates of a not focused month.
      *
      * @param color A not focused month date color.
-     *
      * @attr ref android.R.styleable#CalendarView_unfocusedMonthDateColor
      */
     public void setUnfocusedMonthDateColor(int color) {
@@ -535,7 +529,6 @@ public class CalendarView extends FrameLayout {
      * Gets the color for the dates in a not focused month.
      *
      * @return A not focused month date color.
-     *
      * @attr ref android.R.styleable#CalendarView_unfocusedMonthDateColor
      */
     public int getUnfocusedMonthDateColor() {
@@ -546,7 +539,6 @@ public class CalendarView extends FrameLayout {
      * Sets the color for the week numbers.
      *
      * @param color The week number color.
-     *
      * @attr ref android.R.styleable#CalendarView_weekNumberColor
      */
     public void setWeekNumberColor(int color) {
@@ -562,7 +554,6 @@ public class CalendarView extends FrameLayout {
      * Gets the color for the week numbers.
      *
      * @return The week number color.
-     *
      * @attr ref android.R.styleable#CalendarView_weekNumberColor
      */
     public int getWeekNumberColor() {
@@ -573,7 +564,6 @@ public class CalendarView extends FrameLayout {
      * Sets the color for the separator line between weeks.
      *
      * @param color The week separator color.
-     *
      * @attr ref android.R.styleable#CalendarView_weekSeparatorLineColor
      */
     public void setWeekSeparatorLineColor(int color) {
@@ -587,7 +577,6 @@ public class CalendarView extends FrameLayout {
      * Gets the color for the separator line between weeks.
      *
      * @return The week separator color.
-     *
      * @attr ref android.R.styleable#CalendarView_weekSeparatorLineColor
      */
     public int getWeekSeparatorLineColor() {
@@ -599,7 +588,6 @@ public class CalendarView extends FrameLayout {
      * the end of the selected date.
      *
      * @param resourceId The vertical bar drawable resource id.
-     *
      * @attr ref android.R.styleable#CalendarView_selectedDateVerticalBar
      */
     public void setSelectedDateVerticalBar(int resourceId) {
@@ -612,7 +600,6 @@ public class CalendarView extends FrameLayout {
      * the end of the selected date.
      *
      * @param drawable The vertical bar drawable.
-     *
      * @attr ref android.R.styleable#CalendarView_selectedDateVerticalBar
      */
     public void setSelectedDateVerticalBar(Drawable drawable) {
@@ -642,7 +629,6 @@ public class CalendarView extends FrameLayout {
      * Sets the text appearance for the week day abbreviation of the calendar header.
      *
      * @param resourceId The text appearance resource id.
-     *
      * @attr ref android.R.styleable#CalendarView_weekDayTextAppearance
      */
     public void setWeekDayTextAppearance(int resourceId) {
@@ -656,7 +642,6 @@ public class CalendarView extends FrameLayout {
      * Gets the text appearance for the week day abbreviation of the calendar header.
      *
      * @return The text appearance resource id.
-     *
      * @attr ref android.R.styleable#CalendarView_weekDayTextAppearance
      */
     public int getWeekDayTextAppearance() {
@@ -667,7 +652,6 @@ public class CalendarView extends FrameLayout {
      * Sets the text appearance for the calendar dates.
      *
      * @param resourceId The text appearance resource id.
-     *
      * @attr ref android.R.styleable#CalendarView_dateTextAppearance
      */
     public void setDateTextAppearance(int resourceId) {
@@ -682,7 +666,6 @@ public class CalendarView extends FrameLayout {
      * Gets the text appearance for the calendar dates.
      *
      * @return The text appearance resource id.
-     *
      * @attr ref android.R.styleable#CalendarView_dateTextAppearance
      */
     public int getDateTextAppearance() {
@@ -721,12 +704,11 @@ public class CalendarView extends FrameLayout {
      * Gets the minimal date supported by this {@link CalendarView} in milliseconds
      * since January 1, 1970 00:00:00 in {@link TimeZone#getDefault()} time
      * zone.
-     * <p>
+     * <p/>
      * Note: The default minimal date is 01/01/1900.
-     * <p>
+     * <p/>
      *
      * @return The minimal supported date.
-     *
      * @attr ref android.R.styleable#CalendarView_minDate
      */
     public long getMinDate() {
@@ -739,7 +721,6 @@ public class CalendarView extends FrameLayout {
      * zone.
      *
      * @param minDate The minimal supported date.
-     *
      * @attr ref android.R.styleable#CalendarView_minDate
      */
     public void setMinDate(long minDate) {
@@ -773,12 +754,11 @@ public class CalendarView extends FrameLayout {
      * Gets the maximal date supported by this {@link CalendarView} in milliseconds
      * since January 1, 1970 00:00:00 in {@link TimeZone#getDefault()} time
      * zone.
-     * <p>
+     * <p/>
      * Note: The default maximal date is 01/01/2100.
-     * <p>
+     * <p/>
      *
      * @return The maximal supported date.
-     *
      * @attr ref android.R.styleable#CalendarView_maxDate
      */
     public long getMaxDate() {
@@ -791,7 +771,6 @@ public class CalendarView extends FrameLayout {
      * zone.
      *
      * @param maxDate The maximal supported date.
-     *
      * @attr ref android.R.styleable#CalendarView_maxDate
      */
     public void setMaxDate(long maxDate) {
@@ -818,7 +797,6 @@ public class CalendarView extends FrameLayout {
      * Sets whether to show the week number.
      *
      * @param showWeekNumber True to show the week number.
-     *
      * @attr ref android.R.styleable#CalendarView_showWeekNumber
      */
     public void setShowWeekNumber(boolean showWeekNumber) {
@@ -834,7 +812,6 @@ public class CalendarView extends FrameLayout {
      * Gets whether to show the week number.
      *
      * @return True if showing the week number.
-     *
      * @attr ref android.R.styleable#CalendarView_showWeekNumber
      */
     public boolean getShowWeekNumber() {
@@ -845,7 +822,8 @@ public class CalendarView extends FrameLayout {
      * Gets the first day of week.
      *
      * @return The first day of the week conforming to the {@link CalendarView}
-     *         APIs.
+     * APIs.
+     * @attr ref android.R.styleable#CalendarView_firstDayOfWeek
      * @see Calendar#MONDAY
      * @see Calendar#TUESDAY
      * @see Calendar#WEDNESDAY
@@ -853,8 +831,6 @@ public class CalendarView extends FrameLayout {
      * @see Calendar#FRIDAY
      * @see Calendar#SATURDAY
      * @see Calendar#SUNDAY
-     *
-     * @attr ref android.R.styleable#CalendarView_firstDayOfWeek
      */
     public int getFirstDayOfWeek() {
         return mFirstDayOfWeek;
@@ -864,7 +840,8 @@ public class CalendarView extends FrameLayout {
      * Sets the first day of week.
      *
      * @param firstDayOfWeek The first day of the week conforming to the
-     *            {@link CalendarView} APIs.
+     *                       {@link CalendarView} APIs.
+     * @attr ref android.R.styleable#CalendarView_firstDayOfWeek
      * @see Calendar#MONDAY
      * @see Calendar#TUESDAY
      * @see Calendar#WEDNESDAY
@@ -872,8 +849,6 @@ public class CalendarView extends FrameLayout {
      * @see Calendar#FRIDAY
      * @see Calendar#SATURDAY
      * @see Calendar#SUNDAY
-     *
-     * @attr ref android.R.styleable#CalendarView_firstDayOfWeek
      */
     public void setFirstDayOfWeek(int firstDayOfWeek) {
         if (mFirstDayOfWeek == firstDayOfWeek) {
@@ -909,10 +884,8 @@ public class CalendarView extends FrameLayout {
      * {@link TimeZone#getDefault()} time zone.
      *
      * @param date The selected date.
-     *
      * @throws IllegalArgumentException of the provided date is before the
-     *        minimal or after the maximal date.
-     *
+     *                                  minimal or after the maximal date.
      * @see #setDate(long, boolean, boolean)
      * @see #setMinDate(long)
      * @see #setMaxDate(long)
@@ -925,13 +898,11 @@ public class CalendarView extends FrameLayout {
      * Sets the selected date in milliseconds since January 1, 1970 00:00:00 in
      * {@link TimeZone#getDefault()} time zone.
      *
-     * @param date The date.
+     * @param date    The date.
      * @param animate Whether to animate the scroll to the current date.
-     * @param center Whether to center the current date even if it is already visible.
-     *
+     * @param center  Whether to center the current date even if it is already visible.
      * @throws IllegalArgumentException of the provided date is before the
-     *        minimal or after the maximal date.
-     *
+     *                                  minimal or after the maximal date.
      * @see #setMinDate(long)
      * @see #setMaxDate(long)
      */
@@ -984,7 +955,7 @@ public class CalendarView extends FrameLayout {
      * Gets a calendar for locale bootstrapped with the value of a given calendar.
      *
      * @param oldCalendar The old calendar.
-     * @param locale The locale.
+     * @param locale      The locale.
      */
     private Calendar getCalendarForLocale(Calendar oldCalendar, Locale locale) {
         if (oldCalendar == null) {
@@ -1097,15 +1068,14 @@ public class CalendarView extends FrameLayout {
      * the list will not be scrolled unless forceScroll is true. This time may
      * optionally be highlighted as selected as well.
      *
-     * @param date The time to move to.
-     * @param animate Whether to scroll to the given time or just redraw at the
-     *            new location.
+     * @param date        The time to move to.
+     * @param animate     Whether to scroll to the given time or just redraw at the
+     *                    new location.
      * @param setSelected Whether to set the given time as selected.
      * @param forceScroll Whether to recenter even if the time is already
-     *            visible.
-     *
+     *                    visible.
      * @throws IllegalArgumentException of the provided date is before the
-     *        range start of after the range end.
+     *                                  range start of after the range end.
      */
     private void goTo(Calendar date, boolean animate, boolean setSelected, boolean forceScroll) {
         if (date.before(mMinDate) || date.after(mMaxDate)) {
@@ -1188,7 +1158,7 @@ public class CalendarView extends FrameLayout {
      * month.
      */
     private void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-            int totalItemCount) {
+                          int totalItemCount) {
         WeekView child = (WeekView) view.getChildAt(0);
         if (child == null) {
             return;
@@ -1272,7 +1242,7 @@ public class CalendarView extends FrameLayout {
 
     /**
      * @return Returns the number of weeks between the current <code>date</code>
-     *         and the <code>mMinDate</code>.
+     * and the <code>mMinDate</code>.
      */
     private int getWeeksSinceMinDate(Calendar date) {
         if (date.before(mMinDate)) {
@@ -1300,7 +1270,7 @@ public class CalendarView extends FrameLayout {
          * Sets up the runnable with a short delay in case the scroll state
          * immediately changes again.
          *
-         * @param view The list view that changed state
+         * @param view        The list view that changed state
          * @param scrollState The new state it changed to
          */
         public void doScrollStateChange(AbsListView view, int scrollState) {
@@ -1556,13 +1526,13 @@ public class CalendarView extends FrameLayout {
         /**
          * Initializes this week view.
          *
-         * @param weekNumber The number of the week this view represents. The
-         *            week number is a zero based index of the weeks since
-         *            {@link CalendarView#getMinDate()}.
+         * @param weekNumber      The number of the week this view represents. The
+         *                        week number is a zero based index of the weeks since
+         *                        {@link CalendarView#getMinDate()}.
          * @param selectedWeekDay The selected day of the week from 0 to 6, -1 if no
-         *            selected day.
-         * @param focusedMonth The month that is currently in focus i.e.
-         *            highlighted.
+         *                        selected day.
+         * @param focusedMonth    The month that is currently in focus i.e.
+         *                        highlighted.
          */
         public void init(int weekNumber, int selectedWeekDay, int focusedMonth) {
             mSelectedDay = selectedWeekDay;

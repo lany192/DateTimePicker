@@ -11,12 +11,12 @@ public class CVArrays {
      * with the value {@code null}.
      *
      * @param original the original array
-     * @param start the start index, inclusive
-     * @param end the end index, exclusive
+     * @param start    the start index, inclusive
+     * @param end      the end index, exclusive
      * @return the new array
      * @throws ArrayIndexOutOfBoundsException if {@code start < 0 || start > original.length}
-     * @throws IllegalArgumentException if {@code start > end}
-     * @throws NullPointerException if {@code original == null}
+     * @throws IllegalArgumentException       if {@code start > end}
+     * @throws NullPointerException           if {@code original == null}
      * @since 1.6
      */
     @SuppressWarnings("unchecked")

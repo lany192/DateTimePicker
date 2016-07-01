@@ -76,6 +76,7 @@ public class LanyPickerActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void updateDisplay() {
         showText.setText(new StringBuilder()
                 .append(hour).append(":")

@@ -26,7 +26,7 @@ public class DatePickerActivity extends AppCompatActivity {
 
         DatePicker datePicker = (DatePicker) findViewById(R.id.aa_datePicker);
         datePicker.setSelectionDivider(new ColorDrawable(0xffff0000));
-        datePicker.setSelectionDividerHeight(4);
+        datePicker.setSelectionDividerHeight(2);
         datePicker.setCalendarViewShown(false);
         //datePicker.setDayViewShown(false);
 

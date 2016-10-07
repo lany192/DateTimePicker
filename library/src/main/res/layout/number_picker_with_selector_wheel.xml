@@ -2,15 +2,15 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <view
+        android:id="@+id/np__numberpicker_input"
         class="com.lany.picker.numberpicker.NumberPicker$CustomEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:gravity="center"
+        android:maxLines="1"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?android:attr/textColorPrimary"
-        android:textSize="14sp"
-        android:id="@+id/np__numberpicker_input"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:singleLine="true"
-        android:background="@null" />
+        android:textSize="14sp" />
 
 </merge>

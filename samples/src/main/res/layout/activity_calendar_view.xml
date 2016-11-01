@@ -8,7 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
     <com.lany.picker.calendarview.CalendarView
+        android:id="@+id/calendarView"
         android:layout_width="match_parent"
-        android:background="@android:color/black"
         android:layout_height="match_parent" />
 </LinearLayout>

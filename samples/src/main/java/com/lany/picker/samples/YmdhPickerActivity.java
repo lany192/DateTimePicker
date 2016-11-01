@@ -30,7 +30,7 @@ public class YmdhPickerActivity extends AppCompatActivity {
             @Override
             public void onDateChanged(YmdhPicker view, int year, int monthOfYear, int dayOfMonth, int hourOfDay) {
                 mYear = year;
-                mMonth = monthOfYear;
+                mMonth = monthOfYear + 1;
                 mDay = dayOfMonth;
                 mHour = hourOfDay;
                 updateDisplay();

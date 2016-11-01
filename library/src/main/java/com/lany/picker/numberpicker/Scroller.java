@@ -368,7 +368,7 @@ public class Scroller {
 
             float dx = (float) (mFinalX - mStartX);
             float dy = (float) (mFinalY - mStartY);
-            float hyp = FloatMath.sqrt(dx * dx + dy * dy);
+            float hyp = (float) Math.sqrt(dx * dx + dy * dy);
 
             float ndx = dx / hyp;
             float ndy = dy / hyp;
@@ -385,7 +385,7 @@ public class Scroller {
         mMode = FLING_MODE;
         mFinished = false;
 
-        float velocity = FloatMath.sqrt(velocityX * velocityX + velocityY * velocityY);
+        float velocity = (float) Math.sqrt(velocityX * velocityX + velocityY * velocityY);
 
         mVelocity = velocity;
         final double l = Math.log(START_TENSION * velocity / ALPHA);

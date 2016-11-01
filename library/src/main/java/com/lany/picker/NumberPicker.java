@@ -1,4 +1,4 @@
-package com.lany.picker.numberpicker;
+package com.lany.picker;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -38,8 +38,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.lany.picker.R;
 
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;

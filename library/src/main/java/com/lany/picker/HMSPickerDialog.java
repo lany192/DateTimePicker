@@ -1,4 +1,4 @@
-package com.lany.picker.lanypicker;
+package com.lany.picker;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -9,40 +9,39 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.lany.picker.R;
-import com.lany.picker.lanypicker.LanyPicker.OnTimeChangedListener;
+import com.lany.picker.HMSPicker.OnTimeChangedListener;
 
 /**
  * hour/minute/second
  */
-public class LanyPickerDialog extends AlertDialog implements OnClickListener,
+public class HMSPickerDialog extends AlertDialog implements OnClickListener,
         OnTimeChangedListener {
 
     public interface OnTimeSetListener {
-        void onTimeSet(LanyPicker view, int hourOfDay, int minute, int second);
+        void onTimeSet(HMSPicker view, int hourOfDay, int minute, int second);
     }
 
     private static final String HOUR = "hour";
     private static final String MINUTE = "minute";
     private static final String SECOND = "second";
 
-    private final LanyPicker mLanyPicker;
+    private final HMSPicker mHMSPicker;
     private final OnTimeSetListener mCallback;
 
     private int mInitialHourOfDay;
     private int mInitialMinute;
     private int mInitialSecond;
 
-    public LanyPickerDialog(Context context, OnTimeSetListener callBack,
-                            int hourOfDay, int minute, int second) {
+    public HMSPickerDialog(Context context, OnTimeSetListener callBack,
+                           int hourOfDay, int minute, int second) {
         this(
                 context,
                 Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB ? R.style.Theme_Dialog_Alert
                         : 0, callBack, hourOfDay, minute, second);
     }
 
-    public LanyPickerDialog(Context context, int theme,
-                            OnTimeSetListener callBack, int hourOfDay, int minute, int second) {
+    public HMSPickerDialog(Context context, int theme,
+                           OnTimeSetListener callBack, int hourOfDay, int minute, int second) {
         super(context, theme);
         mCallback = callBack;
         mInitialHourOfDay = hourOfDay;
@@ -60,12 +59,12 @@ public class LanyPickerDialog extends AlertDialog implements OnClickListener,
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.lany_picker_dialog, null);
         setView(view);
-        mLanyPicker = (LanyPicker) view.findViewById(R.id.lanyPicker);
+        mHMSPicker = (HMSPicker) view.findViewById(R.id.hMSPicker);
 
-        mLanyPicker.setCurrentHour(mInitialHourOfDay);
-        mLanyPicker.setCurrentMinute(mInitialMinute);
-        mLanyPicker.setCurrentSecond(mInitialSecond);
-        mLanyPicker.setOnTimeChangedListener(this);
+        mHMSPicker.setCurrentHour(mInitialHourOfDay);
+        mHMSPicker.setCurrentMinute(mInitialMinute);
+        mHMSPicker.setCurrentSecond(mInitialSecond);
+        mHMSPicker.setOnTimeChangedListener(this);
     }
 
     public void onClick(DialogInterface dialog, int which) {
@@ -73,17 +72,17 @@ public class LanyPickerDialog extends AlertDialog implements OnClickListener,
     }
 
     public void updateTime(int hourOfDay, int minutOfHour, int secondOfMinute) {
-        mLanyPicker.setCurrentHour(hourOfDay);
-        mLanyPicker.setCurrentMinute(minutOfHour);
-        mLanyPicker.setCurrentSecond(secondOfMinute);
+        mHMSPicker.setCurrentHour(hourOfDay);
+        mHMSPicker.setCurrentMinute(minutOfHour);
+        mHMSPicker.setCurrentSecond(secondOfMinute);
     }
 
     private void tryNotifyTimeSet() {
         if (mCallback != null) {
-            mLanyPicker.clearFocus();
-            mCallback.onTimeSet(mLanyPicker, mLanyPicker.getCurrentHour(),
-                    mLanyPicker.getCurrentMinute(),
-                    mLanyPicker.getCurrentSecond());
+            mHMSPicker.clearFocus();
+            mCallback.onTimeSet(mHMSPicker, mHMSPicker.getCurrentHour(),
+                    mHMSPicker.getCurrentMinute(),
+                    mHMSPicker.getCurrentSecond());
         }
     }
 
@@ -96,9 +95,9 @@ public class LanyPickerDialog extends AlertDialog implements OnClickListener,
     @Override
     public Bundle onSaveInstanceState() {
         Bundle state = super.onSaveInstanceState();
-        state.putInt(HOUR, mLanyPicker.getCurrentHour());
-        state.putInt(MINUTE, mLanyPicker.getCurrentMinute());
-        state.putInt(SECOND, mLanyPicker.getCurrentSecond());
+        state.putInt(HOUR, mHMSPicker.getCurrentHour());
+        state.putInt(MINUTE, mHMSPicker.getCurrentMinute());
+        state.putInt(SECOND, mHMSPicker.getCurrentSecond());
         return state;
     }
 
@@ -108,14 +107,13 @@ public class LanyPickerDialog extends AlertDialog implements OnClickListener,
         int hour = savedInstanceState.getInt(HOUR);
         int minute = savedInstanceState.getInt(MINUTE);
         int second = savedInstanceState.getInt(SECOND);
-        mLanyPicker.setCurrentHour(hour);
-        mLanyPicker.setCurrentMinute(minute);
-        mLanyPicker.setCurrentSecond(second);
+        mHMSPicker.setCurrentHour(hour);
+        mHMSPicker.setCurrentMinute(minute);
+        mHMSPicker.setCurrentSecond(second);
     }
 
     @Override
-    public void onTimeChanged(LanyPicker view, int hourOfDay, int minute,
-                              int second) {
+    public void onTimeChanged(HMSPicker view, int hourOfDay, int minute, int second) {
 
     }
 }

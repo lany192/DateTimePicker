@@ -1,4 +1,4 @@
-package com.lany.picker.ymdhpicker;
+package com.lany.picker;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -22,10 +22,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.lany.picker.R;
-import com.lany.picker.datepicker.CVArrays;
-import com.lany.picker.numberpicker.NumberPicker;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,8 +30,8 @@ import java.util.Locale;
 /**
  * custom year/month/day/hour picker
  */
-public class YmdhPicker extends FrameLayout {
-    private static final String LOG_TAG = YmdhPicker.class.getSimpleName();
+public class YMDHPicker extends FrameLayout {
+    private final String TAG = getClass().getSimpleName();
     private static final String DATE_FORMAT = "MM/dd/yyyy";
     private static final int DEFAULT_START_YEAR = 1900;
     private static final int DEFAULT_END_YEAR = 2100;
@@ -68,24 +64,22 @@ public class YmdhPicker extends FrameLayout {
     private boolean mIsEnabled = true;
 
     public interface OnDateChangedListener {
-        void onDateChanged(YmdhPicker view, int year, int monthOfYear,
-                           int dayOfMonth, int hourOfDay);
+        void onDateChanged(YMDHPicker view, int year, int monthOfYear, int dayOfMonth, int hourOfDay);
     }
 
-    public void setOnDateChangedListener(
-            OnDateChangedListener onDateChangedListener) {
+    public void setOnDateChangedListener(OnDateChangedListener onDateChangedListener) {
         mOnDateChangedListener = onDateChangedListener;
     }
 
-    public YmdhPicker(Context context) {
+    public YMDHPicker(Context context) {
         this(context, null);
     }
 
-    public YmdhPicker(Context context, AttributeSet attrs) {
+    public YMDHPicker(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.datePickerStyle);
     }
 
-    public YmdhPicker(Context context, AttributeSet attrs, int defStyle) {
+    public YMDHPicker(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setCurrentLocale(Locale.getDefault());
         TypedArray attributesArray = context.obtainStyledAttributes(attrs,
@@ -294,13 +288,13 @@ public class YmdhPicker extends FrameLayout {
     @Override
     public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
         super.onInitializeAccessibilityEvent(event);
-        event.setClassName(YmdhPicker.class.getName());
+        event.setClassName(YMDHPicker.class.getName());
     }
 
     @Override
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
-        info.setClassName(YmdhPicker.class.getName());
+        info.setClassName(YMDHPicker.class.getName());
     }
 
     @Override
@@ -403,7 +397,7 @@ public class YmdhPicker extends FrameLayout {
             outDate.setTime(mDateFormat.parse(date));
             return true;
         } catch (ParseException e) {
-            Log.w(LOG_TAG, "Date: " + date + " not in format: " + DATE_FORMAT);
+            Log.w(TAG, "Date: " + date + " not in format: " + DATE_FORMAT);
             return false;
         }
     }
@@ -571,7 +565,7 @@ public class YmdhPicker extends FrameLayout {
         private final int mHour;
 
         /**
-         * Constructor called from {@link YmdhPicker#onSaveInstanceState()}
+         * Constructor called from {@link YMDHPicker#onSaveInstanceState()}
          */
         private SavedState(Parcelable superState, int year, int month, int day,
                            int hour) {

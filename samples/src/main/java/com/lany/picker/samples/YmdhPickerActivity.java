@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.lany.picker.ymdhpicker.YmdhPicker;
+import com.lany.picker.YMDHPicker;
 
 public class YmdhPickerActivity extends AppCompatActivity {
     private TextView showText;
@@ -23,12 +23,12 @@ public class YmdhPickerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         showText = (TextView) findViewById(R.id.lany_picker_show_text);
 
-        YmdhPicker ymdhPicker = (YmdhPicker) findViewById(R.id.ymdhPicker);
+        YMDHPicker ymdhPicker = (YMDHPicker) findViewById(R.id.ymdhPicker);
         ymdhPicker.setSelectionDivider(new ColorDrawable(0xff000000));
         ymdhPicker.setSelectionDividerHeight(2);
-        ymdhPicker.setOnDateChangedListener(new YmdhPicker.OnDateChangedListener() {
+        ymdhPicker.setOnDateChangedListener(new YMDHPicker.OnDateChangedListener() {
             @Override
-            public void onDateChanged(YmdhPicker view, int year, int monthOfYear, int dayOfMonth, int hourOfDay) {
+            public void onDateChanged(YMDHPicker view, int year, int monthOfYear, int dayOfMonth, int hourOfDay) {
                 mYear = year;
                 mMonth = monthOfYear + 1;
                 mDay = dayOfMonth;

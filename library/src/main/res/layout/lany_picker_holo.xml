@@ -7,7 +7,7 @@
 
     <!-- hour -->
 
-    <com.lany.picker.numberpicker.NumberPicker
+    <com.lany.picker.NumberPicker
         android:id="@+id/hour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
 
     <!-- minute -->
 
-    <com.lany.picker.numberpicker.NumberPicker
+    <com.lany.picker.NumberPicker
         android:id="@+id/minute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         android:importantForAccessibility="no" />
     <!-- second -->
 
-    <com.lany.picker.numberpicker.NumberPicker
+    <com.lany.picker.NumberPicker
         android:id="@+id/second"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

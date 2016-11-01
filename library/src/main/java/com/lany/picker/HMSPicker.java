@@ -1,4 +1,4 @@
-package com.lany.picker.lanypicker;
+package com.lany.picker;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -18,21 +18,12 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.lany.picker.R;
-import com.lany.picker.numberpicker.NumberPicker;
-
 import java.util.Calendar;
 import java.util.Locale;
 
-public class LanyPicker extends FrameLayout {
+public class HMSPicker extends FrameLayout {
 
     private static final boolean DEFAULT_ENABLED_STATE = true;
-
-    private static final OnTimeChangedListener NO_OP_CHANGE_LISTENER = new OnTimeChangedListener() {
-        public void onTimeChanged(LanyPicker view, int hourOfDay, int minute,
-                                  int second) {
-        }
-    };
 
     private final NumberPicker mHourSpinner;
 
@@ -58,19 +49,19 @@ public class LanyPicker extends FrameLayout {
     private Locale mCurrentLocale;
 
     public interface OnTimeChangedListener {
-        void onTimeChanged(LanyPicker view, int hourOfDay, int minute,
+        void onTimeChanged(HMSPicker view, int hourOfDay, int minute,
                            int second);
     }
 
-    public LanyPicker(Context context) {
+    public HMSPicker(Context context) {
         this(context, null);
     }
 
-    public LanyPicker(Context context, AttributeSet attrs) {
+    public HMSPicker(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.timePickerStyle);
     }
 
-    public LanyPicker(Context context, AttributeSet attrs, int defStyle) {
+    public HMSPicker(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setCurrentLocale(Locale.getDefault());
         LayoutInflater inflater = (LayoutInflater) context
@@ -150,7 +141,13 @@ public class LanyPicker extends FrameLayout {
         updateHourControl();
         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
 
-        setOnTimeChangedListener(NO_OP_CHANGE_LISTENER);
+        setOnTimeChangedListener(new OnTimeChangedListener(){
+
+            @Override
+            public void onTimeChanged(HMSPicker view, int hourOfDay, int minute, int second) {
+
+            }
+        });
 
         // set to current time
         setCurrentHour(mTempCalendar.get(Calendar.HOUR_OF_DAY));
@@ -280,8 +277,7 @@ public class LanyPicker extends FrameLayout {
         setCurrentSecond(ss.getSecond());
     }
 
-    public void setOnTimeChangedListener(
-            OnTimeChangedListener onTimeChangedListener) {
+    public void setOnTimeChangedListener(OnTimeChangedListener onTimeChangedListener) {
         mOnTimeChangedListener = onTimeChangedListener;
     }
 
@@ -367,13 +363,13 @@ public class LanyPicker extends FrameLayout {
     @Override
     public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
         super.onInitializeAccessibilityEvent(event);
-        event.setClassName(LanyPicker.class.getName());
+        event.setClassName(HMSPicker.class.getName());
     }
 
     @Override
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
-        info.setClassName(LanyPicker.class.getName());
+        info.setClassName(HMSPicker.class.getName());
     }
 
     private void updateHourControl() {

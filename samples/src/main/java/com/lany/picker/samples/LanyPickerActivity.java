@@ -7,8 +7,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.lany.picker.lanypicker.LanyPicker;
-import com.lany.picker.lanypicker.LanyPickerDialog;
+import com.lany.picker.HMSPicker;
+import com.lany.picker.HMSPickerDialog;
 
 import java.util.Calendar;
 
@@ -26,10 +26,10 @@ public class LanyPickerActivity extends AppCompatActivity {
         findViewById(R.id.show_dialog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new LanyPickerDialog(LanyPickerActivity.this,
-                        new LanyPickerDialog.OnTimeSetListener() {
+                new HMSPickerDialog(LanyPickerActivity.this,
+                        new HMSPickerDialog.OnTimeSetListener() {
                             @Override
-                            public void onTimeSet(LanyPicker view, int hourOfDay, int minuteOfHour, int scd) {
+                            public void onTimeSet(HMSPicker view, int hourOfDay, int minuteOfHour, int scd) {
                                 hour = hourOfDay;
                                 minute = minuteOfHour;
                                 second = scd;
@@ -40,13 +40,13 @@ public class LanyPickerActivity extends AppCompatActivity {
             }
         });
 
-        LanyPicker lanyPicker = (LanyPicker) findViewById(R.id.lanyPicker);
+        HMSPicker lanyPicker = (HMSPicker) findViewById(R.id.lanyPicker);
         lanyPicker.setSelectionDivider(new ColorDrawable(0xff000000));
         lanyPicker.setSelectionDividerHeight(2);
-        lanyPicker.setOnTimeChangedListener(new LanyPicker.OnTimeChangedListener() {
+        lanyPicker.setOnTimeChangedListener(new HMSPicker.OnTimeChangedListener() {
 
             @Override
-            public void onTimeChanged(LanyPicker view, int hourOfDay, int minuteOfHour,
+            public void onTimeChanged(HMSPicker view, int hourOfDay, int minuteOfHour,
                                       int scd) {
                 hour = hourOfDay;
                 minute = minuteOfHour;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lany.picker.numberpicker;
+package com.lany.picker;
 
 import android.content.Context;
 import android.hardware.SensorManager;

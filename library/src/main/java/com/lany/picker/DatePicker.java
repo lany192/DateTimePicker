@@ -1,4 +1,4 @@
-package com.lany.picker.datepicker;
+package com.lany.picker;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -24,10 +24,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.lany.picker.R;
-import com.lany.picker.calendarview.CalendarView;
-import com.lany.picker.numberpicker.NumberPicker;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,8 +31,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class DatePicker extends FrameLayout {
-
-    private static final String LOG_TAG = DatePicker.class.getSimpleName();
+    private final String TAG = getClass().getSimpleName();
 
     private static final String DATE_FORMAT = "MM/dd/yyyy";
 
@@ -100,7 +95,7 @@ public class DatePicker extends FrameLayout {
          * @param view        The view associated with this listener.
          * @param year        The year that was set.
          * @param monthOfYear The month that was set (0-11) for compatibility with
-         *                    {@link java.util.Calendar}.
+         *                    {@link Calendar}.
          * @param dayOfMonth  The day of the month that was set.
          */
         void onDateChanged(DatePicker view, int year, int monthOfYear,
@@ -625,7 +620,7 @@ public class DatePicker extends FrameLayout {
             outDate.setTime(mDateFormat.parse(date));
             return true;
         } catch (ParseException e) {
-            Log.w(LOG_TAG, "Date: " + date + " not in format: " + DATE_FORMAT);
+            Log.w(TAG, "Date: " + date + " not in format: " + DATE_FORMAT);
             return false;
         }
     }
@@ -847,14 +842,14 @@ public class DatePicker extends FrameLayout {
 
         @SuppressWarnings("all")
         // suppress unused and hiding
-        public static final Parcelable.Creator<SavedState> CREATOR = new Creator<SavedState>() {
+        public static final Creator<SavedState> CREATOR = new Creator<DatePicker.SavedState>() {
 
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
+            public DatePicker.SavedState createFromParcel(Parcel in) {
+                return new DatePicker.SavedState(in);
             }
 
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
+            public DatePicker.SavedState[] newArray(int size) {
+                return new DatePicker.SavedState[size];
             }
         };
     }

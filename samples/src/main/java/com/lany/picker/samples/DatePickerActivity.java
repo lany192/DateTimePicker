@@ -7,8 +7,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.lany.picker.datepicker.DatePicker;
-import com.lany.picker.datepicker.DatePickerDialog;
+import com.lany.picker.DatePicker;
+import com.lany.picker.DatePickerDialog;
 
 import java.util.Calendar;
 

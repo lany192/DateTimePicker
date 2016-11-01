@@ -6,8 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.lany.picker.timepicker.TimePicker;
-import com.lany.picker.timepicker.TimePickerDialog;
+import com.lany.picker.HMPicker;
+import com.lany.picker.HMPickerDialog;
 
 import java.util.Calendar;
 
@@ -27,11 +27,11 @@ public class TimePickerActivity extends AppCompatActivity {
         findViewById(R.id.show_dialog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new TimePickerDialog(TimePickerActivity.this,
-                        new TimePickerDialog.OnTimeSetListener() {
+                new HMPickerDialog(TimePickerActivity.this,
+                        new HMPickerDialog.OnTimeSetListener() {
 
                             @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
+                            public void onTimeSet(HMPicker view, int hourOfDay, int minuteOfHour) {
                                 hour = hourOfDay;
                                 minute = minuteOfHour;
                             }
@@ -39,7 +39,7 @@ public class TimePickerActivity extends AppCompatActivity {
                         hour, minute, false).show();
             }
         });
-        TimePicker timePicker = (TimePicker) findViewById(R.id.timePicker);
+        HMPicker timePicker = (HMPicker) findViewById(R.id.timePicker);
         timePicker.setIs24HourView(false);
         timePicker.setSelectionDivider(new ColorDrawable(0xffff0000));
         timePicker.setSelectionDividerHeight(2);

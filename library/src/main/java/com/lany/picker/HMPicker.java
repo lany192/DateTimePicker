@@ -1,4 +1,4 @@
-package com.lany.picker.timepicker;
+package com.lany.picker;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -19,27 +19,15 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.lany.picker.R;
-import com.lany.picker.numberpicker.NumberPicker;
-
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class TimePicker extends FrameLayout {
+public class HMPicker extends FrameLayout {
 
     private static final boolean DEFAULT_ENABLED_STATE = true;
 
     private static final int HOURS_IN_HALF_DAY = 12;
-
-    /**
-     * A no-op callback used in the constructor to avoid null checks later in
-     * the code.
-     */
-    private static final OnTimeChangedListener NO_OP_CHANGE_LISTENER = new OnTimeChangedListener() {
-        public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-        }
-    };
 
     // state
     private boolean mIs24HourView = true;
@@ -88,18 +76,18 @@ public class TimePicker extends FrameLayout {
          * @param hourOfDay The current hour.
          * @param minute    The current minute.
          */
-        void onTimeChanged(TimePicker view, int hourOfDay, int minute);
+        void onTimeChanged(HMPicker view, int hourOfDay, int minute);
     }
 
-    public TimePicker(Context context) {
+    public HMPicker(Context context) {
         this(context, null);
     }
 
-    public TimePicker(Context context, AttributeSet attrs) {
+    public HMPicker(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.timePickerStyle);
     }
 
-    public TimePicker(Context context, AttributeSet attrs, int defStyle) {
+    public HMPicker(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
         // initialization based on locale
@@ -223,7 +211,13 @@ public class TimePicker extends FrameLayout {
         updateHourControl();
         updateAmPmControl();
 
-        setOnTimeChangedListener(NO_OP_CHANGE_LISTENER);
+        setOnTimeChangedListener(new OnTimeChangedListener(){
+
+            @Override
+            public void onTimeChanged(HMPicker view, int hourOfDay, int minute) {
+
+            }
+        });
 
         // set to current time
         setCurrentHour(mTempCalendar.get(Calendar.HOUR_OF_DAY));
@@ -335,13 +329,13 @@ public class TimePicker extends FrameLayout {
         }
 
         @SuppressWarnings({"unused", "hiding"})
-        public static final Parcelable.Creator<SavedState> CREATOR = new Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
+        public static final Creator<SavedState> CREATOR = new Creator<HMPicker.SavedState>() {
+            public HMPicker.SavedState createFromParcel(Parcel in) {
+                return new HMPicker.SavedState(in);
             }
 
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
+            public HMPicker.SavedState[] newArray(int size) {
+                return new HMPicker.SavedState[size];
             }
         };
     }
@@ -485,13 +479,13 @@ public class TimePicker extends FrameLayout {
     @Override
     public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
         super.onInitializeAccessibilityEvent(event);
-        event.setClassName(TimePicker.class.getName());
+        event.setClassName(HMPicker.class.getName());
     }
 
     @Override
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
-        info.setClassName(TimePicker.class.getName());
+        info.setClassName(HMPicker.class.getName());
     }
 
     private void updateHourControl() {

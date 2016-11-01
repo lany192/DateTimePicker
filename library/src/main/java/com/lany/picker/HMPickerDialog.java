@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lany.picker.timepicker;
+package com.lany.picker;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -25,16 +25,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.lany.picker.R;
-import com.lany.picker.timepicker.TimePicker.OnTimeChangedListener;
+import com.lany.picker.HMPicker.OnTimeChangedListener;
 
 /**
- * A dialog that prompts the user for the time of day using a {@link TimePicker}.
+ * A dialog that prompts the user for the time of day using a {@link HMPicker}.
  * <p/>
  * <p>See the <a href="{@docRoot}guide/topics/ui/controls/pickers.html">Pickers</a>
  * guide.</p>
  */
-public class TimePickerDialog extends AlertDialog
+public class HMPickerDialog extends AlertDialog
         implements OnClickListener, OnTimeChangedListener {
 
     /**
@@ -48,14 +47,14 @@ public class TimePickerDialog extends AlertDialog
          * @param hourOfDay The hour that was set.
          * @param minute    The minute that was set.
          */
-        void onTimeSet(TimePicker view, int hourOfDay, int minute);
+        void onTimeSet(HMPicker view, int hourOfDay, int minute);
     }
 
     private static final String HOUR = "hour";
     private static final String MINUTE = "minute";
     private static final String IS_24_HOUR = "is24hour";
 
-    private final TimePicker mTimePicker;
+    private final HMPicker mHMPicker;
     private final OnTimeSetListener mCallback;
 
     int mInitialHourOfDay;
@@ -69,9 +68,9 @@ public class TimePickerDialog extends AlertDialog
      * @param minute       The initial minute.
      * @param is24HourView Whether this is a 24 hour view, or AM/PM.
      */
-    public TimePickerDialog(Context context,
-                            OnTimeSetListener callBack,
-                            int hourOfDay, int minute, boolean is24HourView) {
+    public HMPickerDialog(Context context,
+                          OnTimeSetListener callBack,
+                          int hourOfDay, int minute, boolean is24HourView) {
         this(context, Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB ? R.style.Theme_Dialog_Alert : 0, callBack, hourOfDay, minute, is24HourView);
     }
 
@@ -83,10 +82,10 @@ public class TimePickerDialog extends AlertDialog
      * @param minute       The initial minute.
      * @param is24HourView Whether this is a 24 hour view, or AM/PM.
      */
-    public TimePickerDialog(Context context,
-                            int theme,
-                            OnTimeSetListener callBack,
-                            int hourOfDay, int minute, boolean is24HourView) {
+    public HMPickerDialog(Context context,
+                          int theme,
+                          OnTimeSetListener callBack,
+                          int hourOfDay, int minute, boolean is24HourView) {
         super(context, theme);
         mCallback = callBack;
         mInitialHourOfDay = hourOfDay;
@@ -103,13 +102,13 @@ public class TimePickerDialog extends AlertDialog
                 (LayoutInflater) themeContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.time_picker_dialog, null);
         setView(view);
-        mTimePicker = (TimePicker) view.findViewById(R.id.timePicker);
+        mHMPicker = (HMPicker) view.findViewById(R.id.hmPicker);
 
         // initialize state
-        mTimePicker.setIs24HourView(mIs24HourView);
-        mTimePicker.setCurrentHour(mInitialHourOfDay);
-        mTimePicker.setCurrentMinute(mInitialMinute);
-        mTimePicker.setOnTimeChangedListener(this);
+        mHMPicker.setIs24HourView(mIs24HourView);
+        mHMPicker.setCurrentHour(mInitialHourOfDay);
+        mHMPicker.setCurrentMinute(mInitialMinute);
+        mHMPicker.setOnTimeChangedListener(this);
     }
 
     public void onClick(DialogInterface dialog, int which) {
@@ -117,19 +116,19 @@ public class TimePickerDialog extends AlertDialog
     }
 
     public void updateTime(int hourOfDay, int minutOfHour) {
-        mTimePicker.setCurrentHour(hourOfDay);
-        mTimePicker.setCurrentMinute(minutOfHour);
+        mHMPicker.setCurrentHour(hourOfDay);
+        mHMPicker.setCurrentMinute(minutOfHour);
     }
 
-    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+    public void onTimeChanged(HMPicker view, int hourOfDay, int minute) {
         /* do nothing */
     }
 
     private void tryNotifyTimeSet() {
         if (mCallback != null) {
-            mTimePicker.clearFocus();
-            mCallback.onTimeSet(mTimePicker, mTimePicker.getCurrentHour(),
-                    mTimePicker.getCurrentMinute());
+            mHMPicker.clearFocus();
+            mCallback.onTimeSet(mHMPicker, mHMPicker.getCurrentHour(),
+                    mHMPicker.getCurrentMinute());
         }
     }
 
@@ -142,9 +141,9 @@ public class TimePickerDialog extends AlertDialog
     @Override
     public Bundle onSaveInstanceState() {
         Bundle state = super.onSaveInstanceState();
-        state.putInt(HOUR, mTimePicker.getCurrentHour());
-        state.putInt(MINUTE, mTimePicker.getCurrentMinute());
-        state.putBoolean(IS_24_HOUR, mTimePicker.is24HourView());
+        state.putInt(HOUR, mHMPicker.getCurrentHour());
+        state.putInt(MINUTE, mHMPicker.getCurrentMinute());
+        state.putBoolean(IS_24_HOUR, mHMPicker.is24HourView());
         return state;
     }
 
@@ -153,8 +152,8 @@ public class TimePickerDialog extends AlertDialog
         super.onRestoreInstanceState(savedInstanceState);
         int hour = savedInstanceState.getInt(HOUR);
         int minute = savedInstanceState.getInt(MINUTE);
-        mTimePicker.setIs24HourView(savedInstanceState.getBoolean(IS_24_HOUR));
-        mTimePicker.setCurrentHour(hour);
-        mTimePicker.setCurrentMinute(minute);
+        mHMPicker.setIs24HourView(savedInstanceState.getBoolean(IS_24_HOUR));
+        mHMPicker.setCurrentHour(hour);
+        mHMPicker.setCurrentMinute(minute);
     }
 }

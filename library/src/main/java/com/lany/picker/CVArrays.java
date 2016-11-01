@@ -1,4 +1,4 @@
-package com.lany.picker.datepicker;
+package com.lany.picker;
 
 import java.lang.reflect.Array;
 

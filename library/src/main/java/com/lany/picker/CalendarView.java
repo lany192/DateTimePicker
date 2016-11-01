@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lany.picker.calendarview;
+package com.lany.picker;
 
 import android.app.Service;
 import android.content.Context;
@@ -49,8 +49,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.lany.picker.R;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -78,11 +76,7 @@ import java.util.TimeZone;
  */
 //@Widget
 public class CalendarView extends FrameLayout {
-
-    /**
-     * Tag for logging.
-     */
-    private static final String LOG_TAG = CalendarView.class.getSimpleName();
+    private final String TAG = getClass().getSimpleName();
 
     /**
      * Default value whether to show week number.
@@ -1140,7 +1134,7 @@ public class CalendarView extends FrameLayout {
             outDate.setTime(mDateFormat.parse(date));
             return true;
         } catch (ParseException e) {
-            Log.w(LOG_TAG, "Date: " + date + " not in format: " + DATE_FORMAT);
+            Log.w(TAG, "Date: " + date + " not in format: " + DATE_FORMAT);
             return false;
         }
     }
@@ -1385,8 +1379,8 @@ public class CalendarView extends FrameLayout {
                 weekView = (WeekView) convertView;
             } else {
                 weekView = new WeekView(getContext());
-                android.widget.AbsListView.LayoutParams params =
-                        new android.widget.AbsListView.LayoutParams(LayoutParams.WRAP_CONTENT,
+                AbsListView.LayoutParams params =
+                        new AbsListView.LayoutParams(LayoutParams.WRAP_CONTENT,
                                 LayoutParams.WRAP_CONTENT);
                 weekView.setLayoutParams(params);
                 weekView.setClickable(true);

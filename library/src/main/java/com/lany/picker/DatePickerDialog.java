@@ -1,4 +1,4 @@
-package com.lany.picker.datepicker;
+package com.lany.picker;
 
 
 import android.app.AlertDialog;
@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-
-import com.lany.picker.R;
 
 import java.util.Calendar;
 

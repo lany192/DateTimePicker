@@ -1,14 +1,16 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven'
+apply plugin: 'bintray-release'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
     }
 
     buildTypes {
@@ -17,4 +19,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+}
+
+publish {
+    bintrayUser = "${BINTRAY_USER}"
+    bintrayKey =  "${BINTRAY_KEY}"
+    artifactId = 'DateTimePicker'
+    userOrg = 'lany192'
+    groupId = 'com.lany'
+    uploadName = 'DateTimePicker'
+    publishVersion = '1.0.0'
+    autoPublish = true
+    dryRun = false
+    desc = 'This is a custom android holo datepicker timepicker from android source.'
+    website = 'https://github.com/lany192/DateTimePicker'
+    issueTracker = 'https://github.com/lany192/DateTimePicker/issues'
+    repository = 'https://github.com/lany192/DateTimePicker.git'
+    licences = ['Apache-2.0']
 }

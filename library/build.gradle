@@ -10,7 +10,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.2"
     }
 
     buildTypes {
@@ -28,7 +28,7 @@ publish {
     userOrg = 'lany192'
     groupId = 'com.lany'
     uploadName = 'DateTimePicker'
-    publishVersion = '1.0.0'
+    publishVersion = '1.0.2'
     autoPublish = true
     dryRun = false
     desc = 'This is a custom android holo datepicker timepicker from android source.'

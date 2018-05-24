@@ -70,7 +70,7 @@ public class HourMinutePicker extends FrameLayout {
         // initialization based on locale
         setCurrentLocale(Locale.getDefault());
 
-        LayoutInflater.from(getContext()).inflate(R.layout.time_picker_holo,this);
+        LayoutInflater.from(getContext()).inflate(R.layout.picker_hour_minute, this);
 
         // hour
         mHourSpinner = findViewById(R.id.hour);

@@ -7,14 +7,36 @@ import android.widget.TextView;
 
 import com.lany.box.activity.BaseActivity;
 import com.lany.picker.DatePicker;
+import com.lany.picker.DateTimePicker;
 import com.lany.picker.HourMinutePicker;
-import com.lany.picker.HourMinuteSecondPicker;
+import com.lany.picker.TimePicker;
 import com.lany.picker.YMDHPicker;
 
+import butterknife.BindView;
+
 public class MainActivity extends BaseActivity {
-    private DatePicker mDatePicker1;
-    private DatePicker mDatePicker2;
-    private TextView showText;
+    @BindView(R.id.date_picker_show_text)
+    TextView datePickerShowText;
+    @BindView(R.id.date_picker_1)
+    DatePicker datePicker1;
+    @BindView(R.id.date_picker_2)
+    DatePicker datePicker2;
+    @BindView(R.id.time_picker_show_text)
+    TextView timePickerShowText;
+    @BindView(R.id.time_picker)
+    TimePicker timePicker;
+    @BindView(R.id.hour_minute_picker_show_text)
+    TextView hourMinutePickerShowText;
+    @BindView(R.id.hour_minute_picker)
+    HourMinutePicker hourMinutePicker;
+    @BindView(R.id.ymdh_picker_show_text)
+    TextView ymdhPickerShowText;
+    @BindView(R.id.ymdhPicker)
+    YMDHPicker ymdhPicker;
+    @BindView(R.id.date_time_picker_show_text)
+    TextView dateTimePickerShowText;
+    @BindView(R.id.dateTimePicker)
+    DateTimePicker dateTimePicker;
 
     @Override
     protected int getLayoutId() {
@@ -23,68 +45,90 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void init(Bundle bundle) {
-        mDatePicker1 = findViewById(R.id.date_picker_1);
-        mDatePicker1.setSelectionDivider(new ColorDrawable(0xffff0000));
-        mDatePicker1.setSelectionDividerHeight(2);
-        mDatePicker1.setCalendarViewShown(false);
-        //mDatePicker1.setDayViewShown(false);
-        mDatePicker1.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+        datePicker1.setSelectionDivider(new ColorDrawable(0xffff0000));
+        datePicker1.setSelectionDividerHeight(2);
+        datePicker1.setCalendarViewShown(false);
+        //datePicker1.setDayViewShown(false);
+        datePicker1.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Log.i(TAG, "onDateChanged: " + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                datePickerShowText.setText(new StringBuilder()
+                        .append("DatePicker  ")
+                        .append(year).append("年")
+                        .append(monthOfYear + 1).append("月")
+                        .append(dayOfMonth).append("日"));
             }
         });
 
-        mDatePicker2 = findViewById(R.id.date_picker_2);
-        mDatePicker2.setSelectionDivider(new ColorDrawable(0xff008B00));
-        mDatePicker2.setSelectionDividerHeight(4);
-        mDatePicker2.setCalendarViewShown(false);
-        //mDatePicker2.setDayViewShown(false);
-        mDatePicker2.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+        datePicker2.setSelectionDivider(new ColorDrawable(0xff008B00));
+        datePicker2.setSelectionDividerHeight(4);
+        datePicker2.setCalendarViewShown(false);
+        //datePicker2.setDayViewShown(false);
+        datePicker2.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Log.i(TAG, "onDateChanged: " + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                datePickerShowText.setText(new StringBuilder()
+                        .append("DatePicker  ")
+                        .append(year).append("年")
+                        .append(monthOfYear + 1).append("月")
+                        .append(dayOfMonth).append("日"));
             }
         });
 
-        HourMinuteSecondPicker lanyPicker = findViewById(R.id.lanyPicker);
-        lanyPicker.setSelectionDivider(new ColorDrawable(0xff000000));
-        lanyPicker.setSelectionDividerHeight(2);
-        lanyPicker.setOnTimeChangedListener(new HourMinuteSecondPicker.OnTimeChangedListener() {
+        timePicker.setSelectionDivider(new ColorDrawable(0xff000000));
+        timePicker.setSelectionDividerHeight(2);
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
 
             @Override
-            public void onTimeChanged(HourMinuteSecondPicker view, int hourOfDay, int minuteOfHour, int scd) {
-                showText.setText(new StringBuilder()
-                        .append(hourOfDay).append(":")
-                        .append(minuteOfHour).append(":")
-                        .append(scd));
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minuteOfHour, int scd) {
+                timePickerShowText.setText(new StringBuilder()
+                        .append("TimePicker  ")
+                        .append(hourOfDay).append("时")
+                        .append(minuteOfHour).append("分")
+                        .append(scd).append("秒"));
             }
         });
 
-        showText = findViewById(R.id.lany_picker_show_text);
+        hourMinutePicker.setIs24HourView(false);
+        hourMinutePicker.setSelectionDivider(new ColorDrawable(0xff436EEE));
+        hourMinutePicker.setSelectionDividerHeight(4);
+        hourMinutePicker.setOnTimeChangedListener(new HourMinutePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(HourMinutePicker view, int hourOfDay, int minute) {
+                hourMinutePickerShowText.setText(new StringBuilder()
+                        .append("HourMinutePicker  ")
+                        .append(hourOfDay).append("时")
+                        .append(minute).append("分"));
+            }
+        });
 
-        HourMinutePicker timePicker = findViewById(R.id.timePicker);
-        timePicker.setIs24HourView(false);
-        timePicker.setSelectionDivider(new ColorDrawable(0xff436EEE));
-        timePicker.setSelectionDividerHeight(4);
-
-
-        YMDHPicker ymdhPicker = findViewById(R.id.ymdhPicker);
         ymdhPicker.setSelectionDivider(new ColorDrawable(0xff000000));
         ymdhPicker.setSelectionDividerHeight(2);
         ymdhPicker.setOnDateChangedListener(new YMDHPicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(YMDHPicker view, int year, int monthOfYear, int dayOfMonth, int hourOfDay) {
-                int mYear = year;
-                int mMonth = monthOfYear + 1;
-                int mDay = dayOfMonth;
-                int mHour = hourOfDay;
+                ymdhPickerShowText.setText(new StringBuilder()
+                        .append("YMDHPicker  ")
+                        .append(year).append("年")
+                        .append(monthOfYear + 1).append("月")
+                        .append(dayOfMonth).append("日")
+                        .append(hourOfDay).append("时"));
+            }
+        });
 
-                showText.setText(new StringBuilder()
-                        .append(mYear).append("年")
-                        .append(mMonth).append("月")
-                        .append(mDay).append("日")
-                        .append(mHour).append("时"));
+        dateTimePicker.setSelectionDivider(new ColorDrawable(0xff000000));
+        dateTimePicker.setSelectionDividerHeight(2);
+        dateTimePicker.setOnChangedListener(new DateTimePicker.OnChangedListener() {
+            @Override
+            public void onChanged(DateTimePicker view, int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute, int second) {
+                dateTimePickerShowText.setText(new StringBuilder()
+                        .append("DateTimePicker  ")
+                        .append(year).append("年")
+                        .append(monthOfYear + 1).append("月")
+                        .append(dayOfMonth).append("日")
+                        .append(hourOfDay).append("时")
+                        .append(minute).append("分")
+                        .append(second).append("秒"));
             }
         });
     }

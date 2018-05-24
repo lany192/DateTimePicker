@@ -73,7 +73,7 @@ public class YMDHPicker extends FrameLayout {
     }
 
     public void init(AttributeSet attrs) {
-        LayoutInflater.from(getContext()).inflate(R.layout.ymdh_picker_holo, this);
+        LayoutInflater.from(getContext()).inflate(R.layout.picker_ymdh, this);
         setCurrentLocale(Locale.getDefault());
         int startYear = DEFAULT_START_YEAR;
         int endYear = DEFAULT_END_YEAR;

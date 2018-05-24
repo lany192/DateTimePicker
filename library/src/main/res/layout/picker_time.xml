@@ -8,7 +8,7 @@
     <!-- hour -->
 
     <com.lany.picker.NumberPicker
-        android:id="@+id/hour"
+        android:id="@+id/picker_time_hour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
@@ -18,7 +18,7 @@
     <!-- divider -->
 
     <TextView
-        android:id="@+id/first_divider"
+        android:id="@+id/picker_time_first_divider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -27,7 +27,7 @@
     <!-- minute -->
 
     <com.lany.picker.NumberPicker
-        android:id="@+id/minute"
+        android:id="@+id/picker_time_minute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
@@ -37,7 +37,7 @@
     <!-- divider -->
 
     <TextView
-        android:id="@+id/second_divider"
+        android:id="@+id/picker_time_second_divider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -45,7 +45,7 @@
     <!-- second -->
 
     <com.lany.picker.NumberPicker
-        android:id="@+id/second"
+        android:id="@+id/picker_time_second"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"

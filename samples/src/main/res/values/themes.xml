@@ -4,6 +4,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="numberPickerStyle">@style/NPWidget.Holo.Light.NumberPicker</item>
+        <item name="numberPickerStyle">@style/NumberPicker</item>
     </style>
 </resources>

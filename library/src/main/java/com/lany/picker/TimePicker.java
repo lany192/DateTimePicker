@@ -9,7 +9,6 @@ import android.os.Parcelable;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
@@ -21,7 +20,10 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class HourMinuteSecondPicker extends FrameLayout {
+/**
+ * Hour/Minute/Second
+ */
+public class TimePicker extends FrameLayout {
     private static final boolean DEFAULT_ENABLED_STATE = true;
 
     private final NumberPicker mHourSpinner;
@@ -47,25 +49,25 @@ public class HourMinuteSecondPicker extends FrameLayout {
 
     private Locale mCurrentLocale;
 
-    public HourMinuteSecondPicker(Context context) {
+    public TimePicker(Context context) {
         this(context, null);
     }
 
-    public HourMinuteSecondPicker(Context context, AttributeSet attrs) {
+    public TimePicker(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.timePickerStyle);
     }
 
-    public HourMinuteSecondPicker(Context context, AttributeSet attrs, int defStyle) {
+    public TimePicker(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setCurrentLocale(Locale.getDefault());
 
-        LayoutInflater.from(getContext()).inflate(R.layout.lany_picker_holo,this);
+        LayoutInflater.from(getContext()).inflate(R.layout.picker_time, this);
 
         // hour
-        mHourSpinner = findViewById(R.id.hour);
+        mHourSpinner = findViewById(R.id.picker_time_hour);
         mHourSpinner.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            public void onValueChange(NumberPicker spinner, int oldVal,
-                                      int newVal) {
+            @Override
+            public void onValueChange(NumberPicker spinner, int oldVal, int newVal) {
                 updateInputState();
                 onTimeChanged();
             }
@@ -73,16 +75,16 @@ public class HourMinuteSecondPicker extends FrameLayout {
         mHourSpinnerInput = mHourSpinner.findViewById(R.id.np__numberpicker_input);
         mHourSpinnerInput.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         //divider
-        mFirstDivider = findViewById(R.id.first_divider);
+        mFirstDivider = findViewById(R.id.picker_time_first_divider);
         if (mFirstDivider != null) {
             mFirstDivider.setText(R.string.time_picker_separator);
         }
-        mSecondDivider = findViewById(R.id.second_divider);
+        mSecondDivider = findViewById(R.id.picker_time_second_divider);
         if (mSecondDivider != null) {
             mSecondDivider.setText(R.string.time_picker_separator);
         }
         // minute
-        mMinuteSpinner = findViewById(R.id.minute);
+        mMinuteSpinner = findViewById(R.id.picker_time_minute);
         mMinuteSpinner.setMinValue(0);
         mMinuteSpinner.setMaxValue(59);
         mMinuteSpinner.setOnLongPressUpdateInterval(100);
@@ -106,36 +108,26 @@ public class HourMinuteSecondPicker extends FrameLayout {
         mMinuteSpinnerInput = mMinuteSpinner.findViewById(R.id.np__numberpicker_input);
         mMinuteSpinnerInput.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         // second
-        View secondView = findViewById(R.id.second);
-        mSecondSpinner = (NumberPicker) secondView;
+        mSecondSpinner = findViewById(R.id.picker_time_second);
         mSecondSpinner.setMinValue(0);
         mSecondSpinner.setMaxValue(59);
         mMinuteSpinner.setOnLongPressUpdateInterval(100);
         mMinuteSpinner.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mSecondSpinner
-                .setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-                    public void onValueChange(NumberPicker picker, int oldVal,
-                                              int newVal) {
-                        updateInputState();
-                        picker.requestFocus();
-                        sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
-                        onTimeChanged();
-                    }
-                });
+        mSecondSpinner.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                updateInputState();
+                picker.requestFocus();
+                sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
+                onTimeChanged();
+            }
+        });
         mSecondSpinnerInput = mSecondSpinner.findViewById(R.id.np__numberpicker_input);
         mSecondSpinnerInput.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         // update controls to initial state
         updateHourControl();
         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
-
-        setOnTimeChangedListener(new OnTimeChangedListener() {
-
-            @Override
-            public void onTimeChanged(HourMinuteSecondPicker view, int hourOfDay, int minute, int second) {
-
-            }
-        });
 
         // set to current time
         setCurrentHour(mTempCalendar.get(Calendar.HOUR_OF_DAY));
@@ -217,8 +209,8 @@ public class HourMinuteSecondPicker extends FrameLayout {
         setCurrentSecond(ss.getSecond());
     }
 
-    public void setOnTimeChangedListener(OnTimeChangedListener onTimeChangedListener) {
-        mOnTimeChangedListener = onTimeChangedListener;
+    public void setOnTimeChangedListener(OnTimeChangedListener listener) {
+        mOnTimeChangedListener = listener;
     }
 
     /**
@@ -295,21 +287,20 @@ public class HourMinuteSecondPicker extends FrameLayout {
         mTempCalendar.set(Calendar.HOUR_OF_DAY, getCurrentHour());
         mTempCalendar.set(Calendar.MINUTE, getCurrentMinute());
         mTempCalendar.set(Calendar.SECOND, getCurrentSecond());
-        String selectedDateUtterance = DateUtils.formatDateTime(getContext(),
-                mTempCalendar.getTimeInMillis(), flags);
+        String selectedDateUtterance = DateUtils.formatDateTime(getContext(), mTempCalendar.getTimeInMillis(), flags);
         event.getText().add(selectedDateUtterance);
     }
 
     @Override
     public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
         super.onInitializeAccessibilityEvent(event);
-        event.setClassName(HourMinuteSecondPicker.class.getName());
+        event.setClassName(TimePicker.class.getName());
     }
 
     @Override
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
-        info.setClassName(HourMinuteSecondPicker.class.getName());
+        info.setClassName(TimePicker.class.getName());
     }
 
     private void updateHourControl() {
@@ -342,7 +333,7 @@ public class HourMinuteSecondPicker extends FrameLayout {
     }
 
     public interface OnTimeChangedListener {
-        void onTimeChanged(HourMinuteSecondPicker view, int hourOfDay, int minute,
+        void onTimeChanged(TimePicker view, int hourOfDay, int minute,
                            int second);
     }
 

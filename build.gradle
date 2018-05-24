@@ -1,22 +1,20 @@
 buildscript {
     repositories {
         jcenter()
+        google()
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
+        google()
         maven { url 'https://jitpack.io' }
-    }
-    tasks.withType(JavaCompile){
-        options.encoding = "UTF-8"
-        sourceCompatibility = JavaVersion.VERSION_1_7
-        targetCompatibility = JavaVersion.VERSION_1_7
     }
 }
 

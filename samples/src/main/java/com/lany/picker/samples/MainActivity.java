@@ -1,46 +1,77 @@
 package com.lany.picker.samples;
 
-import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.lany.box.activity.BaseActivity;
+import com.lany.picker.DatePicker;
+import com.lany.picker.HourMinutePicker;
+import com.lany.picker.HourMinuteSecondPicker;
+import com.lany.picker.YMDHPicker;
+
+public class MainActivity extends BaseActivity {
+    private DatePicker mDatePicker1;
+    private DatePicker mDatePicker2;
+    private TextView showText;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_layout);
-        findViewById(R.id.datepicker_btn).setOnClickListener(new View.OnClickListener() {
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void init(Bundle bundle) {
+        mDatePicker1 = findViewById(R.id.date_picker_1);
+        mDatePicker1.setSelectionDivider(new ColorDrawable(0xffff0000));
+        mDatePicker1.setSelectionDividerHeight(2);
+        mDatePicker1.setCalendarViewShown(false);
+        //mDatePicker1.setDayViewShown(false);
+
+        mDatePicker2 = findViewById(R.id.date_picker_2);
+        mDatePicker2.setSelectionDivider(new ColorDrawable(0xff008B00));
+        mDatePicker2.setSelectionDividerHeight(4);
+        mDatePicker2.setCalendarViewShown(false);
+        //mDatePicker2.setDayViewShown(false);
+
+        HourMinuteSecondPicker lanyPicker = findViewById(R.id.lanyPicker);
+        lanyPicker.setSelectionDivider(new ColorDrawable(0xff000000));
+        lanyPicker.setSelectionDividerHeight(2);
+        lanyPicker.setOnTimeChangedListener(new HourMinuteSecondPicker.OnTimeChangedListener() {
+
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, DatePickerActivity.class));
-            }
-        });
-        findViewById(R.id.timepicker_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, TimePickerActivity.class));
+            public void onTimeChanged(HourMinuteSecondPicker view, int hourOfDay, int minuteOfHour, int scd) {
+                showText.setText(new StringBuilder()
+                        .append(hourOfDay).append(":")
+                        .append(minuteOfHour).append(":")
+                        .append(scd));
             }
         });
 
-        findViewById(R.id.lanypicker_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, LanyPickerActivity.class));
-            }
-        });
+        showText = findViewById(R.id.lany_picker_show_text);
 
-        findViewById(R.id.calendar_view_btn).setOnClickListener(new View.OnClickListener() {
+        HourMinutePicker timePicker = findViewById(R.id.timePicker);
+        timePicker.setIs24HourView(false);
+        timePicker.setSelectionDivider(new ColorDrawable(0xff436EEE));
+        timePicker.setSelectionDividerHeight(4);
+
+
+        YMDHPicker ymdhPicker = findViewById(R.id.ymdhPicker);
+        ymdhPicker.setSelectionDivider(new ColorDrawable(0xff000000));
+        ymdhPicker.setSelectionDividerHeight(2);
+        ymdhPicker.setOnDateChangedListener(new YMDHPicker.OnDateChangedListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, CalendarViewActivity.class));
-            }
-        });
-        findViewById(R.id.ymdhpicker_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, YmdhPickerActivity.class));
+            public void onDateChanged(YMDHPicker view, int year, int monthOfYear, int dayOfMonth, int hourOfDay) {
+                int mYear = year;
+                int mMonth = monthOfYear + 1;
+                int mDay = dayOfMonth;
+                int mHour = hourOfDay;
+
+                showText.setText(new StringBuilder()
+                        .append(mYear).append("年")
+                        .append(mMonth).append("月")
+                        .append(mDay).append("日")
+                        .append(mHour).append("时"));
             }
         });
     }

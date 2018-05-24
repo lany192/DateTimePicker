@@ -3,6 +3,7 @@
     package="com.lany.picker.samples">
 
     <application
+        android:name=".SampleApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
@@ -15,11 +16,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DatePickerActivity"></activity>
-        <activity android:name=".TimePickerActivity"></activity>
-        <activity android:name=".LanyPickerActivity"></activity>
-        <activity android:name=".CalendarViewActivity"></activity>
-        <activity android:name=".YmdhPickerActivity"></activity>
     </application>
 
 </manifest>

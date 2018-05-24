@@ -21,8 +21,7 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class HMSPicker extends FrameLayout {
-
+public class HourMinuteSecondPicker extends FrameLayout {
     private static final boolean DEFAULT_ENABLED_STATE = true;
 
     private final NumberPicker mHourSpinner;
@@ -48,73 +47,63 @@ public class HMSPicker extends FrameLayout {
 
     private Locale mCurrentLocale;
 
-    public interface OnTimeChangedListener {
-        void onTimeChanged(HMSPicker view, int hourOfDay, int minute,
-                           int second);
-    }
-
-    public HMSPicker(Context context) {
+    public HourMinuteSecondPicker(Context context) {
         this(context, null);
     }
 
-    public HMSPicker(Context context, AttributeSet attrs) {
+    public HourMinuteSecondPicker(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.timePickerStyle);
     }
 
-    public HMSPicker(Context context, AttributeSet attrs, int defStyle) {
+    public HourMinuteSecondPicker(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setCurrentLocale(Locale.getDefault());
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.lany_picker_holo, this, true);
+
+        LayoutInflater.from(getContext()).inflate(R.layout.lany_picker_holo,this);
 
         // hour
-        mHourSpinner = (NumberPicker) findViewById(R.id.hour);
-        mHourSpinner
-                .setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-                    public void onValueChange(NumberPicker spinner, int oldVal,
-                                              int newVal) {
-                        updateInputState();
-                        onTimeChanged();
-                    }
-                });
-        mHourSpinnerInput = (EditText) mHourSpinner
-                .findViewById(R.id.np__numberpicker_input);
+        mHourSpinner = findViewById(R.id.hour);
+        mHourSpinner.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            public void onValueChange(NumberPicker spinner, int oldVal,
+                                      int newVal) {
+                updateInputState();
+                onTimeChanged();
+            }
+        });
+        mHourSpinnerInput = mHourSpinner.findViewById(R.id.np__numberpicker_input);
         mHourSpinnerInput.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         //divider
-        mFirstDivider = (TextView) findViewById(R.id.first_divider);
+        mFirstDivider = findViewById(R.id.first_divider);
         if (mFirstDivider != null) {
             mFirstDivider.setText(R.string.time_picker_separator);
         }
-        mSecondDivider = (TextView) findViewById(R.id.second_divider);
+        mSecondDivider = findViewById(R.id.second_divider);
         if (mSecondDivider != null) {
             mSecondDivider.setText(R.string.time_picker_separator);
         }
         // minute
-        mMinuteSpinner = (NumberPicker) findViewById(R.id.minute);
+        mMinuteSpinner = findViewById(R.id.minute);
         mMinuteSpinner.setMinValue(0);
         mMinuteSpinner.setMaxValue(59);
         mMinuteSpinner.setOnLongPressUpdateInterval(100);
         mMinuteSpinner.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mMinuteSpinner
-                .setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-                    public void onValueChange(NumberPicker spinner, int oldVal,
-                                              int newVal) {
-                        updateInputState();
-                        int minValue = mMinuteSpinner.getMinValue();
-                        int maxValue = mMinuteSpinner.getMaxValue();
-                        if (oldVal == maxValue && newVal == minValue) {
-                            int newHour = mHourSpinner.getValue() + 1;
-                            mHourSpinner.setValue(newHour);
-                        } else if (oldVal == minValue && newVal == maxValue) {
-                            int newHour = mHourSpinner.getValue() - 1;
-                            mHourSpinner.setValue(newHour);
-                        }
-                        onTimeChanged();
-                    }
-                });
-        mMinuteSpinnerInput = (EditText) mMinuteSpinner
-                .findViewById(R.id.np__numberpicker_input);
+        mMinuteSpinner.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            public void onValueChange(NumberPicker spinner, int oldVal,
+                                      int newVal) {
+                updateInputState();
+                int minValue = mMinuteSpinner.getMinValue();
+                int maxValue = mMinuteSpinner.getMaxValue();
+                if (oldVal == maxValue && newVal == minValue) {
+                    int newHour = mHourSpinner.getValue() + 1;
+                    mHourSpinner.setValue(newHour);
+                } else if (oldVal == minValue && newVal == maxValue) {
+                    int newHour = mHourSpinner.getValue() - 1;
+                    mHourSpinner.setValue(newHour);
+                }
+                onTimeChanged();
+            }
+        });
+        mMinuteSpinnerInput = mMinuteSpinner.findViewById(R.id.np__numberpicker_input);
         mMinuteSpinnerInput.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         // second
         View secondView = findViewById(R.id.second);
@@ -133,18 +122,17 @@ public class HMSPicker extends FrameLayout {
                         onTimeChanged();
                     }
                 });
-        mSecondSpinnerInput = (EditText) mSecondSpinner
-                .findViewById(R.id.np__numberpicker_input);
+        mSecondSpinnerInput = mSecondSpinner.findViewById(R.id.np__numberpicker_input);
         mSecondSpinnerInput.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         // update controls to initial state
         updateHourControl();
         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
 
-        setOnTimeChangedListener(new OnTimeChangedListener(){
+        setOnTimeChangedListener(new OnTimeChangedListener() {
 
             @Override
-            public void onTimeChanged(HMSPicker view, int hourOfDay, int minute, int second) {
+            public void onTimeChanged(HourMinuteSecondPicker view, int hourOfDay, int minute, int second) {
 
             }
         });
@@ -177,6 +165,11 @@ public class HMSPicker extends FrameLayout {
     }
 
     @Override
+    public boolean isEnabled() {
+        return mIsEnabled;
+    }
+
+    @Override
     public void setEnabled(boolean enabled) {
         if (mIsEnabled == enabled) {
             return;
@@ -188,11 +181,6 @@ public class HMSPicker extends FrameLayout {
         mSecondDivider.setEnabled(enabled);
         mSecondSpinner.setEnabled(enabled);
         mIsEnabled = enabled;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return mIsEnabled;
     }
 
     @Override
@@ -214,58 +202,10 @@ public class HMSPicker extends FrameLayout {
         mTempCalendar = Calendar.getInstance(locale);
     }
 
-    /**
-     * Used to save / restore state of time picker
-     */
-    private static class SavedState extends BaseSavedState {
-
-        private final int mHour;
-
-        private final int mMinute;
-
-        private final int mSecond;
-
-        private SavedState(Parcelable superState, int hour, int minute,
-                           int second) {
-            super(superState);
-            mHour = hour;
-            mMinute = minute;
-            mSecond = second;
-        }
-
-        private SavedState(Parcel in) {
-            super(in);
-            mHour = in.readInt();
-            mMinute = in.readInt();
-            mSecond = in.readInt();
-        }
-
-        public int getHour() {
-            return mHour;
-        }
-
-        public int getMinute() {
-            return mMinute;
-        }
-
-        public int getSecond() {
-            return mSecond;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            super.writeToParcel(dest, flags);
-            dest.writeInt(mHour);
-            dest.writeInt(mMinute);
-            dest.writeInt(mSecond);
-        }
-    }
-
     @Override
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
-        return new SavedState(superState, getCurrentHour(), getCurrentMinute(),
-                getCurrentSecond());
+        return new SavedState(superState, getCurrentHour(), getCurrentMinute(), getCurrentSecond());
     }
 
     @Override
@@ -363,13 +303,13 @@ public class HMSPicker extends FrameLayout {
     @Override
     public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
         super.onInitializeAccessibilityEvent(event);
-        event.setClassName(HMSPicker.class.getName());
+        event.setClassName(HourMinuteSecondPicker.class.getName());
     }
 
     @Override
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
-        info.setClassName(HMSPicker.class.getName());
+        info.setClassName(HourMinuteSecondPicker.class.getName());
     }
 
     private void updateHourControl() {
@@ -381,14 +321,12 @@ public class HMSPicker extends FrameLayout {
     private void onTimeChanged() {
         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
         if (mOnTimeChangedListener != null) {
-            mOnTimeChangedListener.onTimeChanged(this, getCurrentHour(),
-                    getCurrentMinute(), getCurrentSecond());
+            mOnTimeChangedListener.onTimeChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSecond());
         }
     }
 
     private void updateInputState() {
-        InputMethodManager inputMethodManager = (InputMethodManager) getContext()
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) {
             if (inputMethodManager.isActive(mHourSpinnerInput)) {
                 mHourSpinnerInput.clearFocus();
@@ -400,6 +338,57 @@ public class HMSPicker extends FrameLayout {
                 mSecondSpinnerInput.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
             }
+        }
+    }
+
+    public interface OnTimeChangedListener {
+        void onTimeChanged(HourMinuteSecondPicker view, int hourOfDay, int minute,
+                           int second);
+    }
+
+    /**
+     * Used to save / restore state of time picker
+     */
+    private static class SavedState extends BaseSavedState {
+
+        private final int mHour;
+
+        private final int mMinute;
+
+        private final int mSecond;
+
+        private SavedState(Parcelable superState, int hour, int minute, int second) {
+            super(superState);
+            mHour = hour;
+            mMinute = minute;
+            mSecond = second;
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            mHour = in.readInt();
+            mMinute = in.readInt();
+            mSecond = in.readInt();
+        }
+
+        public int getHour() {
+            return mHour;
+        }
+
+        public int getMinute() {
+            return mMinute;
+        }
+
+        public int getSecond() {
+            return mSecond;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            super.writeToParcel(dest, flags);
+            dest.writeInt(mHour);
+            dest.writeInt(mMinute);
+            dest.writeInt(mSecond);
         }
     }
 }

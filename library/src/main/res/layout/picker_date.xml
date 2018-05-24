@@ -54,7 +54,7 @@
 
     <!-- calendar view -->
 
-    <com.lany.picker.CalendarView
+    <android.widget.CalendarView
         android:id="@+id/calendar_view"
         android:layout_width="245dp"
         android:layout_height="280dp"

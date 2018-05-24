@@ -28,32 +28,26 @@ import java.util.Calendar;
 import java.util.Locale;
 
 /**
+ * 年月日时
  * custom year/month/day/hour picker
  */
 public class YMDHPicker extends FrameLayout {
-    private final String TAG = getClass().getSimpleName();
     private static final String DATE_FORMAT = "MM/dd/yyyy";
     private static final int DEFAULT_START_YEAR = 1900;
     private static final int DEFAULT_END_YEAR = 2100;
+    private final String TAG = getClass().getSimpleName();
+    private EditText mHourSpinnerInput;
+    private EditText mDaySpinnerInput;
+    private EditText mMonthSpinnerInput;
+    private EditText mYearSpinnerInput;
 
     private NumberPicker mHourSpinner;
     private NumberPicker mDaySpinner;
     private NumberPicker mMonthSpinner;
     private NumberPicker mYearSpinner;
-
-    private final EditText mHourSpinnerInput;
-    private final EditText mDaySpinnerInput;
-    private final EditText mMonthSpinnerInput;
-    private final EditText mYearSpinnerInput;
-
     private Locale mCurrentLocale;
-
     private OnDateChangedListener mOnDateChangedListener;
-
     private String[] mShortMonths;
-
-    private final java.text.DateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
-
     private int mNumberOfMonths;
 
     private Calendar mTempDate;
@@ -63,40 +57,36 @@ public class YMDHPicker extends FrameLayout {
 
     private boolean mIsEnabled = true;
 
-    public interface OnDateChangedListener {
-        void onDateChanged(YMDHPicker view, int year, int monthOfYear, int dayOfMonth, int hourOfDay);
-    }
-
-    public void setOnDateChangedListener(OnDateChangedListener onDateChangedListener) {
-        mOnDateChangedListener = onDateChangedListener;
-    }
-
     public YMDHPicker(Context context) {
-        this(context, null);
+        super(context);
+        init(null);
     }
 
     public YMDHPicker(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.datePickerStyle);
+        super(context, attrs);
+        init(attrs);
     }
 
-    public YMDHPicker(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        setCurrentLocale(Locale.getDefault());
-        TypedArray attributesArray = context.obtainStyledAttributes(attrs,
-                R.styleable.DatePicker, defStyle, 0);
-        int startYear = attributesArray.getInt(
-                R.styleable.DatePicker_dp_startYear, DEFAULT_START_YEAR);
-        int endYear = attributesArray.getInt(R.styleable.DatePicker_dp_endYear,
-                DEFAULT_END_YEAR);
-        String minDate = attributesArray
-                .getString(R.styleable.DatePicker_dp_minDate);
-        String maxDate = attributesArray
-                .getString(R.styleable.DatePicker_dp_maxDate);
-        attributesArray.recycle();
+    public YMDHPicker(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(attrs);
+    }
 
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.ymdh_picker_holo, this, true);
+    public void init(AttributeSet attrs) {
+        LayoutInflater.from(getContext()).inflate(R.layout.ymdh_picker_holo, this);
+        setCurrentLocale(Locale.getDefault());
+        int startYear = DEFAULT_START_YEAR;
+        int endYear = DEFAULT_END_YEAR;
+        String minDate = "";
+        String maxDate = "";
+        if (attrs != null) {
+            TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.YMDHPicker);
+            startYear = typedArray.getInt(R.styleable.YMDHPicker_startYear, DEFAULT_START_YEAR);
+            endYear = typedArray.getInt(R.styleable.YMDHPicker_endYear, DEFAULT_END_YEAR);
+            minDate = typedArray.getString(R.styleable.YMDHPicker_minDate);
+            maxDate = typedArray.getString(R.styleable.YMDHPicker_maxDate);
+            typedArray.recycle();
+        }
 
         NumberPicker.OnValueChangeListener onChangeListener = new NumberPicker.OnValueChangeListener() {
             public void onValueChange(NumberPicker picker, int oldVal,
@@ -141,34 +131,30 @@ public class YMDHPicker extends FrameLayout {
         };
 
         // hour
-        mHourSpinner = (NumberPicker) findViewById(R.id.hour);
+        mHourSpinner = findViewById(R.id.hour);
         mHourSpinner.setOnLongPressUpdateInterval(100);
         mHourSpinner.setOnValueChangedListener(onChangeListener);
-        mHourSpinnerInput = (EditText) mHourSpinner
-                .findViewById(R.id.np__numberpicker_input);
+        mHourSpinnerInput = mHourSpinner.findViewById(R.id.np__numberpicker_input);
         // day
-        mDaySpinner = (NumberPicker) findViewById(R.id.day);
+        mDaySpinner = findViewById(R.id.day);
         mDaySpinner.setFormatter(NumberPicker.getTwoDigitFormatter());
         mDaySpinner.setOnLongPressUpdateInterval(100);
         mDaySpinner.setOnValueChangedListener(onChangeListener);
-        mDaySpinnerInput = (EditText) mDaySpinner
-                .findViewById(R.id.np__numberpicker_input);
+        mDaySpinnerInput = mDaySpinner.findViewById(R.id.np__numberpicker_input);
         // month
-        mMonthSpinner = (NumberPicker) findViewById(R.id.month);
+        mMonthSpinner = findViewById(R.id.month);
         mMonthSpinner.setMinValue(0);
         mMonthSpinner.setMaxValue(mNumberOfMonths - 1);
         mMonthSpinner.setDisplayedValues(mShortMonths);
         mMonthSpinner.setOnLongPressUpdateInterval(200);
         mMonthSpinner.setOnValueChangedListener(onChangeListener);
-        mMonthSpinnerInput = (EditText) mMonthSpinner
-                .findViewById(R.id.np__numberpicker_input);
+        mMonthSpinnerInput = mMonthSpinner.findViewById(R.id.np__numberpicker_input);
 
         // year
-        mYearSpinner = (NumberPicker) findViewById(R.id.year);
+        mYearSpinner = findViewById(R.id.year);
         mYearSpinner.setOnLongPressUpdateInterval(100);
         mYearSpinner.setOnValueChangedListener(onChangeListener);
-        mYearSpinnerInput = (EditText) mYearSpinner
-                .findViewById(R.id.np__numberpicker_input);
+        mYearSpinnerInput = mYearSpinner.findViewById(R.id.np__numberpicker_input);
 
         // set the min date giving priority of the minDate over startYear
         mTempDate.clear();
@@ -206,6 +192,10 @@ public class YMDHPicker extends FrameLayout {
                 && getImportantForAccessibility() == IMPORTANT_FOR_ACCESSIBILITY_AUTO) {
             setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
         }
+    }
+
+    public void setOnDateChangedListener(OnDateChangedListener onDateChangedListener) {
+        mOnDateChangedListener = onDateChangedListener;
     }
 
     public void setSelectionDivider(Drawable selectionDivider) {
@@ -251,6 +241,11 @@ public class YMDHPicker extends FrameLayout {
     }
 
     @Override
+    public boolean isEnabled() {
+        return mIsEnabled;
+    }
+
+    @Override
     public void setEnabled(boolean enabled) {
         if (mIsEnabled == enabled) {
             return;
@@ -261,11 +256,6 @@ public class YMDHPicker extends FrameLayout {
         mMonthSpinner.setEnabled(enabled);
         mYearSpinner.setEnabled(enabled);
         mIsEnabled = enabled;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return mIsEnabled;
     }
 
     @Override
@@ -385,8 +375,7 @@ public class YMDHPicker extends FrameLayout {
         updateSpinners();
     }
 
-    public void init(int year, int monthOfYear, int dayOfMonth, int hourOfDay,
-                     OnDateChangedListener onDateChangedListener) {
+    public void init(int year, int monthOfYear, int dayOfMonth, int hourOfDay, OnDateChangedListener onDateChangedListener) {
         setDate(year, monthOfYear, dayOfMonth, hourOfDay);
         updateSpinners();
         mOnDateChangedListener = onDateChangedListener;
@@ -394,7 +383,7 @@ public class YMDHPicker extends FrameLayout {
 
     private boolean parseDate(String date, Calendar outDate) {
         try {
-            outDate.setTime(mDateFormat.parse(date));
+            outDate.setTime(new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).parse(date));
             return true;
         } catch (ParseException e) {
             Log.w(TAG, "Date: " + date + " not in format: " + DATE_FORMAT);
@@ -421,28 +410,23 @@ public class YMDHPicker extends FrameLayout {
     private void updateSpinners() {
         if (mCurrentDate.equals(mMinDate)) {
             mDaySpinner.setMinValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
-            mDaySpinner.setMaxValue(mCurrentDate
-                    .getActualMaximum(Calendar.DAY_OF_MONTH));
+            mDaySpinner.setMaxValue(mCurrentDate.getActualMaximum(Calendar.DAY_OF_MONTH));
             mDaySpinner.setWrapSelectorWheel(false);
             mMonthSpinner.setDisplayedValues(null);
             mMonthSpinner.setMinValue(mCurrentDate.get(Calendar.MONTH));
-            mMonthSpinner.setMaxValue(mCurrentDate
-                    .getActualMaximum(Calendar.MONTH));
+            mMonthSpinner.setMaxValue(mCurrentDate.getActualMaximum(Calendar.MONTH));
             mMonthSpinner.setWrapSelectorWheel(false);
         } else if (mCurrentDate.equals(mMaxDate)) {
-            mDaySpinner.setMinValue(mCurrentDate
-                    .getActualMinimum(Calendar.DAY_OF_MONTH));
+            mDaySpinner.setMinValue(mCurrentDate.getActualMinimum(Calendar.DAY_OF_MONTH));
             mDaySpinner.setMaxValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
             mDaySpinner.setWrapSelectorWheel(false);
             mMonthSpinner.setDisplayedValues(null);
-            mMonthSpinner.setMinValue(mCurrentDate
-                    .getActualMinimum(Calendar.MONTH));
+            mMonthSpinner.setMinValue(mCurrentDate.getActualMinimum(Calendar.MONTH));
             mMonthSpinner.setMaxValue(mCurrentDate.get(Calendar.MONTH));
             mMonthSpinner.setWrapSelectorWheel(false);
         } else {
             mDaySpinner.setMinValue(1);
-            mDaySpinner.setMaxValue(mCurrentDate
-                    .getActualMaximum(Calendar.DAY_OF_MONTH));
+            mDaySpinner.setMaxValue(mCurrentDate.getActualMaximum(Calendar.DAY_OF_MONTH));
             mDaySpinner.setWrapSelectorWheel(true);
             mMonthSpinner.setDisplayedValues(null);
             mMonthSpinner.setMinValue(0);
@@ -452,8 +436,7 @@ public class YMDHPicker extends FrameLayout {
 
         // make sure the month names are a zero based array
         // with the months in the month spinner
-        String[] displayedValues = CVArrays.copyOfRange(mShortMonths,
-                mMonthSpinner.getMinValue(), mMonthSpinner.getMaxValue() + 1);
+        String[] displayedValues = ArraysUtils.copyOfRange(mShortMonths, mMonthSpinner.getMinValue(), mMonthSpinner.getMaxValue() + 1);
         mMonthSpinner.setDisplayedValues(displayedValues);
 
         // year spinner range does not change based on the current date
@@ -551,17 +534,30 @@ public class YMDHPicker extends FrameLayout {
         }
     }
 
+    public interface OnDateChangedListener {
+        void onDateChanged(YMDHPicker view, int year, int monthOfYear, int dayOfMonth, int hourOfDay);
+    }
+
     /**
      * Class for managing state storing/restoring.
      */
     private static class SavedState extends BaseSavedState {
 
+        @SuppressWarnings("all")
+        // suppress unused and hiding
+        public static final Parcelable.Creator<SavedState> CREATOR = new Creator<SavedState>() {
+
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
         private final int mYear;
-
         private final int mMonth;
-
         private final int mDay;
-
         private final int mHour;
 
         /**
@@ -595,18 +591,5 @@ public class YMDHPicker extends FrameLayout {
             dest.writeInt(mDay);
             dest.writeInt(mHour);
         }
-
-        @SuppressWarnings("all")
-        // suppress unused and hiding
-        public static final Parcelable.Creator<SavedState> CREATOR = new Creator<SavedState>() {
-
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
-            }
-
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        };
     }
 }

@@ -33,6 +33,7 @@
         android:layout_margin="4dp"
         android:focusable="true"
         android:focusableInTouchMode="true" />
+
     <!-- divider -->
 
     <TextView

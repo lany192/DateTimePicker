@@ -2,7 +2,7 @@ package com.lany.picker;
 
 import java.lang.reflect.Array;
 
-public class CVArrays {
+public class ArraysUtils {
 
     /**
      * Copies elements from {@code original} into a new array, from indexes start (inclusive) to

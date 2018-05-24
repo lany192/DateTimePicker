@@ -32,6 +32,18 @@
         <attr name="dp_internalLayout" format="reference" />
     </declare-styleable>
 
+    <!--年月日时选择样式-->
+    <declare-styleable name="YMDHPicker">
+        <!--开始年份-->
+        <attr name="startYear" format="integer" />
+        <!--结束年份-->
+        <attr name="endYear" format="integer" />
+        <!-- The minimal date shown by this calendar view in mm/dd/yyyy format. -->
+        <attr name="minDate" format="string" />
+        <!-- The maximal date shown by this calendar view in mm/dd/yyyy format. -->
+        <attr name="maxDate" format="string" />
+    </declare-styleable>
+
     <!-- The CalendarView style. -->
     <attr name="calendarViewStyle" format="reference" />
 

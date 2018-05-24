@@ -35,7 +35,6 @@ public class DatePicker extends FrameLayout {
     private static final String DATE_FORMAT = "MM/dd/yyyy";
     private static final int DEFAULT_START_YEAR = 1900;
     private static final int DEFAULT_END_YEAR = 2100;
-    private static final boolean DEFAULT_CALENDAR_VIEW_SHOWN = true;
     private static final boolean DEFAULT_SPINNERS_SHOWN = true;
     private static final boolean DEFAULT_DAY_VIEW_SHOWN = true;
     private static final boolean DEFAULT_ENABLED_STATE = true;
@@ -44,7 +43,6 @@ public class DatePicker extends FrameLayout {
     private final EditText mDaySpinnerInput;
     private final EditText mMonthSpinnerInput;
     private final EditText mYearSpinnerInput;
-    private final CalendarView mCalendarView;
     private final java.text.DateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
     private NumberPicker mDaySpinner;
     private NumberPicker mMonthSpinner;
@@ -80,8 +78,6 @@ public class DatePicker extends FrameLayout {
 
         TypedArray attributesArray = context.obtainStyledAttributes(attrs, R.styleable.DatePicker, defStyle, 0);
         boolean spinnersShown = attributesArray.getBoolean(R.styleable.DatePicker_dp_spinnersShown, DEFAULT_SPINNERS_SHOWN);
-        boolean calendarViewShown = attributesArray.getBoolean(R.styleable.DatePicker_dp_calendarViewShown, DEFAULT_CALENDAR_VIEW_SHOWN);
-
         boolean dayViewShown = attributesArray.getBoolean(R.styleable.DatePicker_dp_dayViewShown, DEFAULT_DAY_VIEW_SHOWN);
 
         int startYear = attributesArray.getInt(R.styleable.DatePicker_dp_startYear, DEFAULT_START_YEAR);
@@ -127,23 +123,11 @@ public class DatePicker extends FrameLayout {
                         mTempDate.get(Calendar.MONTH),
                         mTempDate.get(Calendar.DAY_OF_MONTH));
                 updateSpinners();
-                updateCalendarView();
                 notifyDateChanged();
             }
         };
 
         mSpinners = findViewById(R.id.pickers);
-
-        // calendar view day-picker
-        mCalendarView = findViewById(R.id.calendar_view);
-        mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            public void onSelectedDayChange(CalendarView view, int year, int month, int monthDay) {
-                setDate(year, month, monthDay);
-                updateSpinners();
-                notifyDateChanged();
-            }
-        });
-
         // day
         mDaySpinner = findViewById(R.id.day);
         mDaySpinner.setFormatter(NumberPicker.getTwoDigitFormatter());
@@ -178,11 +162,10 @@ public class DatePicker extends FrameLayout {
 
         // show only what the user required but make sure we
         // show something and the spinners have higher priority
-        if (!spinnersShown && !calendarViewShown) {
+        if (!spinnersShown) {
             setSpinnersShown(true);
         } else {
             setSpinnersShown(spinnersShown);
-            setCalendarViewShown(calendarViewShown);
         }
 
         // set the min date giving priority of the minDate over startYear
@@ -236,19 +219,6 @@ public class DatePicker extends FrameLayout {
         mYearSpinner.setSelectionDividerHeight(selectionDividerHeight);
     }
 
-    /**
-     * Gets the minimal date supported by this {@link DatePicker} in
-     * milliseconds since January 1, 1970 00:00:00 in
-     * {@link TimeZone#getDefault()} time zone.
-     * <p/>
-     * Note: The default minimal date is 01/01/1900.
-     * <p/>
-     *
-     * @return The minimal supported date.
-     */
-    public long getMinDate() {
-        return mCalendarView.getMinDate();
-    }
 
     /**
      * Sets the minimal date supported by this {@link NumberPicker} in
@@ -265,27 +235,12 @@ public class DatePicker extends FrameLayout {
             return;
         }
         mMinDate.setTimeInMillis(minDate);
-        mCalendarView.setMinDate(minDate);
         if (mCurrentDate.before(mMinDate)) {
             mCurrentDate.setTimeInMillis(mMinDate.getTimeInMillis());
-            updateCalendarView();
         }
         updateSpinners();
     }
 
-    /**
-     * Gets the maximal date supported by this {@link DatePicker} in
-     * milliseconds since January 1, 1970 00:00:00 in
-     * {@link TimeZone#getDefault()} time zone.
-     * <p/>
-     * Note: The default maximal date is 12/31/2100.
-     * <p/>
-     *
-     * @return The maximal supported date.
-     */
-    public long getMaxDate() {
-        return mCalendarView.getMaxDate();
-    }
 
     /**
      * Sets the maximal date supported by this {@link DatePicker} in
@@ -302,10 +257,8 @@ public class DatePicker extends FrameLayout {
             return;
         }
         mMaxDate.setTimeInMillis(maxDate);
-        mCalendarView.setMaxDate(maxDate);
         if (mCurrentDate.after(mMaxDate)) {
             mCurrentDate.setTimeInMillis(mMaxDate.getTimeInMillis());
-            updateCalendarView();
         }
         updateSpinners();
     }
@@ -324,7 +277,6 @@ public class DatePicker extends FrameLayout {
         mDaySpinner.setEnabled(enabled);
         mMonthSpinner.setEnabled(enabled);
         mYearSpinner.setEnabled(enabled);
-        mCalendarView.setEnabled(enabled);
         mIsEnabled = enabled;
     }
 
@@ -361,35 +313,6 @@ public class DatePicker extends FrameLayout {
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         setCurrentLocale(newConfig.locale);
-    }
-
-    /**
-     * Gets whether the {@link CalendarView} is shown.
-     *
-     * @return True if the calendar view is shown.
-     * @see #getCalendarView()
-     */
-    public boolean getCalendarViewShown() {
-        return mCalendarView.isShown();
-    }
-
-    /**
-     * Sets whether the {@link CalendarView} is shown.
-     *
-     * @param shown True if the calendar view is to be shown.
-     */
-    public void setCalendarViewShown(boolean shown) {
-        mCalendarView.setVisibility(shown ? VISIBLE : GONE);
-    }
-
-    /**
-     * Gets the {@link CalendarView}.
-     *
-     * @return The calendar view.
-     * @see #getCalendarViewShown()
-     */
-    public CalendarView getCalendarView() {
-        return mCalendarView;
     }
 
     /**
@@ -504,7 +427,6 @@ public class DatePicker extends FrameLayout {
         }
         setDate(year, month, dayOfMonth);
         updateSpinners();
-        updateCalendarView();
         notifyDateChanged();
     }
 
@@ -526,7 +448,6 @@ public class DatePicker extends FrameLayout {
         super.onRestoreInstanceState(ss.getSuperState());
         setDate(ss.mYear, ss.mMonth, ss.mDay);
         updateSpinners();
-        updateCalendarView();
     }
 
     /**
@@ -540,7 +461,6 @@ public class DatePicker extends FrameLayout {
     public void init(int year, int monthOfYear, int dayOfMonth) {
         setDate(year, monthOfYear, dayOfMonth);
         updateSpinners();
-        updateCalendarView();
     }
 
 
@@ -625,12 +545,6 @@ public class DatePicker extends FrameLayout {
         mDaySpinner.setValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
     }
 
-    /**
-     * Updates the calendar view with the current date.
-     */
-    private void updateCalendarView() {
-        mCalendarView.setDate(mCurrentDate.getTimeInMillis(), false, false);
-    }
 
     /**
      * @return The selected year.

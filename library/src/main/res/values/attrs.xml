@@ -20,8 +20,6 @@
         <attr name="dp_endYear" format="integer" />
         <!-- Whether the spinners are shown. -->
         <attr name="dp_spinnersShown" format="boolean" />
-        <!-- Whether the calendar view is shown. -->
-        <attr name="dp_calendarViewShown" format="boolean" />
         <!-- Whether the day view is shown. -->
         <attr name="dp_dayViewShown" format="boolean" />
         <!-- The minimal date shown by this calendar view in mm/dd/yyyy format. -->

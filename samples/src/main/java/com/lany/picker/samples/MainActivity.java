@@ -2,7 +2,6 @@ package com.lany.picker.samples;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.lany.box.activity.BaseActivity;
@@ -47,7 +46,6 @@ public class MainActivity extends BaseActivity {
     protected void init(Bundle bundle) {
         datePicker1.setSelectionDivider(new ColorDrawable(0xffff0000));
         datePicker1.setSelectionDividerHeight(2);
-        datePicker1.setCalendarViewShown(false);
         //datePicker1.setDayViewShown(false);
         datePicker1.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
             @Override
@@ -62,7 +60,6 @@ public class MainActivity extends BaseActivity {
 
         datePicker2.setSelectionDivider(new ColorDrawable(0xff008B00));
         datePicker2.setSelectionDividerHeight(4);
-        datePicker2.setCalendarViewShown(false);
         //datePicker2.setDayViewShown(false);
         datePicker2.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
             @Override

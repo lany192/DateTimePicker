@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Spanned;
@@ -119,39 +120,39 @@ public class NumberPicker extends LinearLayout {
     /**
      * The increment button.
      */
-    private final ImageButton mIncrementButton;
+    private ImageButton mIncrementButton;
     /**
      * The decrement button.
      */
-    private final ImageButton mDecrementButton;
+    private ImageButton mDecrementButton;
     /**
      * The text for showing the current value.
      */
-    private final EditText mInputText;
+    private EditText mInputText;
     /**
      * The distance between the two selection dividers.
      */
-    private final int mSelectionDividersDistance;
+    private int mSelectionDividersDistance;
     /**
      * The min height of this widget.
      */
-    private final int mMinHeight;
+    private int mMinHeight;
     /**
      * The max height of this widget.
      */
-    private final int mMaxHeight;
+    private int mMaxHeight;
     /**
      * The max width of this widget.
      */
-    private final int mMinWidth;
+    private int mMinWidth;
     /**
      * Flag whether to compute the max width.
      */
-    private final boolean mComputeMaxWidth;
+    private boolean mComputeMaxWidth;
     /**
      * The height of the text.
      */
-    private final int mTextSize;
+    private int mTextSize;
     /**
      * Cache for the string representation of selector indices.
      */
@@ -163,31 +164,31 @@ public class NumberPicker extends LinearLayout {
     /**
      * The {@link Paint} for drawing the selector.
      */
-    private final Paint mSelectorWheelPaint;
+    private Paint mSelectorWheelPaint;
     /**
      * The {@link Drawable} for pressed virtual (increment/decrement) buttons.
      */
-    private final Drawable mVirtualButtonPressedDrawable;
+    private Drawable mVirtualButtonPressedDrawable;
     /**
      * The {@link Scroller} responsible for flinging the selector.
      */
-    private final Scroller mFlingScroller;
+    private Scroller mFlingScroller;
     /**
      * The {@link Scroller} responsible for adjusting the selector.
      */
-    private final Scroller mAdjustScroller;
+    private Scroller mAdjustScroller;
     /**
      * The back ground color used to optimize scroller fading.
      */
-    private final int mSolidColor;
+    private int mSolidColor;
     /**
      * Flag whether this widget has a selector wheel.
      */
-    private final boolean mHasSelectorWheel;
+    private boolean mHasSelectorWheel;
     /**
      * Helper class for managing pressed state of the virtual buttons.
      */
-    private final PressedStateHelper mPressedStateHelper;
+    private PressedStateHelper mPressedStateHelper;
     /**
      * The max width of this widget.
      */
@@ -349,92 +350,50 @@ public class NumberPicker extends LinearLayout {
      */
     private int mLastHandledDownDpadKeyCode = -1;
 
-    /**
-     * Create a new number picker.
-     *
-     * @param context The application environment.
-     */
     public NumberPicker(Context context) {
-        this(context, null);
+        super(context);
+        inti(null);
     }
 
-    /**
-     * Create a new number picker.
-     *
-     * @param context The application environment.
-     * @param attrs   A collection of attributes.
-     */
-    public NumberPicker(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.numberPickerStyle);
-    }
-
-    /**
-     * Create a new number picker
-     *
-     * @param context  the application environment.
-     * @param attrs    a collection of attributes.
-     * @param defStyle The default style to apply to this view.
-     */
-    public NumberPicker(Context context, AttributeSet attrs, int defStyle) {
+    public NumberPicker(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        inti(attrs);
+    }
 
-        // process style attributes
-        TypedArray attributesArray = context.obtainStyledAttributes(attrs,
-                R.styleable.NumberPicker, defStyle, 0);
-        final int layoutResId = attributesArray.getResourceId(
-                R.styleable.NumberPicker_internalLayout,
-                DEFAULT_LAYOUT_RESOURCE_ID);
+    public NumberPicker(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        inti(attrs);
+    }
 
-        mHasSelectorWheel = (layoutResId != DEFAULT_LAYOUT_RESOURCE_ID);
-
-        mSolidColor = attributesArray.getColor(
-                R.styleable.NumberPicker_solidColor, 0);
-
-        mSelectionDivider = attributesArray
-                .getDrawable(R.styleable.NumberPicker_selectionDivider);
-
-        final int defSelectionDividerHeight = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                UNSCALED_DEFAULT_SELECTION_DIVIDER_HEIGHT, getResources()
-                        .getDisplayMetrics());
-        mSelectionDividerHeight = attributesArray.getDimensionPixelSize(
-                R.styleable.NumberPicker_selectionDividerHeight,
-                defSelectionDividerHeight);
-
-        final int defSelectionDividerDistance = (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                        UNSCALED_DEFAULT_SELECTION_DIVIDERS_DISTANCE,
-                        getResources().getDisplayMetrics());
-        mSelectionDividersDistance = attributesArray.getDimensionPixelSize(
-                R.styleable.NumberPicker_selectionDividersDistance,
-                defSelectionDividerDistance);
-
-        mMinHeight = attributesArray.getDimensionPixelSize(
-                R.styleable.NumberPicker_internalMinHeight, SIZE_UNSPECIFIED);
-
-        mMaxHeight = attributesArray.getDimensionPixelSize(
-                R.styleable.NumberPicker_internalMaxHeight, SIZE_UNSPECIFIED);
-        if (mMinHeight != SIZE_UNSPECIFIED && mMaxHeight != SIZE_UNSPECIFIED
-                && mMinHeight > mMaxHeight) {
-            throw new IllegalArgumentException("minHeight > maxHeight");
+    public void inti(AttributeSet attrs) {
+        int layoutResId = DEFAULT_LAYOUT_RESOURCE_ID;
+        if (attrs != null) {
+            TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.NumberPicker, R.attr.numberPickerStyle, R.style.NumberPicker);
+            layoutResId = typedArray.getResourceId(R.styleable.NumberPicker_internalLayout, DEFAULT_LAYOUT_RESOURCE_ID);
+            mHasSelectorWheel = (layoutResId != DEFAULT_LAYOUT_RESOURCE_ID);
+            mSolidColor = typedArray.getColor(R.styleable.NumberPicker_solidColor, 0);
+            mSelectionDivider = typedArray.getDrawable(R.styleable.NumberPicker_selectionDivider);
+            final int defSelectionDividerHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, UNSCALED_DEFAULT_SELECTION_DIVIDER_HEIGHT, getResources().getDisplayMetrics());
+            mSelectionDividerHeight = typedArray.getDimensionPixelSize(R.styleable.NumberPicker_selectionDividerHeight, defSelectionDividerHeight);
+            final int defSelectionDividerDistance = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, UNSCALED_DEFAULT_SELECTION_DIVIDERS_DISTANCE, getResources().getDisplayMetrics());
+            mSelectionDividersDistance = typedArray.getDimensionPixelSize(R.styleable.NumberPicker_selectionDividersDistance, defSelectionDividerDistance);
+            mMinHeight = typedArray.getDimensionPixelSize(R.styleable.NumberPicker_internalMinHeight, SIZE_UNSPECIFIED);
+            mMaxHeight = typedArray.getDimensionPixelSize(R.styleable.NumberPicker_internalMaxHeight, SIZE_UNSPECIFIED);
+            if (mMinHeight != SIZE_UNSPECIFIED && mMaxHeight != SIZE_UNSPECIFIED && mMinHeight > mMaxHeight) {
+                throw new IllegalArgumentException("minHeight > maxHeight");
+            }
+            mMinWidth = typedArray.getDimensionPixelSize(R.styleable.NumberPicker_internalMinWidth, SIZE_UNSPECIFIED);
+            mMaxWidth = typedArray.getDimensionPixelSize(R.styleable.NumberPicker_internalMaxWidth, SIZE_UNSPECIFIED);
+            if (mMinWidth != SIZE_UNSPECIFIED && mMaxWidth != SIZE_UNSPECIFIED && mMinWidth > mMaxWidth) {
+                throw new IllegalArgumentException("minWidth > maxWidth");
+            }
+            mComputeMaxWidth = (mMaxWidth == SIZE_UNSPECIFIED);
+            mVirtualButtonPressedDrawable = typedArray.getDrawable(R.styleable.NumberPicker_virtualButtonPressedDrawable);
+            typedArray.recycle();
         }
 
-        mMinWidth = attributesArray.getDimensionPixelSize(
-                R.styleable.NumberPicker_internalMinWidth, SIZE_UNSPECIFIED);
+        LayoutInflater.from(getContext()).inflate(layoutResId, this, true);
 
-        mMaxWidth = attributesArray.getDimensionPixelSize(
-                R.styleable.NumberPicker_internalMaxWidth, SIZE_UNSPECIFIED);
-        if (mMinWidth != SIZE_UNSPECIFIED && mMaxWidth != SIZE_UNSPECIFIED
-                && mMinWidth > mMaxWidth) {
-            throw new IllegalArgumentException("minWidth > maxWidth");
-        }
-
-        mComputeMaxWidth = (mMaxWidth == SIZE_UNSPECIFIED);
-
-        mVirtualButtonPressedDrawable = attributesArray
-                .getDrawable(R.styleable.NumberPicker_virtualButtonPressedDrawable);
-
-        attributesArray.recycle();
 
         mPressedStateHelper = new PressedStateHelper();
 
@@ -444,8 +403,6 @@ public class NumberPicker extends LinearLayout {
         // the fading edge effect implemented by View and we need our
         // draw() method to be called. Therefore, we declare we will draw.
         setWillNotDraw(!mHasSelectorWheel);
-
-        LayoutInflater.from(getContext()).inflate(layoutResId, this);
 
         OnClickListener onClickListener = new OnClickListener() {
             public void onClick(View v) {
@@ -508,7 +465,7 @@ public class NumberPicker extends LinearLayout {
         mInputText.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         // initialize constants
-        ViewConfiguration configuration = ViewConfiguration.get(context);
+        ViewConfiguration configuration = ViewConfiguration.get(getContext());
         mTouchSlop = configuration.getScaledTouchSlop();
         mMinimumFlingVelocity = configuration.getScaledMinimumFlingVelocity();
         mMaximumFlingVelocity = configuration.getScaledMaximumFlingVelocity()

@@ -11,7 +11,6 @@
         <item name="internalLayout">@layout/number_picker_with_selector_wheel</item>
         <item name="internalMinWidth">48dp</item>
         <item name="internalMaxHeight">180dp</item>
-        <item name="virtualButtonPressedDrawable">@drawable/item_background_holo_dark</item>
     </style>
 
 </resources>

@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.lany192'
-
 android {
     compileSdkVersion 27
 
@@ -18,4 +17,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+}
+dependencies {
+    implementation 'com.android.support:support-annotations:27.1.1'
 }

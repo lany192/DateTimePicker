@@ -2,6 +2,7 @@ package com.lany.picker.samples;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.lany.box.activity.BaseActivity;
@@ -27,12 +28,24 @@ public class MainActivity extends BaseActivity {
         mDatePicker1.setSelectionDividerHeight(2);
         mDatePicker1.setCalendarViewShown(false);
         //mDatePicker1.setDayViewShown(false);
+        mDatePicker1.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Log.i(TAG, "onDateChanged: " + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+            }
+        });
 
         mDatePicker2 = findViewById(R.id.date_picker_2);
         mDatePicker2.setSelectionDivider(new ColorDrawable(0xff008B00));
         mDatePicker2.setSelectionDividerHeight(4);
         mDatePicker2.setCalendarViewShown(false);
         //mDatePicker2.setDayViewShown(false);
+        mDatePicker2.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Log.i(TAG, "onDateChanged: " + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+            }
+        });
 
         HourMinuteSecondPicker lanyPicker = findViewById(R.id.lanyPicker);
         lanyPicker.setSelectionDivider(new ColorDrawable(0xff000000));

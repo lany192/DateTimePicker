@@ -7,47 +7,71 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
-        <com.lany.picker.DatePicker
-            android:id="@+id/date_picker_1"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:dp_dayViewShown="false" />
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-        <com.lany.picker.DatePicker
-            android:id="@+id/date_picker_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:dp_calendarViewShown="false" />
+            <com.lany.picker.DatePicker
+                android:id="@+id/date_picker_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:dp_dayViewShown="false" />
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <com.lany.picker.DatePicker
+                android:id="@+id/date_picker_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:dp_calendarViewShown="false" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="#dddddd" />
 
         <com.lany.picker.HourMinuteSecondPicker
             android:id="@+id/lanyPicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp" />
+            android:layout_margin="16dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="#dddddd" />
 
         <TextView
             android:id="@+id/lany_picker_show_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textSize="20sp" />
-
+            android:layout_margin="16dp"
+            android:textSize="14sp" />
 
         <com.lany.picker.HourMinutePicker
             android:id="@+id/timePicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp" />
+            android:layout_margin="16dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="#dddddd" />
 
         <com.lany.picker.YMDHPicker
             android:id="@+id/ymdhPicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp" />
+            android:layout_margin="16dp" />
     </LinearLayout>
 </ScrollView>

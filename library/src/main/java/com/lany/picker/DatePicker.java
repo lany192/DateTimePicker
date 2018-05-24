@@ -209,8 +209,7 @@ public class DatePicker extends FrameLayout {
 
         // initialize to current date
         mCurrentDate.setTimeInMillis(System.currentTimeMillis());
-        init(mCurrentDate.get(Calendar.YEAR), mCurrentDate.get(Calendar.MONTH),
-                mCurrentDate.get(Calendar.DAY_OF_MONTH), null);
+        init(mCurrentDate.get(Calendar.YEAR), mCurrentDate.get(Calendar.MONTH), mCurrentDate.get(Calendar.DAY_OF_MONTH));
 
         // re-order the number spinners to match the current date format
         reorderSpinners();
@@ -511,16 +510,14 @@ public class DatePicker extends FrameLayout {
 
     // Override so we are in complete control of save / restore for this widget.
     @Override
-    protected void dispatchRestoreInstanceState(
-            SparseArray<Parcelable> container) {
+    protected void dispatchRestoreInstanceState(SparseArray<Parcelable> container) {
         dispatchThawSelfOnly(container);
     }
 
     @Override
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
-        return new SavedState(superState, getYear(), getMonth(),
-                getDayOfMonth());
+        return new SavedState(superState, getYear(), getMonth(), getDayOfMonth());
     }
 
     @Override
@@ -539,15 +536,14 @@ public class DatePicker extends FrameLayout {
      * @param year                  The initial year.
      * @param monthOfYear           The initial month <strong>starting from zero</strong>.
      * @param dayOfMonth            The initial day of the month.
-     * @param onDateChangedListener How user is notified date is changed by user, can be null.
      */
-    public void init(int year, int monthOfYear, int dayOfMonth,
-                     OnDateChangedListener onDateChangedListener) {
+    public void init(int year, int monthOfYear, int dayOfMonth) {
         setDate(year, monthOfYear, dayOfMonth);
         updateSpinners();
         updateCalendarView();
-        mOnDateChangedListener = onDateChangedListener;
     }
+
+
 
     /**
      * Parses the given <code>date</code> and in case of success sets the result
@@ -664,8 +660,7 @@ public class DatePicker extends FrameLayout {
     private void notifyDateChanged() {
         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
         if (mOnDateChangedListener != null) {
-            mOnDateChangedListener.onDateChanged(this, getYear(), getMonth(),
-                    getDayOfMonth());
+            mOnDateChangedListener.onDateChanged(this, getYear(), getMonth(), getDayOfMonth());
         }
     }
 
@@ -739,6 +734,10 @@ public class DatePicker extends FrameLayout {
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
             }
         }
+    }
+
+    public void setOnDateChangedListener(OnDateChangedListener listener) {
+        mOnDateChangedListener = listener;
     }
 
     /**

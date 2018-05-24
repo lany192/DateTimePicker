@@ -10,6 +10,6 @@ This is a custom datepicker timepicker from android source
         
       
     dependencies {
-        compile 'com.github.lany192:DateTimePicker:1.0.2'
+        compile 'com.github.lany192:DateTimePicker:1.0.3'
     }        
 ![image](https://github.com/lany192/DateTimePicker/raw/master/Screenshot/a.png)

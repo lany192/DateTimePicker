@@ -448,7 +448,7 @@ public class NumberPicker extends LinearLayout {
         }
 
         // input text
-        mInputText = findViewById(R.id.np__numberpicker_input);
+        mInputText = findViewById(R.id.number_picker_edit_text);
         mInputText.setOnFocusChangeListener(new OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
@@ -1290,6 +1290,7 @@ public class NumberPicker extends LinearLayout {
 
     @Override
     protected void onDetachedFromWindow() {
+        //super.onDetachedFromWindow();
         removeAllCallbacks();
     }
 
@@ -1935,23 +1936,7 @@ public class NumberPicker extends LinearLayout {
         }
     }
 
-    /**
-     * @hide
-     */
-    public static class CustomEditText extends EditText {
 
-        public CustomEditText(Context context, AttributeSet attrs) {
-            super(context, attrs);
-        }
-
-        @Override
-        public void onEditorAction(int actionCode) {
-            super.onEditorAction(actionCode);
-            if (actionCode == EditorInfo.IME_ACTION_DONE) {
-                clearFocus();
-            }
-        }
-    }
 
     /**
      * Filter for accepting only valid indices or prefixes of the string

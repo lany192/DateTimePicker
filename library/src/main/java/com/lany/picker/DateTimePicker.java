@@ -22,6 +22,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.lany.picker.utils.ArraysUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,19 +38,19 @@ public class DateTimePicker extends FrameLayout {
     private static final int DEFAULT_END_YEAR = 2100;
     private final String TAG = getClass().getSimpleName();
 
-    private EditText mMinuteSpinnerInput;
-    private EditText mSecondSpinnerInput;
-    private EditText mHourSpinnerInput;
-    private EditText mDaySpinnerInput;
-    private EditText mMonthSpinnerInput;
-    private EditText mYearSpinnerInput;
+    private EditText mMinuteEditText;
+    private EditText mSecondEditText;
+    private EditText mHourEditText;
+    private EditText mDayEditText;
+    private EditText mMonthEditText;
+    private EditText mYearEditText;
 
-    private NumberPicker mSecondSpinner;
-    private NumberPicker mMinuteSpinner;
-    private NumberPicker mHourSpinner;
-    private NumberPicker mDaySpinner;
-    private NumberPicker mMonthSpinner;
-    private NumberPicker mYearSpinner;
+    private NumberPicker mSecondNPicker;
+    private NumberPicker mMinuteNPicker;
+    private NumberPicker mHourNPicker;
+    private NumberPicker mDayNPicker;
+    private NumberPicker mMonthNPicker;
+    private NumberPicker mYearNPicker;
 
 
     private Locale mCurrentLocale;
@@ -100,7 +102,7 @@ public class DateTimePicker extends FrameLayout {
                 mTempDate.setTimeInMillis(mCurrentDate.getTimeInMillis());
                 // take care of wrapping of days and months to update greater
                 // fields
-                if (picker == mDaySpinner) {
+                if (picker == mDayNPicker) {
                     int maxDayOfMonth = mTempDate
                             .getActualMaximum(Calendar.DAY_OF_MONTH);
                     if (oldValue == maxDayOfMonth && newValue == 1) {
@@ -110,7 +112,7 @@ public class DateTimePicker extends FrameLayout {
                     } else {
                         mTempDate.add(Calendar.DAY_OF_MONTH, newValue - oldValue);
                     }
-                } else if (picker == mMonthSpinner) {
+                } else if (picker == mMonthNPicker) {
                     if (oldValue == 11 && newValue == 0) {
                         mTempDate.add(Calendar.MONTH, 1);
                     } else if (oldValue == 0 && newValue == 11) {
@@ -118,13 +120,13 @@ public class DateTimePicker extends FrameLayout {
                     } else {
                         mTempDate.add(Calendar.MONTH, newValue - oldValue);
                     }
-                } else if (picker == mYearSpinner) {
+                } else if (picker == mYearNPicker) {
                     mTempDate.set(Calendar.YEAR, newValue);
-                } else if (picker == mHourSpinner) {
+                } else if (picker == mHourNPicker) {
                     mTempDate.set(Calendar.HOUR_OF_DAY, newValue);
-                } else if (picker == mMinuteSpinner) {
+                } else if (picker == mMinuteNPicker) {
                     mTempDate.set(Calendar.MINUTE, newValue);
-                } else if (picker == mSecondSpinner) {
+                } else if (picker == mSecondNPicker) {
                     mTempDate.set(Calendar.SECOND, newValue);
                 } else {
                     throw new IllegalArgumentException();
@@ -136,53 +138,53 @@ public class DateTimePicker extends FrameLayout {
                         mTempDate.get(Calendar.HOUR_OF_DAY),
                         mTempDate.get(Calendar.MINUTE),
                         mTempDate.get(Calendar.SECOND));
-                updateSpinners();
+                updateNPickers();
                 notifyDateChanged();
             }
         };
         // minute
-        mMinuteSpinner = findViewById(R.id.minute);
-        mMinuteSpinner.setMinValue(0);
-        mMinuteSpinner.setMaxValue(59);
-        mMinuteSpinner.setOnLongPressUpdateInterval(100);
-        mMinuteSpinner.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mMinuteSpinner.setOnValueChangedListener(onChangeListener);
-        mMinuteSpinnerInput = mMinuteSpinner.findViewById(R.id.np__numberpicker_input);
-        mMinuteSpinnerInput.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        mMinuteNPicker = findViewById(R.id.minute);
+        mMinuteNPicker.setMinValue(0);
+        mMinuteNPicker.setMaxValue(59);
+        mMinuteNPicker.setOnLongPressUpdateInterval(100);
+        mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
+        mMinuteNPicker.setOnValueChangedListener(onChangeListener);
+        mMinuteEditText = mMinuteNPicker.findViewById(R.id.number_picker_edit_text);
+        mMinuteEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         // second
-        mSecondSpinner = findViewById(R.id.second);
-        mSecondSpinner.setMinValue(0);
-        mSecondSpinner.setMaxValue(59);
-        mMinuteSpinner.setOnLongPressUpdateInterval(100);
-        mMinuteSpinner.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mSecondSpinner.setOnValueChangedListener(onChangeListener);
-        mSecondSpinnerInput = mSecondSpinner.findViewById(R.id.np__numberpicker_input);
-        mSecondSpinnerInput.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        mSecondNPicker = findViewById(R.id.second);
+        mSecondNPicker.setMinValue(0);
+        mSecondNPicker.setMaxValue(59);
+        mMinuteNPicker.setOnLongPressUpdateInterval(100);
+        mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
+        mSecondNPicker.setOnValueChangedListener(onChangeListener);
+        mSecondEditText = mSecondNPicker.findViewById(R.id.number_picker_edit_text);
+        mSecondEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         // hour
-        mHourSpinner = findViewById(R.id.hour);
-        mHourSpinner.setOnLongPressUpdateInterval(100);
-        mHourSpinner.setOnValueChangedListener(onChangeListener);
-        mHourSpinnerInput = mHourSpinner.findViewById(R.id.np__numberpicker_input);
+        mHourNPicker = findViewById(R.id.hour);
+        mHourNPicker.setOnLongPressUpdateInterval(100);
+        mHourNPicker.setOnValueChangedListener(onChangeListener);
+        mHourEditText = mHourNPicker.findViewById(R.id.number_picker_edit_text);
         // day
-        mDaySpinner = findViewById(R.id.day);
-        mDaySpinner.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mDaySpinner.setOnLongPressUpdateInterval(100);
-        mDaySpinner.setOnValueChangedListener(onChangeListener);
-        mDaySpinnerInput = mDaySpinner.findViewById(R.id.np__numberpicker_input);
+        mDayNPicker = findViewById(R.id.day);
+        mDayNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
+        mDayNPicker.setOnLongPressUpdateInterval(100);
+        mDayNPicker.setOnValueChangedListener(onChangeListener);
+        mDayEditText = mDayNPicker.findViewById(R.id.number_picker_edit_text);
         // month
-        mMonthSpinner = findViewById(R.id.month);
-        mMonthSpinner.setMinValue(0);
-        mMonthSpinner.setMaxValue(mNumberOfMonths - 1);
-        mMonthSpinner.setDisplayedValues(mShortMonths);
-        mMonthSpinner.setOnLongPressUpdateInterval(200);
-        mMonthSpinner.setOnValueChangedListener(onChangeListener);
-        mMonthSpinnerInput = mMonthSpinner.findViewById(R.id.np__numberpicker_input);
+        mMonthNPicker = findViewById(R.id.month);
+        mMonthNPicker.setMinValue(0);
+        mMonthNPicker.setMaxValue(mNumberOfMonths - 1);
+        mMonthNPicker.setDisplayedValues(mShortMonths);
+        mMonthNPicker.setOnLongPressUpdateInterval(200);
+        mMonthNPicker.setOnValueChangedListener(onChangeListener);
+        mMonthEditText = mMonthNPicker.findViewById(R.id.number_picker_edit_text);
 
         // year
-        mYearSpinner = findViewById(R.id.year);
-        mYearSpinner.setOnLongPressUpdateInterval(100);
-        mYearSpinner.setOnValueChangedListener(onChangeListener);
-        mYearSpinnerInput = mYearSpinner.findViewById(R.id.np__numberpicker_input);
+        mYearNPicker = findViewById(R.id.year);
+        mYearNPicker.setOnLongPressUpdateInterval(100);
+        mYearNPicker.setOnValueChangedListener(onChangeListener);
+        mYearEditText = mYearNPicker.findViewById(R.id.number_picker_edit_text);
 
         // set the min date giving priority of the minDate over startYear
         mTempDate.clear();
@@ -215,8 +217,8 @@ public class DateTimePicker extends FrameLayout {
                 mCurrentDate.get(Calendar.MINUTE),
                 mCurrentDate.get(Calendar.SECOND));
 
-        // re-order the number spinners to match the current date format
-        reorderSpinners();
+        // re-order the number NPickers to match the current date format
+        reorderNPickers();
 
         // If not explicitly specified this view is important for accessibility.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
@@ -230,21 +232,21 @@ public class DateTimePicker extends FrameLayout {
     }
 
     public void setSelectionDivider(Drawable selectionDivider) {
-        mDaySpinner.setSelectionDivider(selectionDivider);
-        mMonthSpinner.setSelectionDivider(selectionDivider);
-        mYearSpinner.setSelectionDivider(selectionDivider);
-        mHourSpinner.setSelectionDivider(selectionDivider);
-        mMinuteSpinner.setSelectionDivider(selectionDivider);
-        mSecondSpinner.setSelectionDivider(selectionDivider);
+        mDayNPicker.setSelectionDivider(selectionDivider);
+        mMonthNPicker.setSelectionDivider(selectionDivider);
+        mYearNPicker.setSelectionDivider(selectionDivider);
+        mHourNPicker.setSelectionDivider(selectionDivider);
+        mMinuteNPicker.setSelectionDivider(selectionDivider);
+        mSecondNPicker.setSelectionDivider(selectionDivider);
     }
 
     public void setSelectionDividerHeight(int selectionDividerHeight) {
-        mDaySpinner.setSelectionDividerHeight(selectionDividerHeight);
-        mMonthSpinner.setSelectionDividerHeight(selectionDividerHeight);
-        mYearSpinner.setSelectionDividerHeight(selectionDividerHeight);
-        mHourSpinner.setSelectionDividerHeight(selectionDividerHeight);
-        mMinuteSpinner.setSelectionDividerHeight(selectionDividerHeight);
-        mSecondSpinner.setSelectionDividerHeight(selectionDividerHeight);
+        mDayNPicker.setSelectionDividerHeight(selectionDividerHeight);
+        mMonthNPicker.setSelectionDividerHeight(selectionDividerHeight);
+        mYearNPicker.setSelectionDividerHeight(selectionDividerHeight);
+        mHourNPicker.setSelectionDividerHeight(selectionDividerHeight);
+        mMinuteNPicker.setSelectionDividerHeight(selectionDividerHeight);
+        mSecondNPicker.setSelectionDividerHeight(selectionDividerHeight);
     }
 
     public void setMinDate(long minDate) {
@@ -258,7 +260,7 @@ public class DateTimePicker extends FrameLayout {
         if (mCurrentDate.before(mMinDate)) {
             mCurrentDate.setTimeInMillis(mMinDate.getTimeInMillis());
         }
-        updateSpinners();
+        updateNPickers();
     }
 
     public void setMaxDate(long maxDate) {
@@ -272,7 +274,7 @@ public class DateTimePicker extends FrameLayout {
         if (mCurrentDate.after(mMaxDate)) {
             mCurrentDate.setTimeInMillis(mMaxDate.getTimeInMillis());
         }
-        updateSpinners();
+        updateNPickers();
     }
 
     @Override
@@ -286,12 +288,12 @@ public class DateTimePicker extends FrameLayout {
             return;
         }
         super.setEnabled(enabled);
-        mHourSpinner.setEnabled(enabled);
-        mDaySpinner.setEnabled(enabled);
-        mMonthSpinner.setEnabled(enabled);
-        mYearSpinner.setEnabled(enabled);
-        mMinuteSpinner.setEnabled(enabled);
-        mSecondSpinner.setEnabled(enabled);
+        mHourNPicker.setEnabled(enabled);
+        mDayNPicker.setEnabled(enabled);
+        mMonthNPicker.setEnabled(enabled);
+        mYearNPicker.setEnabled(enabled);
+        mMinuteNPicker.setEnabled(enabled);
+        mSecondNPicker.setEnabled(enabled);
         mIsEnabled = enabled;
     }
 
@@ -355,28 +357,28 @@ public class DateTimePicker extends FrameLayout {
         }
     }
 
-    private void reorderSpinners() {
+    private void reorderNPickers() {
         char[] order = DateFormat.getDateFormatOrder(getContext());
-        final int spinnerCount = order.length;
-        for (int i = 0; i < spinnerCount; i++) {
+        final int NPickerCount = order.length;
+        for (int i = 0; i < NPickerCount; i++) {
             switch (order[i]) {
                 case 's':
-                    setImeOptions(mSecondSpinner, spinnerCount, i);
+                    setImeOptions(mSecondNPicker, NPickerCount, i);
                     break;
                 case 'm':
-                    setImeOptions(mMinuteSpinner, spinnerCount, i);
+                    setImeOptions(mMinuteNPicker, NPickerCount, i);
                     break;
                 case 'h':
-                    setImeOptions(mHourSpinner, spinnerCount, i);
+                    setImeOptions(mHourNPicker, NPickerCount, i);
                     break;
                 case 'd':
-                    setImeOptions(mDaySpinner, spinnerCount, i);
+                    setImeOptions(mDayNPicker, NPickerCount, i);
                     break;
                 case 'M':
-                    setImeOptions(mMonthSpinner, spinnerCount, i);
+                    setImeOptions(mMonthNPicker, NPickerCount, i);
                     break;
                 case 'y':
-                    setImeOptions(mYearSpinner, spinnerCount, i);
+                    setImeOptions(mYearNPicker, NPickerCount, i);
                     break;
                 default:
                     throw new IllegalArgumentException();
@@ -389,7 +391,7 @@ public class DateTimePicker extends FrameLayout {
             return;
         }
         setDate(year, month, dayOfMonth, hourOfDay, minute, second);
-        updateSpinners();
+        updateNPickers();
         notifyDateChanged();
     }
 
@@ -409,12 +411,12 @@ public class DateTimePicker extends FrameLayout {
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
         setDate(ss.mYear, ss.mMonth, ss.mDay, ss.mHour, ss.mMinute, ss.mSecond);
-        updateSpinners();
+        updateNPickers();
     }
 
     public void init(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute, int second) {
         setDate(year, monthOfYear, dayOfMonth, hourOfDay, minute, second);
-        updateSpinners();
+        updateNPickers();
     }
 
     private boolean parseDate(String date, Calendar outDate) {
@@ -445,62 +447,62 @@ public class DateTimePicker extends FrameLayout {
         }
     }
 
-    private void updateSpinners() {
+    private void updateNPickers() {
         if (mCurrentDate.equals(mMinDate)) {
-            mDaySpinner.setMinValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
-            mDaySpinner.setMaxValue(mCurrentDate.getActualMaximum(Calendar.DAY_OF_MONTH));
-            mDaySpinner.setWrapSelectorWheel(false);
-            mMonthSpinner.setDisplayedValues(null);
-            mMonthSpinner.setMinValue(mCurrentDate.get(Calendar.MONTH));
-            mMonthSpinner.setMaxValue(mCurrentDate.getActualMaximum(Calendar.MONTH));
-            mMonthSpinner.setWrapSelectorWheel(false);
+            mDayNPicker.setMinValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
+            mDayNPicker.setMaxValue(mCurrentDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+            mDayNPicker.setWrapSelectorWheel(false);
+            mMonthNPicker.setDisplayedValues(null);
+            mMonthNPicker.setMinValue(mCurrentDate.get(Calendar.MONTH));
+            mMonthNPicker.setMaxValue(mCurrentDate.getActualMaximum(Calendar.MONTH));
+            mMonthNPicker.setWrapSelectorWheel(false);
         } else if (mCurrentDate.equals(mMaxDate)) {
-            mDaySpinner.setMinValue(mCurrentDate.getActualMinimum(Calendar.DAY_OF_MONTH));
-            mDaySpinner.setMaxValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
-            mDaySpinner.setWrapSelectorWheel(false);
-            mMonthSpinner.setDisplayedValues(null);
-            mMonthSpinner.setMinValue(mCurrentDate.getActualMinimum(Calendar.MONTH));
-            mMonthSpinner.setMaxValue(mCurrentDate.get(Calendar.MONTH));
-            mMonthSpinner.setWrapSelectorWheel(false);
+            mDayNPicker.setMinValue(mCurrentDate.getActualMinimum(Calendar.DAY_OF_MONTH));
+            mDayNPicker.setMaxValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
+            mDayNPicker.setWrapSelectorWheel(false);
+            mMonthNPicker.setDisplayedValues(null);
+            mMonthNPicker.setMinValue(mCurrentDate.getActualMinimum(Calendar.MONTH));
+            mMonthNPicker.setMaxValue(mCurrentDate.get(Calendar.MONTH));
+            mMonthNPicker.setWrapSelectorWheel(false);
         } else {
-            mDaySpinner.setMinValue(1);
-            mDaySpinner.setMaxValue(mCurrentDate.getActualMaximum(Calendar.DAY_OF_MONTH));
-            mDaySpinner.setWrapSelectorWheel(true);
-            mMonthSpinner.setDisplayedValues(null);
-            mMonthSpinner.setMinValue(0);
-            mMonthSpinner.setMaxValue(11);
-            mMonthSpinner.setWrapSelectorWheel(true);
+            mDayNPicker.setMinValue(1);
+            mDayNPicker.setMaxValue(mCurrentDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+            mDayNPicker.setWrapSelectorWheel(true);
+            mMonthNPicker.setDisplayedValues(null);
+            mMonthNPicker.setMinValue(0);
+            mMonthNPicker.setMaxValue(11);
+            mMonthNPicker.setWrapSelectorWheel(true);
         }
 
         // make sure the month names are a zero based array
-        // with the months in the month spinner
-        String[] displayedValues = ArraysUtils.copyOfRange(mShortMonths, mMonthSpinner.getMinValue(), mMonthSpinner.getMaxValue() + 1);
-        mMonthSpinner.setDisplayedValues(displayedValues);
+        // with the months in the month NPicker
+        String[] displayedValues = ArraysUtils.copyOfRange(mShortMonths, mMonthNPicker.getMinValue(), mMonthNPicker.getMaxValue() + 1);
+        mMonthNPicker.setDisplayedValues(displayedValues);
 
-        // year spinner range does not change based on the current date
-        mYearSpinner.setMinValue(mMinDate.get(Calendar.YEAR));
-        mYearSpinner.setMaxValue(mMaxDate.get(Calendar.YEAR));
-        mYearSpinner.setWrapSelectorWheel(false);
+        // year NPicker range does not change based on the current date
+        mYearNPicker.setMinValue(mMinDate.get(Calendar.YEAR));
+        mYearNPicker.setMaxValue(mMaxDate.get(Calendar.YEAR));
+        mYearNPicker.setWrapSelectorWheel(false);
 
-        mHourSpinner.setMinValue(0);
-        mHourSpinner.setMaxValue(23);
-        mHourSpinner.setWrapSelectorWheel(true);
+        mHourNPicker.setMinValue(0);
+        mHourNPicker.setMaxValue(23);
+        mHourNPicker.setWrapSelectorWheel(true);
 
-        mMinuteSpinner.setMinValue(0);
-        mMinuteSpinner.setMaxValue(59);
-        mMinuteSpinner.setWrapSelectorWheel(true);
+        mMinuteNPicker.setMinValue(0);
+        mMinuteNPicker.setMaxValue(59);
+        mMinuteNPicker.setWrapSelectorWheel(true);
 
-        mSecondSpinner.setMinValue(0);
-        mSecondSpinner.setMaxValue(59);
-        mSecondSpinner.setWrapSelectorWheel(true);
+        mSecondNPicker.setMinValue(0);
+        mSecondNPicker.setMaxValue(59);
+        mSecondNPicker.setWrapSelectorWheel(true);
 
-        // set the spinner values
-        mYearSpinner.setValue(mCurrentDate.get(Calendar.YEAR));
-        mMonthSpinner.setValue(mCurrentDate.get(Calendar.MONTH));
-        mDaySpinner.setValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
-        mHourSpinner.setValue(mCurrentDate.get(Calendar.HOUR_OF_DAY));
-        mMinuteSpinner.setValue(mCurrentDate.get(Calendar.MINUTE));
-        mSecondSpinner.setValue(mCurrentDate.get(Calendar.SECOND));
+        // set the NPicker values
+        mYearNPicker.setValue(mCurrentDate.get(Calendar.YEAR));
+        mMonthNPicker.setValue(mCurrentDate.get(Calendar.MONTH));
+        mDayNPicker.setValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
+        mHourNPicker.setValue(mCurrentDate.get(Calendar.HOUR_OF_DAY));
+        mMinuteNPicker.setValue(mCurrentDate.get(Calendar.MINUTE));
+        mSecondNPicker.setValue(mCurrentDate.get(Calendar.SECOND));
     }
 
     /**
@@ -550,43 +552,43 @@ public class DateTimePicker extends FrameLayout {
     }
 
     /**
-     * Sets the IME options for a spinner based on its ordering.
+     * Sets the IME options for a NPicker based on its ordering.
      *
-     * @param spinner      The spinner.
-     * @param spinnerCount The total spinner count.
-     * @param spinnerIndex The index of the given spinner.
+     * @param NPicker      The NPicker.
+     * @param NPickerCount The total NPicker count.
+     * @param NPickerIndex The index of the given NPicker.
      */
-    private void setImeOptions(NumberPicker spinner, int spinnerCount, int spinnerIndex) {
+    private void setImeOptions(NumberPicker NPicker, int NPickerCount, int NPickerIndex) {
         final int imeOptions;
-        if (spinnerIndex < spinnerCount - 1) {
+        if (NPickerIndex < NPickerCount - 1) {
             imeOptions = EditorInfo.IME_ACTION_NEXT;
         } else {
             imeOptions = EditorInfo.IME_ACTION_DONE;
         }
-        TextView input = spinner.findViewById(R.id.np__numberpicker_input);
+        TextView input = NPicker.findViewById(R.id.number_picker_edit_text);
         input.setImeOptions(imeOptions);
     }
 
     private void updateInputState() {
         InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) {
-            if (inputMethodManager.isActive(mYearSpinnerInput)) {
-                mYearSpinnerInput.clearFocus();
+            if (inputMethodManager.isActive(mYearEditText)) {
+                mYearEditText.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mMonthSpinnerInput)) {
-                mMonthSpinnerInput.clearFocus();
+            } else if (inputMethodManager.isActive(mMonthEditText)) {
+                mMonthEditText.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mDaySpinnerInput)) {
-                mDaySpinnerInput.clearFocus();
+            } else if (inputMethodManager.isActive(mDayEditText)) {
+                mDayEditText.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mHourSpinnerInput)) {
-                mHourSpinnerInput.clearFocus();
+            } else if (inputMethodManager.isActive(mHourEditText)) {
+                mHourEditText.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mMinuteSpinnerInput)) {
-                mMinuteSpinnerInput.clearFocus();
+            } else if (inputMethodManager.isActive(mMinuteEditText)) {
+                mMinuteEditText.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mSecondSpinnerInput)) {
-                mSecondSpinnerInput.clearFocus();
+            } else if (inputMethodManager.isActive(mSecondEditText)) {
+                mSecondEditText.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
             }
         }

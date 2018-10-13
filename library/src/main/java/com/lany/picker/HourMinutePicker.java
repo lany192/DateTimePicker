@@ -31,16 +31,16 @@ public class HourMinutePicker extends FrameLayout {
 
     private static final int HOURS_IN_HALF_DAY = 12;
     // ui components
-    private final NumberPicker mHourSpinner;
-    private final NumberPicker mMinuteSpinner;
-    private final NumberPicker mAmPmSpinner;
-    private final EditText mHourSpinnerInput;
-    private final EditText mMinuteSpinnerInput;
-    private final EditText mAmPmSpinnerInput;
+    private final NumberPicker mHourNPicker;
+    private final NumberPicker mMinuteNPicker;
+    private final NumberPicker mAmPmNPicker;
+    private final EditText mHourEditText;
+    private final EditText mMinuteEditText;
+    private final EditText mAmPmEditText;
     private final TextView mDivider;
     // Note that the legacy implementation of the TimePicker is
     // using a button for toggling between AM/PM while the new
-    // version uses a NumberPicker spinner. Therefore the code
+    // version uses a NumberPicker NPicker. Therefore the code
     // accommodates these two cases to be backwards compatible.
     private final Button mAmPmButton;
     private final String[] mAmPmStrings;
@@ -73,10 +73,10 @@ public class HourMinutePicker extends FrameLayout {
         LayoutInflater.from(getContext()).inflate(R.layout.picker_hour_minute, this);
 
         // hour
-        mHourSpinner = findViewById(R.id.hour);
-        mHourSpinner.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        mHourNPicker = findViewById(R.id.hour);
+        mHourNPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
-            public void onValueChange(NumberPicker spinner, int oldVal, int newVal) {
+            public void onValueChange(NumberPicker NPicker, int oldVal, int newVal) {
                 updateInputState();
                 if (!is24HourView()) {
                     if ((oldVal == HOURS_IN_HALF_DAY - 1 && newVal == HOURS_IN_HALF_DAY)
@@ -88,8 +88,8 @@ public class HourMinutePicker extends FrameLayout {
                 onTimeChanged();
             }
         });
-        mHourSpinnerInput = mHourSpinner.findViewById(R.id.np__numberpicker_input);
-        mHourSpinnerInput.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        mHourEditText = mHourNPicker.findViewById(R.id.number_picker_edit_text);
+        mHourEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 
         // divider (only for the new widget style)
         mDivider = findViewById(R.id.divider);
@@ -98,47 +98,47 @@ public class HourMinutePicker extends FrameLayout {
         }
 
         // minute
-        mMinuteSpinner = findViewById(R.id.minute);
-        mMinuteSpinner.setMinValue(0);
-        mMinuteSpinner.setMaxValue(59);
-        mMinuteSpinner.setOnLongPressUpdateInterval(100);
-        mMinuteSpinner.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mMinuteSpinner.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        mMinuteNPicker = findViewById(R.id.minute);
+        mMinuteNPicker.setMinValue(0);
+        mMinuteNPicker.setMaxValue(59);
+        mMinuteNPicker.setOnLongPressUpdateInterval(100);
+        mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
+        mMinuteNPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
-            public void onValueChange(NumberPicker spinner, int oldVal, int newVal) {
+            public void onValueChange(NumberPicker NPicker, int oldVal, int newVal) {
                 updateInputState();
-                int minValue = mMinuteSpinner.getMinValue();
-                int maxValue = mMinuteSpinner.getMaxValue();
+                int minValue = mMinuteNPicker.getMinValue();
+                int maxValue = mMinuteNPicker.getMaxValue();
                 if (oldVal == maxValue && newVal == minValue) {
-                    int newHour = mHourSpinner.getValue() + 1;
+                    int newHour = mHourNPicker.getValue() + 1;
                     if (!is24HourView() && newHour == HOURS_IN_HALF_DAY) {
                         mIsAm = !mIsAm;
                         updateAmPmControl();
                     }
-                    mHourSpinner.setValue(newHour);
+                    mHourNPicker.setValue(newHour);
                 } else if (oldVal == minValue && newVal == maxValue) {
-                    int newHour = mHourSpinner.getValue() - 1;
+                    int newHour = mHourNPicker.getValue() - 1;
                     if (!is24HourView()
                             && newHour == HOURS_IN_HALF_DAY - 1) {
                         mIsAm = !mIsAm;
                         updateAmPmControl();
                     }
-                    mHourSpinner.setValue(newHour);
+                    mHourNPicker.setValue(newHour);
                 }
                 onTimeChanged();
             }
         });
-        mMinuteSpinnerInput = mMinuteSpinner.findViewById(R.id.np__numberpicker_input);
-        mMinuteSpinnerInput.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        mMinuteEditText = mMinuteNPicker.findViewById(R.id.number_picker_edit_text);
+        mMinuteEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 
-        /* Get the localized am/pm strings and use them in the spinner */
+        /* Get the localized am/pm strings and use them in the NPicker */
         mAmPmStrings = new DateFormatSymbols().getAmPmStrings();
 
         // am/pm
         View amPmView = findViewById(R.id.amPm);
         if (amPmView instanceof Button) {
-            mAmPmSpinner = null;
-            mAmPmSpinnerInput = null;
+            mAmPmNPicker = null;
+            mAmPmEditText = null;
             mAmPmButton = (Button) amPmView;
             mAmPmButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -151,11 +151,11 @@ public class HourMinutePicker extends FrameLayout {
             });
         } else {
             mAmPmButton = null;
-            mAmPmSpinner = (NumberPicker) amPmView;
-            mAmPmSpinner.setMinValue(0);
-            mAmPmSpinner.setMaxValue(1);
-            mAmPmSpinner.setDisplayedValues(mAmPmStrings);
-            mAmPmSpinner.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            mAmPmNPicker = (NumberPicker) amPmView;
+            mAmPmNPicker.setMinValue(0);
+            mAmPmNPicker.setMaxValue(1);
+            mAmPmNPicker.setDisplayedValues(mAmPmStrings);
+            mAmPmNPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                 public void onValueChange(NumberPicker picker,
                                           int oldVal, int newVal) {
                     updateInputState();
@@ -165,8 +165,8 @@ public class HourMinutePicker extends FrameLayout {
                     onTimeChanged();
                 }
             });
-            mAmPmSpinnerInput = mAmPmSpinner.findViewById(R.id.np__numberpicker_input);
-            mAmPmSpinnerInput.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            mAmPmEditText = mAmPmNPicker.findViewById(R.id.number_picker_edit_text);
+            mAmPmEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         }
 
         // update controls to initial state
@@ -200,15 +200,15 @@ public class HourMinutePicker extends FrameLayout {
     }
 
     public void setSelectionDivider(Drawable selectionDivider) {
-        mHourSpinner.setSelectionDivider(selectionDivider);
-        mMinuteSpinner.setSelectionDivider(selectionDivider);
-        mAmPmSpinner.setSelectionDivider(selectionDivider);
+        mHourNPicker.setSelectionDivider(selectionDivider);
+        mMinuteNPicker.setSelectionDivider(selectionDivider);
+        mAmPmNPicker.setSelectionDivider(selectionDivider);
     }
 
     public void setSelectionDividerHeight(int selectionDividerHeight) {
-        mHourSpinner.setSelectionDividerHeight(selectionDividerHeight);
-        mMinuteSpinner.setSelectionDividerHeight(selectionDividerHeight);
-        mAmPmSpinner.setSelectionDividerHeight(selectionDividerHeight);
+        mHourNPicker.setSelectionDividerHeight(selectionDividerHeight);
+        mMinuteNPicker.setSelectionDividerHeight(selectionDividerHeight);
+        mAmPmNPicker.setSelectionDividerHeight(selectionDividerHeight);
     }
 
     @Override
@@ -222,13 +222,13 @@ public class HourMinutePicker extends FrameLayout {
             return;
         }
         super.setEnabled(enabled);
-        mMinuteSpinner.setEnabled(enabled);
+        mMinuteNPicker.setEnabled(enabled);
         if (mDivider != null) {
             mDivider.setEnabled(enabled);
         }
-        mHourSpinner.setEnabled(enabled);
-        if (mAmPmSpinner != null) {
-            mAmPmSpinner.setEnabled(enabled);
+        mHourNPicker.setEnabled(enabled);
+        if (mAmPmNPicker != null) {
+            mAmPmNPicker.setEnabled(enabled);
         } else {
             mAmPmButton.setEnabled(enabled);
         }
@@ -281,7 +281,7 @@ public class HourMinutePicker extends FrameLayout {
      * @return The current hour in the range (0-23).
      */
     public Integer getCurrentHour() {
-        int currentHour = mHourSpinner.getValue();
+        int currentHour = mHourNPicker.getValue();
         if (is24HourView()) {
             return currentHour;
         } else if (mIsAm) {
@@ -314,7 +314,7 @@ public class HourMinutePicker extends FrameLayout {
             }
             updateAmPmControl();
         }
-        mHourSpinner.setValue(currentHour);
+        mHourNPicker.setValue(currentHour);
         onTimeChanged();
     }
 
@@ -328,10 +328,10 @@ public class HourMinutePicker extends FrameLayout {
             return;
         }
         mIs24HourView = is24HourView;
-        // cache the current hour since spinner range changes
+        // cache the current hour since NPicker range changes
         int currentHour = getCurrentHour();
         updateHourControl();
-        // set value after spinner range is updated
+        // set value after NPicker range is updated
         setCurrentHour(currentHour);
         updateAmPmControl();
     }
@@ -347,7 +347,7 @@ public class HourMinutePicker extends FrameLayout {
      * @return The current minute.
      */
     public Integer getCurrentMinute() {
-        return mMinuteSpinner.getValue();
+        return mMinuteNPicker.getValue();
     }
 
     /**
@@ -357,13 +357,13 @@ public class HourMinutePicker extends FrameLayout {
         if (currentMinute == getCurrentMinute()) {
             return;
         }
-        mMinuteSpinner.setValue(currentMinute);
+        mMinuteNPicker.setValue(currentMinute);
         onTimeChanged();
     }
 
     @Override
     public int getBaseline() {
-        return mHourSpinner.getBaseline();
+        return mHourNPicker.getBaseline();
     }
 
     @Override
@@ -403,28 +403,28 @@ public class HourMinutePicker extends FrameLayout {
 
     private void updateHourControl() {
         if (is24HourView()) {
-            mHourSpinner.setMinValue(0);
-            mHourSpinner.setMaxValue(23);
-            mHourSpinner.setFormatter(NumberPicker.getTwoDigitFormatter());
+            mHourNPicker.setMinValue(0);
+            mHourNPicker.setMaxValue(23);
+            mHourNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
         } else {
-            mHourSpinner.setMinValue(1);
-            mHourSpinner.setMaxValue(12);
-            mHourSpinner.setFormatter(null);
+            mHourNPicker.setMinValue(1);
+            mHourNPicker.setMaxValue(12);
+            mHourNPicker.setFormatter(null);
         }
     }
 
     private void updateAmPmControl() {
         if (is24HourView()) {
-            if (mAmPmSpinner != null) {
-                mAmPmSpinner.setVisibility(View.GONE);
+            if (mAmPmNPicker != null) {
+                mAmPmNPicker.setVisibility(View.GONE);
             } else {
                 mAmPmButton.setVisibility(View.GONE);
             }
         } else {
             int index = mIsAm ? Calendar.AM : Calendar.PM;
-            if (mAmPmSpinner != null) {
-                mAmPmSpinner.setValue(index);
-                mAmPmSpinner.setVisibility(View.VISIBLE);
+            if (mAmPmNPicker != null) {
+                mAmPmNPicker.setValue(index);
+                mAmPmNPicker.setVisibility(View.VISIBLE);
             } else {
                 mAmPmButton.setText(mAmPmStrings[index]);
                 mAmPmButton.setVisibility(View.VISIBLE);
@@ -446,20 +446,20 @@ public class HourMinutePicker extends FrameLayout {
             return; // This is never reached anyway, backport doesn't have
         // increment/decrement buttons
         // Minute
-        trySetContentDescription(mMinuteSpinner, R.id.np__increment,
+        trySetContentDescription(mMinuteNPicker, R.id.np__increment,
                 R.string.time_picker_increment_minute_button);
-        trySetContentDescription(mMinuteSpinner, R.id.np__decrement,
+        trySetContentDescription(mMinuteNPicker, R.id.np__decrement,
                 R.string.time_picker_decrement_minute_button);
         // Hour
-        trySetContentDescription(mHourSpinner, R.id.np__increment,
+        trySetContentDescription(mHourNPicker, R.id.np__increment,
                 R.string.time_picker_increment_hour_button);
-        trySetContentDescription(mHourSpinner, R.id.np__decrement,
+        trySetContentDescription(mHourNPicker, R.id.np__decrement,
                 R.string.time_picker_decrement_hour_button);
         // AM/PM
-        if (mAmPmSpinner != null) {
-            trySetContentDescription(mAmPmSpinner, R.id.np__increment,
+        if (mAmPmNPicker != null) {
+            trySetContentDescription(mAmPmNPicker, R.id.np__increment,
                     R.string.time_picker_increment_set_pm_button);
-            trySetContentDescription(mAmPmSpinner, R.id.np__decrement,
+            trySetContentDescription(mAmPmNPicker, R.id.np__decrement,
                     R.string.time_picker_decrement_set_am_button);
         }
     }
@@ -483,14 +483,14 @@ public class HourMinutePicker extends FrameLayout {
         InputMethodManager inputMethodManager = (InputMethodManager) getContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) {
-            if (inputMethodManager.isActive(mHourSpinnerInput)) {
-                mHourSpinnerInput.clearFocus();
+            if (inputMethodManager.isActive(mHourEditText)) {
+                mHourEditText.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mMinuteSpinnerInput)) {
-                mMinuteSpinnerInput.clearFocus();
+            } else if (inputMethodManager.isActive(mMinuteEditText)) {
+                mMinuteEditText.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mAmPmSpinnerInput)) {
-                mAmPmSpinnerInput.clearFocus();
+            } else if (inputMethodManager.isActive(mAmPmEditText)) {
+                mAmPmEditText.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
             }
         }

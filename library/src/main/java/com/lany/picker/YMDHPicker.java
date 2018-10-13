@@ -89,8 +89,7 @@ public class YMDHPicker extends FrameLayout {
         }
 
         NumberPicker.OnValueChangeListener onChangeListener = new NumberPicker.OnValueChangeListener() {
-            public void onValueChange(NumberPicker picker, int oldVal,
-                                      int newVal) {
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 updateInputState();
                 mTempDate.setTimeInMillis(mCurrentDate.getTimeInMillis());
                 // take care of wrapping of days and months to update greater

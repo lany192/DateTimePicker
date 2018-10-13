@@ -1,6 +1,14 @@
 package com.lany.picker.samples;
 
-import com.lany.box.BaseApp;
+import android.app.Application;
 
-public class SampleApplication extends BaseApp {
+import com.lany.box.Box;
+
+public class SampleApplication extends Application {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Box.of().init(this, BuildConfig.DEBUG);
+    }
 }

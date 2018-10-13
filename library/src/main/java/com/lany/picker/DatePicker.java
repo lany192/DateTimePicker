@@ -77,14 +77,14 @@ public class DatePicker extends FrameLayout {
         setCurrentLocale(Locale.getDefault());
 
         TypedArray attributesArray = context.obtainStyledAttributes(attrs, R.styleable.DatePicker, defStyle, 0);
-        boolean spinnersShown = attributesArray.getBoolean(R.styleable.DatePicker_dp_spinnersShown, DEFAULT_SPINNERS_SHOWN);
-        boolean dayViewShown = attributesArray.getBoolean(R.styleable.DatePicker_dp_dayViewShown, DEFAULT_DAY_VIEW_SHOWN);
+        boolean spinnersShown = attributesArray.getBoolean(R.styleable.DatePicker_picker_spinnersShown, DEFAULT_SPINNERS_SHOWN);
+        boolean dayViewShown = attributesArray.getBoolean(R.styleable.DatePicker_picker_dayViewShown, DEFAULT_DAY_VIEW_SHOWN);
 
-        int startYear = attributesArray.getInt(R.styleable.DatePicker_dp_startYear, DEFAULT_START_YEAR);
-        int endYear = attributesArray.getInt(R.styleable.DatePicker_dp_endYear, DEFAULT_END_YEAR);
-        String minDate = attributesArray.getString(R.styleable.DatePicker_dp_minDate);
-        String maxDate = attributesArray.getString(R.styleable.DatePicker_dp_maxDate);
-        int layoutResourceId = attributesArray.getResourceId(R.styleable.DatePicker_dp_internalLayout, R.layout.picker_date);
+        int startYear = attributesArray.getInt(R.styleable.DatePicker_picker_startYear, DEFAULT_START_YEAR);
+        int endYear = attributesArray.getInt(R.styleable.DatePicker_picker_endYear, DEFAULT_END_YEAR);
+        String minDate = attributesArray.getString(R.styleable.DatePicker_picker_minDate);
+        String maxDate = attributesArray.getString(R.styleable.DatePicker_picker_maxDate);
+        int layoutResourceId = attributesArray.getResourceId(R.styleable.DatePicker_picker_internalLayout, R.layout.picker_date);
         attributesArray.recycle();
 
         LayoutInflater.from(getContext()).inflate(layoutResourceId, this);

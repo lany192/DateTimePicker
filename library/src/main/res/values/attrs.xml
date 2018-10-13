@@ -12,22 +12,22 @@
              The first year (inclusive), for example "1940".
              {@deprecated Use minDate instead.}
         -->
-        <attr name="dp_startYear" format="integer" />
+        <attr name="picker_startYear" format="integer" />
         <!--
              The last year (inclusive), for example "2010".
              {@deprecated Use maxDate instead.}
         -->
-        <attr name="dp_endYear" format="integer" />
+        <attr name="picker_endYear" format="integer" />
         <!-- Whether the spinners are shown. -->
-        <attr name="dp_spinnersShown" format="boolean" />
+        <attr name="picker_spinnersShown" format="boolean" />
         <!-- Whether the day view is shown. -->
-        <attr name="dp_dayViewShown" format="boolean" />
+        <attr name="picker_dayViewShown" format="boolean" />
         <!-- The minimal date shown by this calendar view in mm/dd/yyyy format. -->
-        <attr name="dp_minDate" format="string" />
+        <attr name="picker_minDate" format="string" />
         <!-- The maximal date shown by this calendar view in mm/dd/yyyy format. -->
-        <attr name="dp_maxDate" format="string" />
+        <attr name="picker_maxDate" format="string" />
         <!-- @hide The layout of the date picker. -->
-        <attr name="dp_internalLayout" format="reference" />
+        <attr name="picker_internalLayout" format="reference" />
     </declare-styleable>
 
     <!--年月日时选择样式-->

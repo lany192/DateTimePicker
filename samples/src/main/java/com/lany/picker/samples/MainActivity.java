@@ -38,6 +38,10 @@ public class MainActivity extends BaseActivity {
     DateTimePicker dateTimePicker;
 
     @Override
+    protected boolean hasBackBtn() {
+        return false;
+    }
+    @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
     }

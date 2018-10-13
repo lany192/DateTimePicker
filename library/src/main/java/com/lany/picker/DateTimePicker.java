@@ -95,8 +95,7 @@ public class DateTimePicker extends FrameLayout {
         }
 
         NumberPicker.OnValueChangeListener onChangeListener = new NumberPicker.OnValueChangeListener() {
-            public void onValueChange(NumberPicker picker, int oldVal,
-                                      int newVal) {
+            public void onValueChange(NumberPicker picker, int oldValue, int newValue) {
                 updateInputState();
                 mTempDate.setTimeInMillis(mCurrentDate.getTimeInMillis());
                 // take care of wrapping of days and months to update greater
@@ -104,29 +103,29 @@ public class DateTimePicker extends FrameLayout {
                 if (picker == mDaySpinner) {
                     int maxDayOfMonth = mTempDate
                             .getActualMaximum(Calendar.DAY_OF_MONTH);
-                    if (oldVal == maxDayOfMonth && newVal == 1) {
+                    if (oldValue == maxDayOfMonth && newValue == 1) {
                         mTempDate.add(Calendar.DAY_OF_MONTH, 1);
-                    } else if (oldVal == 1 && newVal == maxDayOfMonth) {
+                    } else if (oldValue == 1 && newValue == maxDayOfMonth) {
                         mTempDate.add(Calendar.DAY_OF_MONTH, -1);
                     } else {
-                        mTempDate.add(Calendar.DAY_OF_MONTH, newVal - oldVal);
+                        mTempDate.add(Calendar.DAY_OF_MONTH, newValue - oldValue);
                     }
                 } else if (picker == mMonthSpinner) {
-                    if (oldVal == 11 && newVal == 0) {
+                    if (oldValue == 11 && newValue == 0) {
                         mTempDate.add(Calendar.MONTH, 1);
-                    } else if (oldVal == 0 && newVal == 11) {
+                    } else if (oldValue == 0 && newValue == 11) {
                         mTempDate.add(Calendar.MONTH, -1);
                     } else {
-                        mTempDate.add(Calendar.MONTH, newVal - oldVal);
+                        mTempDate.add(Calendar.MONTH, newValue - oldValue);
                     }
                 } else if (picker == mYearSpinner) {
-                    mTempDate.set(Calendar.YEAR, newVal);
+                    mTempDate.set(Calendar.YEAR, newValue);
                 } else if (picker == mHourSpinner) {
-                    mTempDate.set(Calendar.HOUR_OF_DAY, newVal);
+                    mTempDate.set(Calendar.HOUR_OF_DAY, newValue);
                 } else if (picker == mMinuteSpinner) {
-                    mTempDate.set(Calendar.MINUTE, newVal);
+                    mTempDate.set(Calendar.MINUTE, newValue);
                 } else if (picker == mSecondSpinner) {
-                    mTempDate.set(Calendar.SECOND, newVal);
+                    mTempDate.set(Calendar.SECOND, newValue);
                 } else {
                     throw new IllegalArgumentException();
                 }

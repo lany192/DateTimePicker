@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/lany192/DateTimePicker.svg)](https://jitpack.io/#lany192/DateTimePicker)
+
 # 这是一个从android源码改编过来的时间控件
 This is a custom datepicker timepicker from android source
 
@@ -10,6 +12,7 @@ This is a custom datepicker timepicker from android source
         
       
     dependencies {
-        compile 'com.github.lany192:DateTimePicker:1.0.3'
-    }        
+        implementation 'com.github.lany192:DateTimePicker:1.0.4'
+    }
+        
 ![image](https://github.com/lany192/DateTimePicker/raw/master/Screenshot/a.png)

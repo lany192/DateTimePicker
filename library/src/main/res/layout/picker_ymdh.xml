@@ -9,7 +9,7 @@
 
     <!-- Year -->
 
-    <com.lany.picker.NumberPicker
+    <com.lany.numberpicker.NumberPicker
         android:id="@+id/year"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
         app:selectionDividerHeight="1dp" />
     <!-- Month -->
 
-    <com.lany.picker.NumberPicker
+    <com.lany.numberpicker.NumberPicker
         android:id="@+id/month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
 
     <!-- Day -->
 
-    <com.lany.picker.NumberPicker
+    <com.lany.numberpicker.NumberPicker
         android:id="@+id/day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
 
     <!-- hour -->
 
-    <com.lany.picker.NumberPicker
+    <com.lany.numberpicker.NumberPicker
         android:id="@+id/hour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

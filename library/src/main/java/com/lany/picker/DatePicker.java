@@ -396,7 +396,12 @@ public class DatePicker extends FrameLayout {
      */
     private void reorderNPickers() {
         mNPickers.removeAllViews();
-        char[] order = DateFormat.getDateFormatOrder(getContext());
+        char[] order;
+        try {
+            order = DateFormat.getDateFormatOrder(getContext());
+        } catch (IllegalArgumentException expected) {
+            order = new char[0];
+        }
         final int NPickerCount = order.length;
         for (int i = 0; i < NPickerCount; i++) {
             switch (order[i]) {

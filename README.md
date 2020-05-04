@@ -12,7 +12,7 @@ This is a custom datepicker timepicker from android source
         
       
     dependencies {
-        implementation 'com.github.lany192:DateTimePicker:1.0.5'
+        implementation 'com.github.lany192:DateTimePicker:latest'
         implementation 'com.github.lany192:NumberPicker:1.0.3'
     }
         

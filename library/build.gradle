@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.lany192'
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0.0"
     }
@@ -18,13 +18,13 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    implementation 'com.android.support:support-annotations:28.0.0'
-    // 源码地址 https://github.com/lany192/NumberPicker
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    // https://github.com/lany192/NumberPicker
     api 'com.github.lany192:NumberPicker:1.0.3'
 }

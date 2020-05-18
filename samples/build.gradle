@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "com.lany.picker.samples"
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 29
     }
 
     buildTypes {
@@ -16,8 +16,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -25,7 +25,5 @@ dependencies {
     implementation project(':library')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    implementation 'com.github.lany192:Box:2.8.4'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
 }

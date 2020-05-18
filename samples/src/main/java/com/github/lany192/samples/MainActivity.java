@@ -1,4 +1,4 @@
-package com.lany.picker.samples;
+package com.github.lany192.samples;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -7,11 +7,11 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.lany.picker.DatePicker;
-import com.lany.picker.DateTimePicker;
-import com.lany.picker.HourMinutePicker;
-import com.lany.picker.TimePicker;
-import com.lany.picker.YMDHPicker;
+import com.github.lany192.picker.DatePicker;
+import com.github.lany192.picker.DateTimePicker;
+import com.github.lany192.picker.HourMinutePicker;
+import com.github.lany192.picker.TimePicker;
+import com.github.lany192.picker.YMDHPicker;
 
 
 public class MainActivity extends AppCompatActivity {

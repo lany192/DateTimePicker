@@ -1,4 +1,4 @@
-package com.lany.picker;
+package com.github.lany192.picker;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -22,34 +22,40 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.github.lany192.R;
 import com.lany.numberpicker.NumberPicker;
-import com.lany.picker.utils.ArraysUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-
+import com.github.lany192.picker.utils.ArraysUtils;
 /**
- * 年月日时
- * custom year/month/day/hour picker
+ * 年月日时分秒
  */
-public class YMDHPicker extends FrameLayout {
+public class DateTimePicker extends FrameLayout {
     private static final String DATE_FORMAT = "MM/dd/yyyy";
     private static final int DEFAULT_START_YEAR = 1900;
     private static final int DEFAULT_END_YEAR = 2100;
     private final String TAG = getClass().getSimpleName();
+
+    private EditText mMinuteEditText;
+    private EditText mSecondEditText;
     private EditText mHourEditText;
     private EditText mDayEditText;
     private EditText mMonthEditText;
     private EditText mYearEditText;
 
+    private NumberPicker mSecondNPicker;
+    private NumberPicker mMinuteNPicker;
     private NumberPicker mHourNPicker;
     private NumberPicker mDayNPicker;
     private NumberPicker mMonthNPicker;
     private NumberPicker mYearNPicker;
+
+
     private Locale mCurrentLocale;
-    private OnDateChangedListener mOnDateChangedListener;
+    private OnChangedListener mOnChangedListener;
     private String[] mShortMonths;
     private int mNumberOfMonths;
 
@@ -60,23 +66,23 @@ public class YMDHPicker extends FrameLayout {
 
     private boolean mIsEnabled = true;
 
-    public YMDHPicker(Context context) {
+    public DateTimePicker(Context context) {
         super(context);
         init(null);
     }
 
-    public YMDHPicker(Context context, AttributeSet attrs) {
+    public DateTimePicker(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
 
-    public YMDHPicker(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DateTimePicker(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
     }
 
     public void init(AttributeSet attrs) {
-        LayoutInflater.from(getContext()).inflate(R.layout.picker_ymdh, this);
+        LayoutInflater.from(getContext()).inflate(R.layout.picker_date_time, this);
         setCurrentLocale(Locale.getDefault());
         int startYear = DEFAULT_START_YEAR;
         int endYear = DEFAULT_END_YEAR;
@@ -92,7 +98,7 @@ public class YMDHPicker extends FrameLayout {
         }
 
         NumberPicker.OnValueChangeListener onChangeListener = new NumberPicker.OnValueChangeListener() {
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+            public void onValueChange(NumberPicker picker, int oldValue, int newValue) {
                 updateInputState();
                 mTempDate.setTimeInMillis(mCurrentDate.getTimeInMillis());
                 // take care of wrapping of days and months to update greater
@@ -100,25 +106,29 @@ public class YMDHPicker extends FrameLayout {
                 if (picker == mDayNPicker) {
                     int maxDayOfMonth = mTempDate
                             .getActualMaximum(Calendar.DAY_OF_MONTH);
-                    if (oldVal == maxDayOfMonth && newVal == 1) {
+                    if (oldValue == maxDayOfMonth && newValue == 1) {
                         mTempDate.add(Calendar.DAY_OF_MONTH, 1);
-                    } else if (oldVal == 1 && newVal == maxDayOfMonth) {
+                    } else if (oldValue == 1 && newValue == maxDayOfMonth) {
                         mTempDate.add(Calendar.DAY_OF_MONTH, -1);
                     } else {
-                        mTempDate.add(Calendar.DAY_OF_MONTH, newVal - oldVal);
+                        mTempDate.add(Calendar.DAY_OF_MONTH, newValue - oldValue);
                     }
                 } else if (picker == mMonthNPicker) {
-                    if (oldVal == 11 && newVal == 0) {
+                    if (oldValue == 11 && newValue == 0) {
                         mTempDate.add(Calendar.MONTH, 1);
-                    } else if (oldVal == 0 && newVal == 11) {
+                    } else if (oldValue == 0 && newValue == 11) {
                         mTempDate.add(Calendar.MONTH, -1);
                     } else {
-                        mTempDate.add(Calendar.MONTH, newVal - oldVal);
+                        mTempDate.add(Calendar.MONTH, newValue - oldValue);
                     }
                 } else if (picker == mYearNPicker) {
-                    mTempDate.set(Calendar.YEAR, newVal);
+                    mTempDate.set(Calendar.YEAR, newValue);
                 } else if (picker == mHourNPicker) {
-                    mTempDate.set(Calendar.HOUR_OF_DAY, newVal);
+                    mTempDate.set(Calendar.HOUR_OF_DAY, newValue);
+                } else if (picker == mMinuteNPicker) {
+                    mTempDate.set(Calendar.MINUTE, newValue);
+                } else if (picker == mSecondNPicker) {
+                    mTempDate.set(Calendar.SECOND, newValue);
                 } else {
                     throw new IllegalArgumentException();
                 }
@@ -126,12 +136,31 @@ public class YMDHPicker extends FrameLayout {
                 setDate(mTempDate.get(Calendar.YEAR),
                         mTempDate.get(Calendar.MONTH),
                         mTempDate.get(Calendar.DAY_OF_MONTH),
-                        mTempDate.get(Calendar.HOUR_OF_DAY));
+                        mTempDate.get(Calendar.HOUR_OF_DAY),
+                        mTempDate.get(Calendar.MINUTE),
+                        mTempDate.get(Calendar.SECOND));
                 updateNPickers();
                 notifyDateChanged();
             }
         };
-
+        // minute
+        mMinuteNPicker = findViewById(R.id.minute);
+        mMinuteNPicker.setMinValue(0);
+        mMinuteNPicker.setMaxValue(59);
+        mMinuteNPicker.setOnLongPressUpdateInterval(100);
+        mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
+        mMinuteNPicker.setOnValueChangedListener(onChangeListener);
+        mMinuteEditText = mMinuteNPicker.findViewById(R.id.number_picker_edit_text);
+        mMinuteEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        // second
+        mSecondNPicker = findViewById(R.id.second);
+        mSecondNPicker.setMinValue(0);
+        mSecondNPicker.setMaxValue(59);
+        mMinuteNPicker.setOnLongPressUpdateInterval(100);
+        mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
+        mSecondNPicker.setOnValueChangedListener(onChangeListener);
+        mSecondEditText = mSecondNPicker.findViewById(R.id.number_picker_edit_text);
+        mSecondEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         // hour
         mHourNPicker = findViewById(R.id.hour);
         mHourNPicker.setOnLongPressUpdateInterval(100);
@@ -182,9 +211,12 @@ public class YMDHPicker extends FrameLayout {
 
         // initialize to current date
         mCurrentDate.setTimeInMillis(System.currentTimeMillis());
-        init(mCurrentDate.get(Calendar.YEAR), mCurrentDate.get(Calendar.MONTH),
+        init(mCurrentDate.get(Calendar.YEAR),
+                mCurrentDate.get(Calendar.MONTH),
                 mCurrentDate.get(Calendar.DAY_OF_MONTH),
-                mCurrentDate.get(Calendar.HOUR_OF_DAY), null);
+                mCurrentDate.get(Calendar.HOUR_OF_DAY),
+                mCurrentDate.get(Calendar.MINUTE),
+                mCurrentDate.get(Calendar.SECOND));
 
         // re-order the number NPickers to match the current date format
         reorderNPickers();
@@ -196,8 +228,8 @@ public class YMDHPicker extends FrameLayout {
         }
     }
 
-    public void setOnDateChangedListener(OnDateChangedListener onDateChangedListener) {
-        mOnDateChangedListener = onDateChangedListener;
+    public void setOnChangedListener(OnChangedListener listener) {
+        mOnChangedListener = listener;
     }
 
     public void setSelectionDivider(Drawable selectionDivider) {
@@ -205,6 +237,8 @@ public class YMDHPicker extends FrameLayout {
         mMonthNPicker.setSelectionDivider(selectionDivider);
         mYearNPicker.setSelectionDivider(selectionDivider);
         mHourNPicker.setSelectionDivider(selectionDivider);
+        mMinuteNPicker.setSelectionDivider(selectionDivider);
+        mSecondNPicker.setSelectionDivider(selectionDivider);
     }
 
     public void setSelectionDividerHeight(int selectionDividerHeight) {
@@ -212,6 +246,8 @@ public class YMDHPicker extends FrameLayout {
         mMonthNPicker.setSelectionDividerHeight(selectionDividerHeight);
         mYearNPicker.setSelectionDividerHeight(selectionDividerHeight);
         mHourNPicker.setSelectionDividerHeight(selectionDividerHeight);
+        mMinuteNPicker.setSelectionDividerHeight(selectionDividerHeight);
+        mSecondNPicker.setSelectionDividerHeight(selectionDividerHeight);
     }
 
     public void setMinDate(long minDate) {
@@ -257,6 +293,8 @@ public class YMDHPicker extends FrameLayout {
         mDayNPicker.setEnabled(enabled);
         mMonthNPicker.setEnabled(enabled);
         mYearNPicker.setEnabled(enabled);
+        mMinuteNPicker.setEnabled(enabled);
+        mSecondNPicker.setEnabled(enabled);
         mIsEnabled = enabled;
     }
 
@@ -269,24 +307,21 @@ public class YMDHPicker extends FrameLayout {
     @Override
     public void onPopulateAccessibilityEvent(AccessibilityEvent event) {
         super.onPopulateAccessibilityEvent(event);
-
-        final int flags = DateUtils.FORMAT_SHOW_DATE
-                | DateUtils.FORMAT_SHOW_YEAR;
-        String selectedDateUtterance = DateUtils.formatDateTime(getContext(),
-                mCurrentDate.getTimeInMillis(), flags);
+        final int flags = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR;
+        String selectedDateUtterance = DateUtils.formatDateTime(getContext(), mCurrentDate.getTimeInMillis(), flags);
         event.getText().add(selectedDateUtterance);
     }
 
     @Override
     public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
         super.onInitializeAccessibilityEvent(event);
-        event.setClassName(YMDHPicker.class.getName());
+        event.setClassName(DateTimePicker.class.getName());
     }
 
     @Override
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
-        info.setClassName(YMDHPicker.class.getName());
+        info.setClassName(DateTimePicker.class.getName());
     }
 
     @Override
@@ -308,8 +343,7 @@ public class YMDHPicker extends FrameLayout {
         mNumberOfMonths = mTempDate.getActualMaximum(Calendar.MONTH) + 1;
         mShortMonths = new String[mNumberOfMonths];
         for (int i = 0; i < mNumberOfMonths; i++) {
-            mShortMonths[i] = DateUtils.getMonthString(Calendar.JANUARY + i,
-                    DateUtils.LENGTH_MEDIUM);
+            mShortMonths[i] = DateUtils.getMonthString(Calendar.JANUARY + i, DateUtils.LENGTH_MEDIUM);
         }
     }
 
@@ -334,6 +368,12 @@ public class YMDHPicker extends FrameLayout {
         final int NPickerCount = order.length;
         for (int i = 0; i < NPickerCount; i++) {
             switch (order[i]) {
+                case 's':
+                    setImeOptions(mSecondNPicker, NPickerCount, i);
+                    break;
+                case 'm':
+                    setImeOptions(mMinuteNPicker, NPickerCount, i);
+                    break;
                 case 'h':
                     setImeOptions(mHourNPicker, NPickerCount, i);
                     break;
@@ -352,40 +392,37 @@ public class YMDHPicker extends FrameLayout {
         }
     }
 
-    public void updateDate(int year, int month, int dayOfMonth, int hourOfDay) {
-        if (!isNewDate(year, month, dayOfMonth, hourOfDay)) {
+    public void updateDate(int year, int month, int dayOfMonth, int hourOfDay, int minute, int second) {
+        if (!isNewDate(year, month, dayOfMonth, hourOfDay, minute, second)) {
             return;
         }
-        setDate(year, month, dayOfMonth, hourOfDay);
+        setDate(year, month, dayOfMonth, hourOfDay, minute, second);
         updateNPickers();
         notifyDateChanged();
     }
 
     @Override
-    protected void dispatchRestoreInstanceState(
-            SparseArray<Parcelable> container) {
+    protected void dispatchRestoreInstanceState(SparseArray<Parcelable> container) {
         dispatchThawSelfOnly(container);
     }
 
     @Override
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
-        return new SavedState(superState, getYear(), getMonth(),
-                getDayOfMonth(), getHourOfDay());
+        return new SavedState(superState, getYear(), getMonth(), getDayOfMonth(), getHourOfDay(), getMinute(), getSecond());
     }
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
-        setDate(ss.mYear, ss.mMonth, ss.mDay, ss.mHour);
+        setDate(ss.mYear, ss.mMonth, ss.mDay, ss.mHour, ss.mMinute, ss.mSecond);
         updateNPickers();
     }
 
-    public void init(int year, int monthOfYear, int dayOfMonth, int hourOfDay, OnDateChangedListener onDateChangedListener) {
-        setDate(year, monthOfYear, dayOfMonth, hourOfDay);
+    public void init(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute, int second) {
+        setDate(year, monthOfYear, dayOfMonth, hourOfDay, minute, second);
         updateNPickers();
-        mOnDateChangedListener = onDateChangedListener;
     }
 
     private boolean parseDate(String date, Calendar outDate) {
@@ -398,15 +435,17 @@ public class YMDHPicker extends FrameLayout {
         }
     }
 
-    private boolean isNewDate(int year, int month, int dayOfMonth, int hourOfDay) {
+    private boolean isNewDate(int year, int month, int dayOfMonth, int hourOfDay, int minute, int second) {
         return (mCurrentDate.get(Calendar.YEAR) != year
                 || mCurrentDate.get(Calendar.MONTH) != dayOfMonth
-                || mCurrentDate.get(Calendar.DAY_OF_MONTH) != month || mCurrentDate
-                .get(Calendar.HOUR_OF_DAY) != hourOfDay);
+                || mCurrentDate.get(Calendar.DAY_OF_MONTH) != month
+                || mCurrentDate.get(Calendar.HOUR_OF_DAY) != hourOfDay
+                || mCurrentDate.get(Calendar.MINUTE) != minute
+                || mCurrentDate.get(Calendar.SECOND) != second);
     }
 
-    private void setDate(int year, int month, int dayOfMonth, int hourOfDay) {
-        mCurrentDate.set(year, month, dayOfMonth, hourOfDay, 0);
+    private void setDate(int year, int month, int dayOfMonth, int hourOfDay, int minute, int second) {
+        mCurrentDate.set(year, month, dayOfMonth, hourOfDay, minute, second);
         if (mCurrentDate.before(mMinDate)) {
             mCurrentDate.setTimeInMillis(mMinDate.getTimeInMillis());
         } else if (mCurrentDate.after(mMaxDate)) {
@@ -455,11 +494,21 @@ public class YMDHPicker extends FrameLayout {
         mHourNPicker.setMaxValue(23);
         mHourNPicker.setWrapSelectorWheel(true);
 
+        mMinuteNPicker.setMinValue(0);
+        mMinuteNPicker.setMaxValue(59);
+        mMinuteNPicker.setWrapSelectorWheel(true);
+
+        mSecondNPicker.setMinValue(0);
+        mSecondNPicker.setMaxValue(59);
+        mSecondNPicker.setWrapSelectorWheel(true);
+
         // set the NPicker values
         mYearNPicker.setValue(mCurrentDate.get(Calendar.YEAR));
         mMonthNPicker.setValue(mCurrentDate.get(Calendar.MONTH));
         mDayNPicker.setValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
         mHourNPicker.setValue(mCurrentDate.get(Calendar.HOUR_OF_DAY));
+        mMinuteNPicker.setValue(mCurrentDate.get(Calendar.MINUTE));
+        mSecondNPicker.setValue(mCurrentDate.get(Calendar.SECOND));
     }
 
     /**
@@ -490,14 +539,21 @@ public class YMDHPicker extends FrameLayout {
         return mCurrentDate.get(Calendar.HOUR_OF_DAY);
     }
 
+    public int getMinute() {
+        return mCurrentDate.get(Calendar.MINUTE);
+    }
+
+    public int getSecond() {
+        return mCurrentDate.get(Calendar.SECOND);
+    }
+
     /**
      * Notifies the listener, if such, for a change in the selected date.
      */
     private void notifyDateChanged() {
         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
-        if (mOnDateChangedListener != null) {
-            mOnDateChangedListener.onDateChanged(this, getYear(), getMonth(),
-                    getDayOfMonth(), getHourOfDay());
+        if (mOnChangedListener != null) {
+            mOnChangedListener.onChanged(this, getYear(), getMonth(), getDayOfMonth(), getHourOfDay(), getMinute(), getSecond());
         }
     }
 
@@ -508,22 +564,19 @@ public class YMDHPicker extends FrameLayout {
      * @param NPickerCount The total NPicker count.
      * @param NPickerIndex The index of the given NPicker.
      */
-    private void setImeOptions(NumberPicker NPicker, int NPickerCount,
-                               int NPickerIndex) {
+    private void setImeOptions(NumberPicker NPicker, int NPickerCount, int NPickerIndex) {
         final int imeOptions;
         if (NPickerIndex < NPickerCount - 1) {
             imeOptions = EditorInfo.IME_ACTION_NEXT;
         } else {
             imeOptions = EditorInfo.IME_ACTION_DONE;
         }
-        TextView input = (TextView) NPicker
-                .findViewById(R.id.number_picker_edit_text);
+        TextView input = NPicker.findViewById(R.id.number_picker_edit_text);
         input.setImeOptions(imeOptions);
     }
 
     private void updateInputState() {
-        InputMethodManager inputMethodManager = (InputMethodManager) getContext()
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) {
             if (inputMethodManager.isActive(mYearEditText)) {
                 mYearEditText.clearFocus();
@@ -537,12 +590,18 @@ public class YMDHPicker extends FrameLayout {
             } else if (inputMethodManager.isActive(mHourEditText)) {
                 mHourEditText.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
+            } else if (inputMethodManager.isActive(mMinuteEditText)) {
+                mMinuteEditText.clearFocus();
+                inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
+            } else if (inputMethodManager.isActive(mSecondEditText)) {
+                mSecondEditText.clearFocus();
+                inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
             }
         }
     }
 
-    public interface OnDateChangedListener {
-        void onDateChanged(YMDHPicker view, int year, int monthOfYear, int dayOfMonth, int hourOfDay);
+    public interface OnChangedListener {
+        void onChanged(DateTimePicker picker, int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute, int second);
     }
 
     /**
@@ -552,31 +611,34 @@ public class YMDHPicker extends FrameLayout {
 
         @SuppressWarnings("all")
         // suppress unused and hiding
-        public static final Parcelable.Creator<SavedState> CREATOR = new Creator<SavedState>() {
+        public static final Creator<SavedState> CREATOR = new Creator<DateTimePicker.SavedState>() {
 
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
+            public DateTimePicker.SavedState createFromParcel(Parcel in) {
+                return new DateTimePicker.SavedState(in);
             }
 
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
+            public DateTimePicker.SavedState[] newArray(int size) {
+                return new DateTimePicker.SavedState[size];
             }
         };
         private final int mYear;
         private final int mMonth;
         private final int mDay;
         private final int mHour;
+        private final int mMinute;
+        private final int mSecond;
 
         /**
-         * Constructor called from {@link YMDHPicker#onSaveInstanceState()}
+         * Constructor called from {@link DateTimePicker#onSaveInstanceState()}
          */
-        private SavedState(Parcelable superState, int year, int month, int day,
-                           int hour) {
+        private SavedState(Parcelable superState, int year, int month, int day, int hour, int minute, int second) {
             super(superState);
             mYear = year;
             mMonth = month;
             mDay = day;
             mHour = hour;
+            mMinute = minute;
+            mSecond = second;
         }
 
         /**
@@ -588,6 +650,8 @@ public class YMDHPicker extends FrameLayout {
             mMonth = in.readInt();
             mDay = in.readInt();
             mHour = in.readInt();
+            mMinute = in.readInt();
+            mSecond = in.readInt();
         }
 
         @Override
@@ -597,6 +661,8 @@ public class YMDHPicker extends FrameLayout {
             dest.writeInt(mMonth);
             dest.writeInt(mDay);
             dest.writeInt(mHour);
+            dest.writeInt(mMinute);
+            dest.writeInt(mSecond);
         }
     }
 }

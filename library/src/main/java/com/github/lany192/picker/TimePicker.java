@@ -1,4 +1,4 @@
-package com.lany.picker;
+package com.github.lany192.picker;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -17,11 +17,12 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.github.lany192.R;
 import com.lany.numberpicker.NumberPicker;
 
 import java.util.Calendar;
 import java.util.Locale;
-
+import com.github.lany192.picker.utils.ArraysUtils;
 /**
  * Hour/Minute/Second
  */

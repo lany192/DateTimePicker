@@ -1,4 +1,4 @@
-package com.lany.picker.utils;
+package com.github.lany192.picker.utils;
 
 import java.lang.reflect.Array;
 

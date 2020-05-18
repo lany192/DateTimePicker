@@ -24,7 +24,7 @@
             android:orientation="horizontal"
             android:padding="16dp">
 
-            <com.lany.picker.DatePicker
+            <com.github.lany192.picker.DatePicker
                 android:id="@+id/date_picker_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
-            <com.lany.picker.DatePicker
+            <com.github.lany192.picker.DatePicker
                 android:id="@+id/date_picker_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -54,7 +54,7 @@
             android:text="TimePicker:"
             android:textSize="14sp" />
 
-        <com.lany.picker.TimePicker
+        <com.github.lany192.picker.TimePicker
             android:id="@+id/time_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
             android:text="HourMinutePicker:"
             android:textSize="14sp" />
 
-        <com.lany.picker.HourMinutePicker
+        <com.github.lany192.picker.HourMinutePicker
             android:id="@+id/hour_minute_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
             android:text="YMDHPicker:"
             android:textSize="14sp" />
 
-        <com.lany.picker.YMDHPicker
+        <com.github.lany192.picker.YMDHPicker
             android:id="@+id/ymdhPicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
             android:text="DateTimePicker:"
             android:textSize="14sp" />
 
-        <com.lany.picker.DateTimePicker
+        <com.github.lany192.picker.DateTimePicker
             android:id="@+id/dateTimePicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

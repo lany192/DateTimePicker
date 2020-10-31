@@ -3,6 +3,7 @@ package com.github.lany192.picker;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
@@ -21,37 +22,33 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CalendarView;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 import com.github.lany192.R;
-import com.github.lany192.picker.utils.ArraysUtils;
-import com.lany.numberpicker.NumberPicker;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
-public class DatePicker extends FrameLayout {
-    private static final String DATE_FORMAT = "MM/dd/yyyy";
+public class DatePicker extends BasePicker {
     private static final int DEFAULT_START_YEAR = 1900;
     private static final int DEFAULT_END_YEAR = 2100;
     private static final boolean DEFAULT_NPickerS_SHOWN = true;
     private static final boolean DEFAULT_DAY_VIEW_SHOWN = true;
     private static final boolean DEFAULT_ENABLED_STATE = true;
-    private final String TAG = getClass().getSimpleName();
     private final LinearLayout mNPickers;
     private final EditText mDayEditText;
     private final EditText mMonthEditText;
     private final EditText mYearEditText;
-    private final java.text.DateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
-    private NumberPicker mDayNPicker;
-    private NumberPicker mMonthNPicker;
-    private NumberPicker mYearNPicker;
+
+    private final NumberPicker dayNumberPicker;
+    private final NumberPicker monthNumberPicker;
+    private final NumberPicker yearNumberPicker;
     private Locale mCurrentLocale;
     private OnDateChangedListener mOnDateChangedListener;
     private String[] mShortMonths;
@@ -72,7 +69,7 @@ public class DatePicker extends FrameLayout {
     }
 
     public DatePicker(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.datePickerStyle);
+        this(context, attrs, 0);
     }
 
     public DatePicker(Context context, AttributeSet attrs, int defStyle) {
@@ -81,16 +78,37 @@ public class DatePicker extends FrameLayout {
         // initialization based on locale
         setCurrentLocale(Locale.getDefault());
 
-        TypedArray attributesArray = context.obtainStyledAttributes(attrs, R.styleable.DatePicker, defStyle, 0);
-        boolean spinnersShown = attributesArray.getBoolean(R.styleable.DatePicker_picker_spinnersShown, DEFAULT_NPickerS_SHOWN);
-        boolean dayViewShown = attributesArray.getBoolean(R.styleable.DatePicker_picker_dayViewShown, DEFAULT_DAY_VIEW_SHOWN);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.DatePicker, defStyle, 0);
+        boolean spinnersShown = typedArray.getBoolean(R.styleable.DatePicker_picker_spinnersShown, DEFAULT_NPickerS_SHOWN);
+        boolean dayViewShown = typedArray.getBoolean(R.styleable.DatePicker_picker_dayViewShown, DEFAULT_DAY_VIEW_SHOWN);
 
-        int startYear = attributesArray.getInt(R.styleable.DatePicker_picker_startYear, DEFAULT_START_YEAR);
-        int endYear = attributesArray.getInt(R.styleable.DatePicker_picker_endYear, DEFAULT_END_YEAR);
-        String minDate = attributesArray.getString(R.styleable.DatePicker_picker_minDate);
-        String maxDate = attributesArray.getString(R.styleable.DatePicker_picker_maxDate);
-        int layoutResourceId = attributesArray.getResourceId(R.styleable.DatePicker_picker_internalLayout, R.layout.picker_date);
-        attributesArray.recycle();
+        int startYear = typedArray.getInt(R.styleable.DatePicker_picker_startYear, DEFAULT_START_YEAR);
+        int endYear = typedArray.getInt(R.styleable.DatePicker_picker_endYear, DEFAULT_END_YEAR);
+        String minDate = typedArray.getString(R.styleable.DatePicker_picker_minDate);
+        String maxDate = typedArray.getString(R.styleable.DatePicker_picker_maxDate);
+        int layoutResourceId = typedArray.getResourceId(R.styleable.DatePicker_picker_picker_internalLayout, R.layout.picker_date);
+
+
+        int solidColor = typedArray.getColor(R.styleable.DateTimePicker_picker_solidColor, 0);
+        Drawable selectionDivider = typedArray.getDrawable(R.styleable.DateTimePicker_picker_selectionDivider);
+        int selectionDividerHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_selectionDividerHeight, dp2px(2));
+        int selectionDividersDistance = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_selectionDividersDistance, dp2px(2));
+        int minHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMinHeight, SIZE_UNSPECIFIED);
+        int maxHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMaxHeight, SIZE_UNSPECIFIED);
+        if (minHeight != SIZE_UNSPECIFIED && maxHeight != SIZE_UNSPECIFIED && minHeight > maxHeight) {
+            throw new IllegalArgumentException("minHeight > maxHeight");
+        }
+        int mMinWidth = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMinWidth, SIZE_UNSPECIFIED);
+        int mMaxWidth = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMaxWidth, SIZE_UNSPECIFIED);
+        if (mMinWidth != SIZE_UNSPECIFIED && mMaxWidth != SIZE_UNSPECIFIED && mMinWidth > mMaxWidth) {
+            throw new IllegalArgumentException("minWidth > maxWidth");
+        }
+        Drawable virtualButtonPressedDrawable = typedArray.getDrawable(R.styleable.DateTimePicker_picker_virtualButtonPressedDrawable);
+        int selectionTextSize = (int) typedArray.getDimension(R.styleable.DateTimePicker_picker_selectionTextSize, SIZE_UNSPECIFIED);
+        int selectionTextColor = typedArray.getColor(R.styleable.DateTimePicker_picker_selectionTextColor, Color.BLACK);
+
+
+        typedArray.recycle();
 
         LayoutInflater.from(getContext()).inflate(layoutResourceId, this);
 
@@ -100,7 +118,7 @@ public class DatePicker extends FrameLayout {
                 mTempDate.setTimeInMillis(mCurrentDate.getTimeInMillis());
                 // take care of wrapping of days and months to update greater
                 // fields
-                if (picker == mDayNPicker) {
+                if (picker == dayNumberPicker) {
                     int maxDayOfMonth = mTempDate
                             .getActualMaximum(Calendar.DAY_OF_MONTH);
                     if (oldVal == maxDayOfMonth && newVal == 1) {
@@ -110,7 +128,7 @@ public class DatePicker extends FrameLayout {
                     } else {
                         mTempDate.add(Calendar.DAY_OF_MONTH, newVal - oldVal);
                     }
-                } else if (picker == mMonthNPicker) {
+                } else if (picker == monthNumberPicker) {
                     if (oldVal == 11 && newVal == 0) {
                         mTempDate.add(Calendar.MONTH, 1);
                     } else if (oldVal == 0 && newVal == 11) {
@@ -118,7 +136,7 @@ public class DatePicker extends FrameLayout {
                     } else {
                         mTempDate.add(Calendar.MONTH, newVal - oldVal);
                     }
-                } else if (picker == mYearNPicker) {
+                } else if (picker == yearNumberPicker) {
                     mTempDate.set(Calendar.YEAR, newVal);
                 } else {
                     throw new IllegalArgumentException();
@@ -134,11 +152,11 @@ public class DatePicker extends FrameLayout {
 
         mNPickers = findViewById(R.id.pickers);
         // day
-        mDayNPicker = findViewById(R.id.day);
-        mDayNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mDayNPicker.setOnLongPressUpdateInterval(100);
-        mDayNPicker.setOnValueChangedListener(onChangeListener);
-        mDayEditText = mDayNPicker.findViewById(R.id.number_picker_edit_text);
+        dayNumberPicker = findViewById(R.id.day);
+        dayNumberPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
+        dayNumberPicker.setOnLongPressUpdateInterval(100);
+        dayNumberPicker.setOnValueChangedListener(onChangeListener);
+        mDayEditText = dayNumberPicker.findViewById(R.id.number_picker_edit_text);
 
         // show only what the user required but make sure we
         // show something and the NPickers have higher priority
@@ -151,19 +169,19 @@ public class DatePicker extends FrameLayout {
 
 
         // month
-        mMonthNPicker = findViewById(R.id.month);
-        mMonthNPicker.setMinValue(0);
-        mMonthNPicker.setMaxValue(mNumberOfMonths - 1);
-        mMonthNPicker.setDisplayedValues(mShortMonths);
-        mMonthNPicker.setOnLongPressUpdateInterval(200);
-        mMonthNPicker.setOnValueChangedListener(onChangeListener);
-        mMonthEditText = mMonthNPicker.findViewById(R.id.number_picker_edit_text);
+        monthNumberPicker = findViewById(R.id.month);
+        monthNumberPicker.setMinValue(0);
+        monthNumberPicker.setMaxValue(mNumberOfMonths - 1);
+        monthNumberPicker.setDisplayedValues(mShortMonths);
+        monthNumberPicker.setOnLongPressUpdateInterval(200);
+        monthNumberPicker.setOnValueChangedListener(onChangeListener);
+        mMonthEditText = monthNumberPicker.findViewById(R.id.number_picker_edit_text);
 
         // year
-        mYearNPicker = findViewById(R.id.year);
-        mYearNPicker.setOnLongPressUpdateInterval(100);
-        mYearNPicker.setOnValueChangedListener(onChangeListener);
-        mYearEditText = mYearNPicker.findViewById(R.id.number_picker_edit_text);
+        yearNumberPicker = findViewById(R.id.year);
+        yearNumberPicker.setOnLongPressUpdateInterval(100);
+        yearNumberPicker.setOnValueChangedListener(onChangeListener);
+        mYearEditText = yearNumberPicker.findViewById(R.id.number_picker_edit_text);
 
         // show only what the user required but make sure we
         // show something and the NPickers have higher priority
@@ -202,9 +220,6 @@ public class DatePicker extends FrameLayout {
         // re-order the number NPickers to match the current date format
         reorderNPickers();
 
-        // accessibility
-        setContentDescriptions();
-
         // If not explicitly specified this view is important for accessibility.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
                 && getImportantForAccessibility() == IMPORTANT_FOR_ACCESSIBILITY_AUTO) {
@@ -213,15 +228,15 @@ public class DatePicker extends FrameLayout {
     }
 
     public void setSelectionDivider(Drawable selectionDivider) {
-        mDayNPicker.setSelectionDivider(selectionDivider);
-        mMonthNPicker.setSelectionDivider(selectionDivider);
-        mYearNPicker.setSelectionDivider(selectionDivider);
+        dayNumberPicker.setSelectionDivider(selectionDivider);
+        monthNumberPicker.setSelectionDivider(selectionDivider);
+        yearNumberPicker.setSelectionDivider(selectionDivider);
     }
 
     public void setSelectionDividerHeight(int selectionDividerHeight) {
-        mDayNPicker.setSelectionDividerHeight(selectionDividerHeight);
-        mMonthNPicker.setSelectionDividerHeight(selectionDividerHeight);
-        mYearNPicker.setSelectionDividerHeight(selectionDividerHeight);
+        dayNumberPicker.setSelectionDividerHeight(selectionDividerHeight);
+        monthNumberPicker.setSelectionDividerHeight(selectionDividerHeight);
+        yearNumberPicker.setSelectionDividerHeight(selectionDividerHeight);
     }
 
 
@@ -235,8 +250,7 @@ public class DatePicker extends FrameLayout {
     public void setMinDate(long minDate) {
         mTempDate.setTimeInMillis(minDate);
         if (mTempDate.get(Calendar.YEAR) == mMinDate.get(Calendar.YEAR)
-                && mTempDate.get(Calendar.DAY_OF_YEAR) != mMinDate
-                .get(Calendar.DAY_OF_YEAR)) {
+                && mTempDate.get(Calendar.DAY_OF_YEAR) != mMinDate.get(Calendar.DAY_OF_YEAR)) {
             return;
         }
         mMinDate.setTimeInMillis(minDate);
@@ -279,9 +293,9 @@ public class DatePicker extends FrameLayout {
             return;
         }
         super.setEnabled(enabled);
-        mDayNPicker.setEnabled(enabled);
-        mMonthNPicker.setEnabled(enabled);
-        mYearNPicker.setEnabled(enabled);
+        dayNumberPicker.setEnabled(enabled);
+        monthNumberPicker.setEnabled(enabled);
+        yearNumberPicker.setEnabled(enabled);
         mIsEnabled = enabled;
     }
 
@@ -294,11 +308,8 @@ public class DatePicker extends FrameLayout {
     @Override
     public void onPopulateAccessibilityEvent(AccessibilityEvent event) {
         super.onPopulateAccessibilityEvent(event);
-
-        final int flags = DateUtils.FORMAT_SHOW_DATE
-                | DateUtils.FORMAT_SHOW_YEAR;
-        String selectedDateUtterance = DateUtils.formatDateTime(getContext(),
-                mCurrentDate.getTimeInMillis(), flags);
+        final int flags = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR;
+        String selectedDateUtterance = DateUtils.formatDateTime(getContext(), mCurrentDate.getTimeInMillis(), flags);
         event.getText().add(selectedDateUtterance);
     }
 
@@ -326,7 +337,7 @@ public class DatePicker extends FrameLayout {
      * @param shown True if the calendar view is to be shown.
      */
     public void setDayViewShown(boolean shown) {
-        mDayNPicker.setVisibility(shown ? VISIBLE : GONE);
+        dayNumberPicker.setVisibility(shown ? VISIBLE : GONE);
     }
 
     /**
@@ -367,8 +378,7 @@ public class DatePicker extends FrameLayout {
         mNumberOfMonths = mTempDate.getActualMaximum(Calendar.MONTH) + 1;
         mShortMonths = new String[mNumberOfMonths];
         for (int i = 0; i < mNumberOfMonths; i++) {
-            mShortMonths[i] = DateUtils.getMonthString(Calendar.JANUARY + i,
-                    DateUtils.LENGTH_MEDIUM);
+            mShortMonths[i] = DateUtils.getMonthString(Calendar.JANUARY + i, DateUtils.LENGTH_MEDIUM);
         }
     }
 
@@ -407,16 +417,16 @@ public class DatePicker extends FrameLayout {
         for (int i = 0; i < NPickerCount; i++) {
             switch (order[i]) {
                 case 'd':
-                    mNPickers.addView(mDayNPicker);
-                    setImeOptions(mDayNPicker, NPickerCount, i);
+                    mNPickers.addView(dayNumberPicker);
+                    setImeOptions(dayNumberPicker, NPickerCount, i);
                     break;
                 case 'M':
-                    mNPickers.addView(mMonthNPicker);
-                    setImeOptions(mMonthNPicker, NPickerCount, i);
+                    mNPickers.addView(monthNumberPicker);
+                    setImeOptions(monthNumberPicker, NPickerCount, i);
                     break;
                 case 'y':
-                    mNPickers.addView(mYearNPicker);
-                    setImeOptions(mYearNPicker, NPickerCount, i);
+                    mNPickers.addView(yearNumberPicker);
+                    setImeOptions(yearNumberPicker, NPickerCount, i);
                     break;
                 default:
                     throw new IllegalArgumentException();
@@ -482,18 +492,19 @@ public class DatePicker extends FrameLayout {
      */
     private boolean parseDate(String date, Calendar outDate) {
         try {
-            outDate.setTime(mDateFormat.parse(date));
+            SimpleDateFormat mDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+            outDate.setTime(Objects.requireNonNull(mDateFormat.parse(date)));
             return true;
         } catch (ParseException e) {
-            Log.w(TAG, "Date: " + date + " not in format: " + DATE_FORMAT);
+            Log.w(TAG, "Date: " + date + " not in format: MM/dd/yyyy");
             return false;
         }
     }
 
     private boolean isNewDate(int year, int month, int dayOfMonth) {
         return (mCurrentDate.get(Calendar.YEAR) != year
-                || mCurrentDate.get(Calendar.MONTH) != dayOfMonth || mCurrentDate
-                .get(Calendar.DAY_OF_MONTH) != month);
+                || mCurrentDate.get(Calendar.MONTH) != dayOfMonth
+                || mCurrentDate.get(Calendar.DAY_OF_MONTH) != month);
     }
 
     private void setDate(int year, int month, int dayOfMonth) {
@@ -508,53 +519,46 @@ public class DatePicker extends FrameLayout {
     private void updateNPickers() {
         // set the NPicker ranges respecting the min and max dates
         if (mCurrentDate.equals(mMinDate)) {
-            mDayNPicker.setMinValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
-            mDayNPicker.setMaxValue(mCurrentDate
-                    .getActualMaximum(Calendar.DAY_OF_MONTH));
-            mDayNPicker.setWrapSelectorWheel(false);
-            mMonthNPicker.setDisplayedValues(null);
-            mMonthNPicker.setMinValue(mCurrentDate.get(Calendar.MONTH));
-            mMonthNPicker.setMaxValue(mCurrentDate
-                    .getActualMaximum(Calendar.MONTH));
-            mMonthNPicker.setWrapSelectorWheel(false);
+            dayNumberPicker.setMinValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
+            dayNumberPicker.setMaxValue(mCurrentDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+            dayNumberPicker.setWrapSelectorWheel(false);
+            monthNumberPicker.setDisplayedValues(null);
+            monthNumberPicker.setMinValue(mCurrentDate.get(Calendar.MONTH));
+            monthNumberPicker.setMaxValue(mCurrentDate.getActualMaximum(Calendar.MONTH));
+            monthNumberPicker.setWrapSelectorWheel(false);
         } else if (mCurrentDate.equals(mMaxDate)) {
-            mDayNPicker.setMinValue(mCurrentDate
-                    .getActualMinimum(Calendar.DAY_OF_MONTH));
-            mDayNPicker.setMaxValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
-            mDayNPicker.setWrapSelectorWheel(false);
-            mMonthNPicker.setDisplayedValues(null);
-            mMonthNPicker.setMinValue(mCurrentDate
-                    .getActualMinimum(Calendar.MONTH));
-            mMonthNPicker.setMaxValue(mCurrentDate.get(Calendar.MONTH));
-            mMonthNPicker.setWrapSelectorWheel(false);
+            dayNumberPicker.setMinValue(mCurrentDate.getActualMinimum(Calendar.DAY_OF_MONTH));
+            dayNumberPicker.setMaxValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
+            dayNumberPicker.setWrapSelectorWheel(false);
+            monthNumberPicker.setDisplayedValues(null);
+            monthNumberPicker.setMinValue(mCurrentDate.getActualMinimum(Calendar.MONTH));
+            monthNumberPicker.setMaxValue(mCurrentDate.get(Calendar.MONTH));
+            monthNumberPicker.setWrapSelectorWheel(false);
         } else {
-            mDayNPicker.setMinValue(1);
-            mDayNPicker.setMaxValue(mCurrentDate
-                    .getActualMaximum(Calendar.DAY_OF_MONTH));
-            mDayNPicker.setWrapSelectorWheel(true);
-            mMonthNPicker.setDisplayedValues(null);
-            mMonthNPicker.setMinValue(0);
-            mMonthNPicker.setMaxValue(11);
-            mMonthNPicker.setWrapSelectorWheel(true);
+            dayNumberPicker.setMinValue(1);
+            dayNumberPicker.setMaxValue(mCurrentDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+            dayNumberPicker.setWrapSelectorWheel(true);
+            monthNumberPicker.setDisplayedValues(null);
+            monthNumberPicker.setMinValue(0);
+            monthNumberPicker.setMaxValue(11);
+            monthNumberPicker.setWrapSelectorWheel(true);
         }
 
         // make sure the month names are a zero based array
         // with the months in the month NPicker
-        String[] displayedValues = ArraysUtils.copyOfRange(mShortMonths,
-                mMonthNPicker.getMinValue(), mMonthNPicker.getMaxValue() + 1);
-        mMonthNPicker.setDisplayedValues(displayedValues);
+        String[] displayedValues = Arrays.copyOfRange(mShortMonths, monthNumberPicker.getMinValue(), monthNumberPicker.getMaxValue() + 1);
+        monthNumberPicker.setDisplayedValues(displayedValues);
 
         // year NPicker range does not change based on the current date
-        mYearNPicker.setMinValue(mMinDate.get(Calendar.YEAR));
-        mYearNPicker.setMaxValue(mMaxDate.get(Calendar.YEAR));
-        mYearNPicker.setWrapSelectorWheel(false);
+        yearNumberPicker.setMinValue(mMinDate.get(Calendar.YEAR));
+        yearNumberPicker.setMaxValue(mMaxDate.get(Calendar.YEAR));
+        yearNumberPicker.setWrapSelectorWheel(false);
 
         // set the NPicker values
-        mYearNPicker.setValue(mCurrentDate.get(Calendar.YEAR));
-        mMonthNPicker.setValue(mCurrentDate.get(Calendar.MONTH));
-        mDayNPicker.setValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
+        yearNumberPicker.setValue(mCurrentDate.get(Calendar.YEAR));
+        monthNumberPicker.setValue(mCurrentDate.get(Calendar.MONTH));
+        dayNumberPicker.setValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
     }
-
 
     /**
      * @return The selected year.
@@ -590,45 +594,22 @@ public class DatePicker extends FrameLayout {
     /**
      * Sets the IME options for a NPicker based on its ordering.
      *
-     * @param NPicker      The NPicker.
-     * @param NPickerCount The total NPicker count.
-     * @param NPickerIndex The index of the given NPicker.
+     * @param picker            The NPicker.
+     * @param numberPickerCount The total NumberPicker count.
+     * @param numberPickerIndex The index of the given NumberPicker.
      */
-    private void setImeOptions(NumberPicker NPicker, int NPickerCount,
-                               int NPickerIndex) {
+    private void setImeOptions(NumberPicker picker, int numberPickerCount, int numberPickerIndex) {
         final int imeOptions;
-        if (NPickerIndex < NPickerCount - 1) {
+        if (numberPickerIndex < numberPickerCount - 1) {
             imeOptions = EditorInfo.IME_ACTION_NEXT;
         } else {
             imeOptions = EditorInfo.IME_ACTION_DONE;
         }
-        TextView input = (TextView) NPicker
-                .findViewById(R.id.number_picker_edit_text);
+        TextView input = picker.findViewById(R.id.number_picker_edit_text);
         input.setImeOptions(imeOptions);
     }
 
-    private void setContentDescriptions() {
-        if (true)
-            return; // increment/decrement buttons don't exist in backport
-        // Day
-        trySetContentDescription(mDayNPicker, R.id.np__increment,
-                R.string.date_picker_increment_day_button);
-        trySetContentDescription(mDayNPicker, R.id.np__decrement,
-                R.string.date_picker_decrement_day_button);
-        // Month
-        trySetContentDescription(mMonthNPicker, R.id.np__increment,
-                R.string.date_picker_increment_month_button);
-        trySetContentDescription(mMonthNPicker, R.id.np__decrement,
-                R.string.date_picker_decrement_month_button);
-        // Year
-        trySetContentDescription(mYearNPicker, R.id.np__increment,
-                R.string.date_picker_increment_year_button);
-        trySetContentDescription(mYearNPicker, R.id.np__decrement,
-                R.string.date_picker_decrement_year_button);
-    }
-
-    private void trySetContentDescription(View root, int viewId,
-                                          int contDescResId) {
+    private void trySetContentDescription(View root, int viewId, int contDescResId) {
         View target = root.findViewById(viewId);
         if (target != null) {
             target.setContentDescription(getContext().getString(contDescResId));
@@ -643,8 +624,7 @@ public class DatePicker extends FrameLayout {
         // value and having the IME up makes no sense.
         // InputMethodManager inputMethodManager =
         // InputMethodManager.peekInstance();
-        InputMethodManager inputMethodManager = (InputMethodManager) getContext()
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) {
             if (inputMethodManager.isActive(mYearEditText)) {
                 mYearEditText.clearFocus();
@@ -677,8 +657,7 @@ public class DatePicker extends FrameLayout {
          *                    {@link Calendar}.
          * @param dayOfMonth  The day of the month that was set.
          */
-        void onDateChanged(DatePicker view, int year, int monthOfYear,
-                           int dayOfMonth);
+        void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth);
     }
 
     /**

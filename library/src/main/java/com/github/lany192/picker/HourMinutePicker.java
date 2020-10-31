@@ -16,20 +16,18 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.github.lany192.R;
-import com.lany.numberpicker.NumberPicker;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.Locale;
-import com.github.lany192.picker.utils.ArraysUtils;
+
 /**
  * 小时和分钟
  */
-public class HourMinutePicker extends FrameLayout {
+public class HourMinutePicker extends BasePicker {
     private static final boolean DEFAULT_ENABLED_STATE = true;
 
     private static final int HOURS_IN_HALF_DAY = 12;
@@ -64,7 +62,7 @@ public class HourMinutePicker extends FrameLayout {
     }
 
     public HourMinutePicker(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.timePickerStyle);
+        this(context, attrs, 0);
     }
 
     public HourMinutePicker(Context context, AttributeSet attrs, int defStyle) {

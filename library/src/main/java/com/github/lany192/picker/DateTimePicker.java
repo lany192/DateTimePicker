@@ -3,6 +3,7 @@ package com.github.lany192.picker;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
@@ -19,25 +20,23 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.github.lany192.R;
-import com.lany.numberpicker.NumberPicker;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
-import com.github.lany192.picker.utils.ArraysUtils;
+import java.util.Objects;
+
 /**
  * 年月日时分秒
  */
-public class DateTimePicker extends FrameLayout {
-    private static final String DATE_FORMAT = "MM/dd/yyyy";
+public class DateTimePicker extends BasePicker {
     private static final int DEFAULT_START_YEAR = 1900;
     private static final int DEFAULT_END_YEAR = 2100;
-    private final String TAG = getClass().getSimpleName();
 
     private EditText mMinuteEditText;
     private EditText mSecondEditText;
@@ -89,11 +88,31 @@ public class DateTimePicker extends FrameLayout {
         String minDate = "";
         String maxDate = "";
         if (attrs != null) {
-            TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.YMDHPicker);
-            startYear = typedArray.getInt(R.styleable.YMDHPicker_startYear, DEFAULT_START_YEAR);
-            endYear = typedArray.getInt(R.styleable.YMDHPicker_endYear, DEFAULT_END_YEAR);
-            minDate = typedArray.getString(R.styleable.YMDHPicker_minDate);
-            maxDate = typedArray.getString(R.styleable.YMDHPicker_maxDate);
+            TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.DateTimePicker);
+            startYear = typedArray.getInt(R.styleable.DateTimePicker_picker_startYear, DEFAULT_START_YEAR);
+            endYear = typedArray.getInt(R.styleable.DateTimePicker_picker_endYear, DEFAULT_END_YEAR);
+            minDate = typedArray.getString(R.styleable.DateTimePicker_picker_minDate);
+            maxDate = typedArray.getString(R.styleable.DateTimePicker_picker_maxDate);
+
+
+            int solidColor = typedArray.getColor(R.styleable.DateTimePicker_picker_solidColor, 0);
+            Drawable selectionDivider = typedArray.getDrawable(R.styleable.DateTimePicker_picker_selectionDivider);
+            int selectionDividerHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_selectionDividerHeight, dp2px(2));
+            int selectionDividersDistance = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_selectionDividersDistance, dp2px(2));
+            int minHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMinHeight, SIZE_UNSPECIFIED);
+            int maxHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMaxHeight, SIZE_UNSPECIFIED);
+            if (minHeight != SIZE_UNSPECIFIED && maxHeight != SIZE_UNSPECIFIED && minHeight > maxHeight) {
+                throw new IllegalArgumentException("minHeight > maxHeight");
+            }
+            int mMinWidth = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMinWidth, SIZE_UNSPECIFIED);
+            int mMaxWidth = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMaxWidth, SIZE_UNSPECIFIED);
+            if (mMinWidth != SIZE_UNSPECIFIED && mMaxWidth != SIZE_UNSPECIFIED && mMinWidth > mMaxWidth) {
+                throw new IllegalArgumentException("minWidth > maxWidth");
+            }
+            Drawable virtualButtonPressedDrawable = typedArray.getDrawable(R.styleable.DateTimePicker_picker_virtualButtonPressedDrawable);
+            int selectionTextSize = (int) typedArray.getDimension(R.styleable.DateTimePicker_picker_selectionTextSize, SIZE_UNSPECIFIED);
+            int selectionTextColor = typedArray.getColor(R.styleable.DateTimePicker_picker_selectionTextColor, Color.BLACK);
+
             typedArray.recycle();
         }
 
@@ -427,10 +446,11 @@ public class DateTimePicker extends FrameLayout {
 
     private boolean parseDate(String date, Calendar outDate) {
         try {
-            outDate.setTime(new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).parse(date));
+            SimpleDateFormat mDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+            outDate.setTime(Objects.requireNonNull(mDateFormat.parse(date)));
             return true;
         } catch (ParseException e) {
-            Log.w(TAG, "Date: " + date + " not in format: " + DATE_FORMAT);
+            Log.w(TAG, "Date: " + date + " not in format: MM/dd/yyyy");
             return false;
         }
     }
@@ -482,7 +502,7 @@ public class DateTimePicker extends FrameLayout {
 
         // make sure the month names are a zero based array
         // with the months in the month NPicker
-        String[] displayedValues = ArraysUtils.copyOfRange(mShortMonths, mMonthNPicker.getMinValue(), mMonthNPicker.getMaxValue() + 1);
+        String[] displayedValues = Arrays.copyOfRange(mShortMonths, mMonthNPicker.getMinValue(), mMonthNPicker.getMaxValue() + 1);
         mMonthNPicker.setDisplayedValues(displayedValues);
 
         // year NPicker range does not change based on the current date

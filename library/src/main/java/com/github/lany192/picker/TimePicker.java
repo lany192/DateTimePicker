@@ -14,19 +14,17 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.github.lany192.R;
-import com.lany.numberpicker.NumberPicker;
 
 import java.util.Calendar;
 import java.util.Locale;
-import com.github.lany192.picker.utils.ArraysUtils;
+
 /**
- * Hour/Minute/Second
+ * 时分秒 Hour/Minute/Second
  */
-public class TimePicker extends FrameLayout {
+public class TimePicker extends BasePicker {
     private static final boolean DEFAULT_ENABLED_STATE = true;
 
     private final NumberPicker mHourNPicker;
@@ -57,7 +55,7 @@ public class TimePicker extends FrameLayout {
     }
 
     public TimePicker(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.timePickerStyle);
+        this(context, attrs, 0);
     }
 
     public TimePicker(Context context, AttributeSet attrs, int defStyle) {
@@ -68,12 +66,9 @@ public class TimePicker extends FrameLayout {
 
         // hour
         mHourNPicker = findViewById(R.id.picker_time_hour);
-        mHourNPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker NPicker, int oldVal, int newVal) {
-                updateInputState();
-                onTimeChanged();
-            }
+        mHourNPicker.setOnValueChangedListener((NPicker, oldVal, newVal) -> {
+            updateInputState();
+            onTimeChanged();
         });
         mHourEditText = mHourNPicker.findViewById(R.id.number_picker_edit_text);
         mHourEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -92,21 +87,18 @@ public class TimePicker extends FrameLayout {
         mMinuteNPicker.setMaxValue(59);
         mMinuteNPicker.setOnLongPressUpdateInterval(100);
         mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mMinuteNPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            public void onValueChange(NumberPicker NPicker, int oldVal,
-                                      int newVal) {
-                updateInputState();
-                int minValue = mMinuteNPicker.getMinValue();
-                int maxValue = mMinuteNPicker.getMaxValue();
-                if (oldVal == maxValue && newVal == minValue) {
-                    int newHour = mHourNPicker.getValue() + 1;
-                    mHourNPicker.setValue(newHour);
-                } else if (oldVal == minValue && newVal == maxValue) {
-                    int newHour = mHourNPicker.getValue() - 1;
-                    mHourNPicker.setValue(newHour);
-                }
-                onTimeChanged();
+        mMinuteNPicker.setOnValueChangedListener((NPicker, oldVal, newVal) -> {
+            updateInputState();
+            int minValue = mMinuteNPicker.getMinValue();
+            int maxValue = mMinuteNPicker.getMaxValue();
+            if (oldVal == maxValue && newVal == minValue) {
+                int newHour = mHourNPicker.getValue() + 1;
+                mHourNPicker.setValue(newHour);
+            } else if (oldVal == minValue && newVal == maxValue) {
+                int newHour = mHourNPicker.getValue() - 1;
+                mHourNPicker.setValue(newHour);
             }
+            onTimeChanged();
         });
         mMinuteEditText = mMinuteNPicker.findViewById(R.id.number_picker_edit_text);
         mMinuteEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -116,14 +108,11 @@ public class TimePicker extends FrameLayout {
         mSecondNPicker.setMaxValue(59);
         mMinuteNPicker.setOnLongPressUpdateInterval(100);
         mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mSecondNPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                updateInputState();
-                picker.requestFocus();
-                sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
-                onTimeChanged();
-            }
+        mSecondNPicker.setOnValueChangedListener((picker, oldVal, newVal) -> {
+            updateInputState();
+            picker.requestFocus();
+            sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
+            onTimeChanged();
         });
         mSecondEditText = mSecondNPicker.findViewById(R.id.number_picker_edit_text);
         mSecondEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);

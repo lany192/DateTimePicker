@@ -85,25 +85,6 @@
             android:background="#dddddd" />
 
         <TextView
-            android:id="@+id/ymdh_picker_show_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="YMDHPicker:"
-            android:textSize="14sp" />
-
-        <com.github.lany192.picker.YMDHPicker
-            android:id="@+id/ymdhPicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:background="#dddddd" />
-
-        <TextView
             android:id="@+id/date_time_picker_show_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

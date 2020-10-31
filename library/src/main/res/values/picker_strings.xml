@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <string name="app_name">Library</string>
     <!-- DatePicker - accessibility support -->
     <!-- Description of the button to increment the DatePicker's month value. [CHAR LIMIT=NONE] -->
     <string name="date_picker_increment_month_button">Increment month</string>

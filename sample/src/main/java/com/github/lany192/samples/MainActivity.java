@@ -11,7 +11,6 @@ import com.github.lany192.picker.DatePicker;
 import com.github.lany192.picker.DateTimePicker;
 import com.github.lany192.picker.HourMinutePicker;
 import com.github.lany192.picker.TimePicker;
-import com.github.lany192.picker.YMDHPicker;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
         TimePicker timePicker = findViewById(R.id.time_picker);
         TextView hourMinutePickerShowText = findViewById(R.id.hour_minute_picker_show_text);
         HourMinutePicker hourMinutePicker = findViewById(R.id.hour_minute_picker);
-        TextView ymdhPickerShowText = findViewById(R.id.ymdh_picker_show_text);
-        YMDHPicker ymdhPicker = findViewById(R.id.ymdhPicker);
         TextView dateTimePickerShowText = findViewById(R.id.date_time_picker_show_text);
         DateTimePicker dateTimePicker = findViewById(R.id.dateTimePicker);
 
@@ -66,15 +63,6 @@ public class MainActivity extends AppCompatActivity {
                 .append("HourMinutePicker:")
                 .append(hourOfDay).append("时")
                 .append(minute).append("分")));
-
-        ymdhPicker.setSelectionDivider(new ColorDrawable(0xff000000));
-        ymdhPicker.setSelectionDividerHeight(2);
-        ymdhPicker.setOnDateChangedListener((view, year, monthOfYear, dayOfMonth, hourOfDay) -> ymdhPickerShowText.setText(new StringBuilder()
-                .append("YMDHPicker:")
-                .append(year).append("年")
-                .append(monthOfYear + 1).append("月")
-                .append(dayOfMonth).append("日")
-                .append(hourOfDay).append("时")));
 
         dateTimePicker.setSelectionDivider(new ColorDrawable(0xff000000));
         dateTimePicker.setSelectionDividerHeight(2);

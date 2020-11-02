@@ -14,22 +14,38 @@ import com.github.lany192.picker.TimePicker;
 
 
 public class MainActivity extends AppCompatActivity {
+    DatePicker datePicker1;
+    DatePicker datePicker2;
+    TimePicker timePicker;
+    HourMinutePicker hourMinutePicker;
+    DateTimePicker dateTimePicker;
+
+    TextView datePickerShowText;
+    TextView timePickerShowText;
+    TextView hourMinutePickerShowText;
+    TextView dateTimePickerShowText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        TextView datePickerShowText = findViewById(R.id.date_picker_show_text);
-        DatePicker datePicker1 = findViewById(R.id.date_picker_1);
-        DatePicker datePicker2 = findViewById(R.id.date_picker_2);
-        TextView timePickerShowText = findViewById(R.id.time_picker_show_text);
-        TimePicker timePicker = findViewById(R.id.time_picker);
-        TextView hourMinutePickerShowText = findViewById(R.id.hour_minute_picker_show_text);
-        HourMinutePicker hourMinutePicker = findViewById(R.id.hour_minute_picker);
-        TextView dateTimePickerShowText = findViewById(R.id.date_time_picker_show_text);
-        DateTimePicker dateTimePicker = findViewById(R.id.dateTimePicker);
+        findView();
+        init();
+    }
 
+    private void findView() {
+        datePickerShowText = findViewById(R.id.date_picker_show_text);
+        datePicker1 = findViewById(R.id.date_picker_1);
+        datePicker2 = findViewById(R.id.date_picker_2);
+        timePickerShowText = findViewById(R.id.time_picker_show_text);
+        timePicker = findViewById(R.id.time_picker);
+        hourMinutePickerShowText = findViewById(R.id.hour_minute_picker_show_text);
+        hourMinutePicker = findViewById(R.id.hour_minute_picker);
+        dateTimePickerShowText = findViewById(R.id.date_time_picker_show_text);
+        dateTimePicker = findViewById(R.id.dateTimePicker);
+    }
 
+    private void init() {
         datePicker1.setSelectionDivider(new ColorDrawable(0xffff0000));
         datePicker1.setSelectionDividerHeight(2);
         //datePicker1.setDayViewShown(false);

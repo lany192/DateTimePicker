@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 .append(minuteOfHour).append("分")
                 .append(scd).append("秒")));
 
-        hourMinutePicker.setIs24HourView(false);
+        hourMinutePicker.setIs24HourView(true);
         hourMinutePicker.setSelectionDivider(new ColorDrawable(0xff436EEE));
         hourMinutePicker.setSelectionDividerHeight(4);
         hourMinutePicker.setOnTimeChangedListener((view, hourOfDay, minute) -> hourMinutePickerShowText.setText(new StringBuilder()

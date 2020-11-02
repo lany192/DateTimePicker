@@ -32,7 +32,7 @@
     <!-- Whether the spinners are shown. -->
     <attr name="picker_spinnersShown" format="boolean" />
     <!-- Whether the day view is shown. -->
-    <attr name="picker_dayViewShown" format="boolean" />
+    <attr name="picker_showDay" format="boolean" />
     <!-- The minimal date shown by this calendar view in mm/dd/yyyy format. -->
     <attr name="picker_minDate" format="string" />
     <!-- The maximal date shown by this calendar view in mm/dd/yyyy format. -->
@@ -80,7 +80,7 @@
         <attr name="picker_startYear" />
         <attr name="picker_endYear" />
         <attr name="picker_spinnersShown" />
-        <attr name="picker_dayViewShown" />
+        <attr name="picker_showDay" />
         <attr name="picker_minDate" />
         <attr name="picker_maxDate" />
         <attr name="picker_picker_internalLayout" />

@@ -80,7 +80,7 @@ public class DatePicker extends BasePicker {
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.DatePicker, defStyle, 0);
         boolean spinnersShown = typedArray.getBoolean(R.styleable.DatePicker_picker_spinnersShown, DEFAULT_NPickerS_SHOWN);
-        boolean dayViewShown = typedArray.getBoolean(R.styleable.DatePicker_picker_dayViewShown, DEFAULT_DAY_VIEW_SHOWN);
+        boolean dayViewShown = typedArray.getBoolean(R.styleable.DatePicker_picker_showDay, DEFAULT_DAY_VIEW_SHOWN);
 
         int startYear = typedArray.getInt(R.styleable.DatePicker_picker_startYear, DEFAULT_START_YEAR);
         int endYear = typedArray.getInt(R.styleable.DatePicker_picker_endYear, DEFAULT_END_YEAR);
@@ -89,23 +89,23 @@ public class DatePicker extends BasePicker {
         int layoutResourceId = typedArray.getResourceId(R.styleable.DatePicker_picker_picker_internalLayout, R.layout.picker_date);
 
 
-        int solidColor = typedArray.getColor(R.styleable.DateTimePicker_picker_solidColor, 0);
-        Drawable selectionDivider = typedArray.getDrawable(R.styleable.DateTimePicker_picker_selectionDivider);
-        int selectionDividerHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_selectionDividerHeight, dp2px(2));
-        int selectionDividersDistance = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_selectionDividersDistance, dp2px(2));
-        int minHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMinHeight, SIZE_UNSPECIFIED);
-        int maxHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMaxHeight, SIZE_UNSPECIFIED);
+        int solidColor = typedArray.getColor(R.styleable.DatePicker_picker_solidColor, 0);
+        Drawable selectionDivider = typedArray.getDrawable(R.styleable.DatePicker_picker_selectionDivider);
+        int selectionDividerHeight = typedArray.getDimensionPixelSize(R.styleable.DatePicker_picker_selectionDividerHeight, dp2px(2));
+        int selectionDividersDistance = typedArray.getDimensionPixelSize(R.styleable.DatePicker_picker_selectionDividersDistance, dp2px(2));
+        int minHeight = typedArray.getDimensionPixelSize(R.styleable.DatePicker_picker_internalMinHeight, SIZE_UNSPECIFIED);
+        int maxHeight = typedArray.getDimensionPixelSize(R.styleable.DatePicker_picker_internalMaxHeight, SIZE_UNSPECIFIED);
         if (minHeight != SIZE_UNSPECIFIED && maxHeight != SIZE_UNSPECIFIED && minHeight > maxHeight) {
             throw new IllegalArgumentException("minHeight > maxHeight");
         }
-        int mMinWidth = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMinWidth, SIZE_UNSPECIFIED);
-        int mMaxWidth = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMaxWidth, SIZE_UNSPECIFIED);
+        int mMinWidth = typedArray.getDimensionPixelSize(R.styleable.DatePicker_picker_internalMinWidth, SIZE_UNSPECIFIED);
+        int mMaxWidth = typedArray.getDimensionPixelSize(R.styleable.DatePicker_picker_internalMaxWidth, SIZE_UNSPECIFIED);
         if (mMinWidth != SIZE_UNSPECIFIED && mMaxWidth != SIZE_UNSPECIFIED && mMinWidth > mMaxWidth) {
             throw new IllegalArgumentException("minWidth > maxWidth");
         }
-        Drawable virtualButtonPressedDrawable = typedArray.getDrawable(R.styleable.DateTimePicker_picker_virtualButtonPressedDrawable);
-        int selectionTextSize = (int) typedArray.getDimension(R.styleable.DateTimePicker_picker_selectionTextSize, SIZE_UNSPECIFIED);
-        int selectionTextColor = typedArray.getColor(R.styleable.DateTimePicker_picker_selectionTextColor, Color.BLACK);
+        Drawable virtualButtonPressedDrawable = typedArray.getDrawable(R.styleable.DatePicker_picker_virtualButtonPressedDrawable);
+        int selectionTextSize = (int) typedArray.getDimension(R.styleable.DatePicker_picker_selectionTextSize, SIZE_UNSPECIFIED);
+        int selectionTextColor = typedArray.getColor(R.styleable.DatePicker_picker_selectionTextColor, Color.BLACK);
 
 
         typedArray.recycle();

@@ -37,8 +37,6 @@
     <attr name="picker_minDate" format="string" />
     <!-- The maximal date shown by this calendar view in mm/dd/yyyy format. -->
     <attr name="picker_maxDate" format="string" />
-    <!-- @hide The layout of the date picker. -->
-    <attr name="picker_picker_internalLayout" format="reference" />
     <!--开始年份-->
     <attr name="startYear" format="integer" />
     <!--结束年份-->
@@ -83,7 +81,6 @@
         <attr name="picker_showDay" />
         <attr name="picker_minDate" />
         <attr name="picker_maxDate" />
-        <attr name="picker_picker_internalLayout" />
     </declare-styleable>
 
     <declare-styleable name="DateTimePicker">

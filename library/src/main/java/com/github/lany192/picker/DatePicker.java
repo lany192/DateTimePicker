@@ -65,7 +65,7 @@ public class DatePicker extends BasePicker {
     private boolean mIsEnabled = DEFAULT_ENABLED_STATE;
 
     public DatePicker(Context context) {
-        this(context, null);
+        this(context, null,0);
     }
 
     public DatePicker(Context context, AttributeSet attrs) {

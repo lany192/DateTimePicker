@@ -23,7 +23,8 @@
     <attr name="picker_selectionTextSize" format="dimension" />
     <!--  textColor-->
     <attr name="picker_selectionTextColor" format="color|reference" />
-
+    <!-- The unit of the number picker. -->
+    <attr name="picker_number_unit" format="string" />
     <!-- ################################################## -->
     <!-- The first year (inclusive), for example "1940".-->
     <attr name="picker_startYear" format="integer" />

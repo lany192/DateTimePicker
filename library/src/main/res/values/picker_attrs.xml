@@ -30,8 +30,6 @@
     <attr name="picker_startYear" format="integer" />
     <!-- The last year (inclusive), for example "2010".-->
     <attr name="picker_endYear" format="integer" />
-    <!-- Whether the spinners are shown. -->
-    <attr name="picker_spinnersShown" format="boolean" />
     <!-- Whether the day view is shown. -->
     <attr name="picker_showDay" format="boolean" />
     <!-- The minimal date shown by this calendar view in mm/dd/yyyy format. -->
@@ -78,7 +76,6 @@
 
         <attr name="picker_startYear" />
         <attr name="picker_endYear" />
-        <attr name="picker_spinnersShown" />
         <attr name="picker_showDay" />
         <attr name="picker_minDate" />
         <attr name="picker_maxDate" />

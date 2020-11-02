@@ -38,7 +38,6 @@ import java.util.TimeZone;
 public class DatePicker extends BasePicker {
     private static final int DEFAULT_START_YEAR = 1900;
     private static final int DEFAULT_END_YEAR = 2100;
-    private static final boolean DEFAULT_NPickerS_SHOWN = true;
     private static final boolean DEFAULT_DAY_VIEW_SHOWN = true;
     private static final boolean DEFAULT_ENABLED_STATE = true;
     private final LinearLayout mNPickers;
@@ -79,7 +78,6 @@ public class DatePicker extends BasePicker {
         setCurrentLocale(Locale.getDefault());
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.DatePicker, defStyle, 0);
-        boolean spinnersShown = typedArray.getBoolean(R.styleable.DatePicker_picker_spinnersShown, DEFAULT_NPickerS_SHOWN);
         boolean dayViewShown = typedArray.getBoolean(R.styleable.DatePicker_picker_showDay, DEFAULT_DAY_VIEW_SHOWN);
 
         int startYear = typedArray.getInt(R.styleable.DatePicker_picker_startYear, DEFAULT_START_YEAR);
@@ -158,12 +156,7 @@ public class DatePicker extends BasePicker {
         dayNumberPicker.setOnValueChangedListener(onChangeListener);
         mDayEditText = dayNumberPicker.findViewById(R.id.number_picker_edit_text);
 
-        // show only what the user required but make sure we
-        // show something and the NPickers have higher priority
-        if (!spinnersShown && !dayViewShown) {
-            setspinnersShown(true);
-        } else {
-            setspinnersShown(spinnersShown);
+        if (dayViewShown) {
             setDayViewShown(dayViewShown);
         }
 
@@ -182,14 +175,6 @@ public class DatePicker extends BasePicker {
         yearNumberPicker.setOnLongPressUpdateInterval(100);
         yearNumberPicker.setOnValueChangedListener(onChangeListener);
         mYearEditText = yearNumberPicker.findViewById(R.id.number_picker_edit_text);
-
-        // show only what the user required but make sure we
-        // show something and the NPickers have higher priority
-        if (!spinnersShown) {
-            setspinnersShown(true);
-        } else {
-            setspinnersShown(spinnersShown);
-        }
 
         // set the min date giving priority of the minDate over startYear
         mTempDate.clear();
@@ -338,24 +323,6 @@ public class DatePicker extends BasePicker {
      */
     public void setDayViewShown(boolean shown) {
         dayNumberPicker.setVisibility(shown ? VISIBLE : GONE);
-    }
-
-    /**
-     * Gets whether the NPickers are shown.
-     *
-     * @return True if the NPickers are shown.
-     */
-    public boolean getspinnersShown() {
-        return mNPickers.isShown();
-    }
-
-    /**
-     * Sets whether the NPickers are shown.
-     *
-     * @param shown True if the NPickers are to be shown.
-     */
-    public void setspinnersShown(boolean shown) {
-        mNPickers.setVisibility(shown ? VISIBLE : GONE);
     }
 
     /**

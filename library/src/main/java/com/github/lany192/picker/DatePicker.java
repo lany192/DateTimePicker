@@ -103,7 +103,6 @@ public class DatePicker extends BasePicker {
         if (mMinWidth != SIZE_UNSPECIFIED && mMaxWidth != SIZE_UNSPECIFIED && mMinWidth > mMaxWidth) {
             throw new IllegalArgumentException("minWidth > maxWidth");
         }
-        Drawable virtualButtonPressedDrawable = typedArray.getDrawable(R.styleable.DateTimePicker_picker_virtualButtonPressedDrawable);
         int selectionTextSize = (int) typedArray.getDimension(R.styleable.DateTimePicker_picker_selectionTextSize, SIZE_UNSPECIFIED);
         int selectionTextColor = typedArray.getColor(R.styleable.DateTimePicker_picker_selectionTextColor, Color.BLACK);
 

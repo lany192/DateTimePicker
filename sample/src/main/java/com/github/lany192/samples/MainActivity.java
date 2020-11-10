@@ -1,5 +1,6 @@
 package com.github.lany192.samples;
 
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.github.lany192.picker.DatePicker;
 import com.github.lany192.picker.DateTimePicker;
 import com.github.lany192.picker.HourMinutePicker;
+import com.github.lany192.picker.NumberPicker;
 import com.github.lany192.picker.TimePicker;
 
 
@@ -19,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        NumberPicker numberPicker1 = findViewById(R.id.number_picker_1);
+
         TextView datePickerShowText = findViewById(R.id.date_picker_show_text);
         DatePicker datePicker1 = findViewById(R.id.date_picker_1);
         DatePicker datePicker2 = findViewById(R.id.date_picker_2);
@@ -29,6 +33,12 @@ public class MainActivity extends AppCompatActivity {
         TextView dateTimePickerShowText = findViewById(R.id.date_time_picker_show_text);
         DateTimePicker dateTimePicker = findViewById(R.id.dateTimePicker);
 
+
+        numberPicker1.setSelectionDivider(new ColorDrawable(0xff3300ff));
+        numberPicker1.setSelectionDividerHeight(4);
+        numberPicker1.setMaxValue(100);
+        numberPicker1.setMinValue(1);
+        numberPicker1.setFormatter(value -> value + "个");
 
         datePicker1.setSelectionDivider(new ColorDrawable(0xffff0000));
         datePicker1.setSelectionDividerHeight(2);

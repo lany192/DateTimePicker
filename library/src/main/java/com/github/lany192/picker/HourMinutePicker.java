@@ -29,6 +29,7 @@ import java.util.Locale;
  */
 public class HourMinutePicker extends BasePicker {
     private static final boolean DEFAULT_ENABLED_STATE = true;
+    private static final boolean DEFAULT_AUTO_SCROLL_STATE = true;
 
     private static final int HOURS_IN_HALF_DAY = 12;
     // ui components
@@ -49,6 +50,7 @@ public class HourMinutePicker extends BasePicker {
     private boolean mIs24HourView = true;
     private boolean mIsAm;
     private boolean mIsEnabled = DEFAULT_ENABLED_STATE;
+    private boolean mIsAutoScroll = DEFAULT_AUTO_SCROLL_STATE;
 
     // callbacks
     private OnTimeChangedListener mOnTimeChangedListener;
@@ -79,7 +81,7 @@ public class HourMinutePicker extends BasePicker {
             @Override
             public void onValueChange(NumberPicker NPicker, int oldVal, int newVal) {
                 updateInputState();
-                if (!is24HourView()) {
+                if (!is24HourView() && isAutoScrollState()) {
                     if ((oldVal == HOURS_IN_HALF_DAY - 1 && newVal == HOURS_IN_HALF_DAY)
                             || (oldVal == HOURS_IN_HALF_DAY && newVal == HOURS_IN_HALF_DAY - 1)) {
                         mIsAm = !mIsAm;
@@ -110,14 +112,14 @@ public class HourMinutePicker extends BasePicker {
                 updateInputState();
                 int minValue = mMinuteNPicker.getMinValue();
                 int maxValue = mMinuteNPicker.getMaxValue();
-                if (oldVal == maxValue && newVal == minValue) {
+                if (oldVal == maxValue && newVal == minValue && isAutoScrollState()) {
                     int newHour = mHourNPicker.getValue() + 1;
                     if (!is24HourView() && newHour == HOURS_IN_HALF_DAY) {
                         mIsAm = !mIsAm;
                         updateAmPmControl();
                     }
                     mHourNPicker.setValue(newHour);
-                } else if (oldVal == minValue && newVal == maxValue) {
+                } else if (oldVal == minValue && newVal == maxValue && isAutoScrollState()) {
                     int newHour = mHourNPicker.getValue() - 1;
                     if (!is24HourView()
                             && newHour == HOURS_IN_HALF_DAY - 1) {
@@ -234,6 +236,20 @@ public class HourMinutePicker extends BasePicker {
             mAmPmButton.setEnabled(enabled);
         }
         mIsEnabled = enabled;
+    }
+
+    public boolean isAutoScrollState() {
+        return mIsAutoScroll;
+    }
+
+    /**
+     * Sets the automatic scrolling of items in the picker.
+     */
+    public void setIsAutoScrollState(Boolean isAutoScrollState) {
+        if (mIsAutoScroll == isAutoScrollState) {
+            return;
+        }
+        mIsAutoScroll = isAutoScrollState;
     }
 
     @Override

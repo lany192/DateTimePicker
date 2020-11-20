@@ -41,6 +41,7 @@ public class DatePicker extends BasePicker {
     private static final boolean DEFAULT_NPickerS_SHOWN = true;
     private static final boolean DEFAULT_DAY_VIEW_SHOWN = true;
     private static final boolean DEFAULT_ENABLED_STATE = true;
+    private static final boolean DEFAULT_AUTO_SCROLL_STATE = true;
     private final LinearLayout mNPickers;
     private final EditText mDayEditText;
     private final EditText mMonthEditText;
@@ -63,6 +64,8 @@ public class DatePicker extends BasePicker {
     private Calendar mCurrentDate;
 
     private boolean mIsEnabled = DEFAULT_ENABLED_STATE;
+
+    private boolean mIsAutoScroll = DEFAULT_AUTO_SCROLL_STATE;
 
     public DatePicker(Context context) {
         this(context, null);
@@ -120,17 +123,17 @@ public class DatePicker extends BasePicker {
                 if (picker == dayNumberPicker) {
                     int maxDayOfMonth = mTempDate
                             .getActualMaximum(Calendar.DAY_OF_MONTH);
-                    if (oldVal == maxDayOfMonth && newVal == 1) {
+                    if (oldVal == maxDayOfMonth && newVal == 1 && isAutoScrollState()) {
                         mTempDate.add(Calendar.DAY_OF_MONTH, 1);
-                    } else if (oldVal == 1 && newVal == maxDayOfMonth) {
+                    } else if (oldVal == 1 && newVal == maxDayOfMonth && isAutoScrollState()) {
                         mTempDate.add(Calendar.DAY_OF_MONTH, -1);
                     } else {
                         mTempDate.add(Calendar.DAY_OF_MONTH, newVal - oldVal);
                     }
                 } else if (picker == monthNumberPicker) {
-                    if (oldVal == 11 && newVal == 0) {
+                    if (oldVal == 11 && newVal == 0 && isAutoScrollState()) {
                         mTempDate.add(Calendar.MONTH, 1);
-                    } else if (oldVal == 0 && newVal == 11) {
+                    } else if (oldVal == 0 && newVal == 11 && isAutoScrollState()) {
                         mTempDate.add(Calendar.MONTH, -1);
                     } else {
                         mTempDate.add(Calendar.MONTH, newVal - oldVal);
@@ -296,6 +299,20 @@ public class DatePicker extends BasePicker {
         monthNumberPicker.setEnabled(enabled);
         yearNumberPicker.setEnabled(enabled);
         mIsEnabled = enabled;
+    }
+
+    public boolean isAutoScrollState() {
+        return mIsAutoScroll;
+    }
+
+    /**
+     * Sets the automatic scrolling of items in the picker.
+     */
+    public void setIsAutoScrollState(Boolean isAutoScrollState) {
+        if (mIsAutoScroll == isAutoScrollState) {
+            return;
+        }
+        mIsAutoScroll = isAutoScrollState;
     }
 
     @Override

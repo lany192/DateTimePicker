@@ -1,6 +1,5 @@
 package com.github.lany192.samples;
 
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -42,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         datePicker1.setSelectionDivider(new ColorDrawable(0xffff0000));
         datePicker1.setSelectionDividerHeight(2);
+//        datePicker1.setIsAutoScrollState(false);
         //datePicker1.setDayViewShown(false);
         datePicker1.setOnDateChangedListener((view, year, monthOfYear, dayOfMonth) -> datePickerShowText.setText(new StringBuilder()
                 .append("DatePicker:")
@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         datePicker2.setSelectionDivider(new ColorDrawable(0xff008B00));
         datePicker2.setSelectionDividerHeight(4);
+//        datePicker2.setIsAutoScrollState(false);
         //datePicker2.setDayViewShown(false);
         datePicker2.setOnDateChangedListener((view, year, monthOfYear, dayOfMonth) -> datePickerShowText.setText(new StringBuilder()
                 .append("DatePicker:")
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         timePicker.setSelectionDivider(new ColorDrawable(0xff000000));
         timePicker.setSelectionDividerHeight(2);
+//        timePicker.setIsAutoScrollState(false);
         timePicker.setOnTimeChangedListener((view, hourOfDay, minuteOfHour, scd) -> timePickerShowText.setText(new StringBuilder()
                 .append("TimePicker:")
                 .append(hourOfDay).append("时")
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         hourMinutePicker.setIs24HourView(false);
         hourMinutePicker.setSelectionDivider(new ColorDrawable(0xff436EEE));
         hourMinutePicker.setSelectionDividerHeight(4);
+//        hourMinutePicker.setIsAutoScrollState(false);
         hourMinutePicker.setOnTimeChangedListener((view, hourOfDay, minute) -> hourMinutePickerShowText.setText(new StringBuilder()
                 .append("HourMinutePicker:")
                 .append(hourOfDay).append("时")
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         dateTimePicker.setSelectionDivider(new ColorDrawable(0xff000000));
         dateTimePicker.setSelectionDividerHeight(2);
+//        dateTimePicker.setIsAutoScrollState(false);
         dateTimePicker.setOnChangedListener((view, year, monthOfYear, dayOfMonth, hourOfDay, minute, second) -> dateTimePickerShowText.setText(new StringBuilder()
                 .append("DateTimePicker:")
                 .append(year).append("年")

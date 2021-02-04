@@ -17,8 +17,6 @@
     <attr name="picker_internalMaxWidth" format="dimension" />
     <!--  The layout of the number picker. -->
     <attr name="picker_internalLayout" format="reference" />
-    <!--  The drawable for pressed virtual (increment/decrement) buttons. -->
-    <attr name="picker_virtualButtonPressedDrawable" format="reference" />
     <!--  textSize-->
     <attr name="picker_selectionTextSize" format="dimension" />
     <!--  textColor-->
@@ -55,7 +53,6 @@
         <attr name="picker_internalMinWidth" />
         <attr name="picker_internalMaxWidth" />
         <attr name="picker_internalLayout" />
-        <attr name="picker_virtualButtonPressedDrawable" />
         <attr name="picker_selectionTextSize" />
         <attr name="picker_selectionTextColor" />
     </declare-styleable>
@@ -70,7 +67,6 @@
         <attr name="picker_internalMinWidth" />
         <attr name="picker_internalMaxWidth" />
         <attr name="picker_internalLayout" />
-        <attr name="picker_virtualButtonPressedDrawable" />
         <attr name="picker_selectionTextSize" />
         <attr name="picker_selectionTextColor" />
 
@@ -91,10 +87,8 @@
         <attr name="picker_internalMinWidth" />
         <attr name="picker_internalMaxWidth" />
         <attr name="picker_internalLayout" />
-        <attr name="picker_virtualButtonPressedDrawable" />
         <attr name="picker_selectionTextSize" />
         <attr name="picker_selectionTextColor" />
-
 
         <attr name="picker_startYear" />
         <attr name="picker_endYear" />

@@ -158,10 +158,6 @@ public class NumberPicker extends BasePicker {
      */
     private Paint mSelectorWheelPaint;
     /**
-     * The {@link Drawable} for pressed virtual (increment/decrement) buttons.
-     */
-    private Drawable mVirtualButtonPressedDrawable;
-    /**
      * The {@link Scroller} responsible for flinging the selector.
      */
     private Scroller mFlingScroller;
@@ -177,10 +173,7 @@ public class NumberPicker extends BasePicker {
      * Flag whether this widget has a selector wheel.
      */
     private boolean mHasSelectorWheel;
-    /**
-     * Helper class for managing pressed state of the virtual buttons.
-     */
-    private PressedStateHelper mPressedStateHelper;
+
     /**
      * The max width of this widget.
      */
@@ -319,16 +312,6 @@ public class NumberPicker extends BasePicker {
     private int mBottomSelectionDividerBottom;
 
     /**
-     * Whether the increment virtual button is pressed.
-     */
-    private boolean mIncrementVirtualButtonPressed;
-
-    /**
-     * Whether the decrement virtual button is pressed.
-     */
-    private boolean mDecrementVirtualButtonPressed;
-
-    /**
      * The keycode of the last handled DPAD down event.
      */
     private int mLastHandledDownDpadKeyCode = -1;
@@ -413,16 +396,12 @@ public class NumberPicker extends BasePicker {
                 throw new IllegalArgumentException("minWidth > maxWidth");
             }
             mComputeMaxWidth = (mMaxWidth == SIZE_UNSPECIFIED);
-            mVirtualButtonPressedDrawable = typedArray.getDrawable(R.styleable.NumberPicker_picker_virtualButtonPressedDrawable);
             mTextSize = (int) typedArray.getDimension(R.styleable.NumberPicker_picker_selectionTextSize, -1);
             mTextColor = typedArray.getColor(R.styleable.NumberPicker_picker_selectionTextColor, Color.BLACK);
             typedArray.recycle();
         }
 
         LayoutInflater.from(getContext()).inflate(layoutResId, this, true);
-
-
-        mPressedStateHelper = new PressedStateHelper();
 
         // By default Linearlayout that we extend is not drawn. This is
         // its draw() method is not called but dispatchDraw() is called
@@ -627,18 +606,7 @@ public class NumberPicker extends BasePicker {
                 mLastDownEventTime = event.getEventTime();
                 mIngonreMoveEvents = false;
                 mShowSoftInputOnTap = false;
-                // Handle pressed state before any state change.
-                if (mLastDownEventY < mTopSelectionDividerTop) {
-                    if (mScrollState == OnScrollListener.SCROLL_STATE_IDLE) {
-                        mPressedStateHelper
-                                .buttonPressDelayed(PressedStateHelper.BUTTON_DECREMENT);
-                    }
-                } else if (mLastDownEventY > mBottomSelectionDividerBottom) {
-                    if (mScrollState == OnScrollListener.SCROLL_STATE_IDLE) {
-                        mPressedStateHelper
-                                .buttonPressDelayed(PressedStateHelper.BUTTON_INCREMENT);
-                    }
-                }
+
                 // Make sure we support flinging inside scrollables.
                 getParent().requestDisallowInterceptTouchEvent(true);
                 if (!mFlingScroller.isFinished()) {
@@ -699,7 +667,6 @@ public class NumberPicker extends BasePicker {
             case MotionEvent.ACTION_UP: {
                 removeBeginSoftInputCommand();
                 removeChangeCurrentByOneFromLongPress();
-                mPressedStateHelper.cancel();
                 VelocityTracker velocityTracker = mVelocityTracker;
                 velocityTracker.computeCurrentVelocity(1000, mMaximumFlingVelocity);
                 int initialVelocity = (int) velocityTracker.getYVelocity();
@@ -722,12 +689,8 @@ public class NumberPicker extends BasePicker {
                                     - SELECTOR_MIDDLE_ITEM_INDEX;
                             if (selectorIndexOffset > 0) {
                                 changeValueByOne(true);
-                                mPressedStateHelper
-                                        .buttonTapped(PressedStateHelper.BUTTON_INCREMENT);
                             } else if (selectorIndexOffset < 0) {
                                 changeValueByOne(false);
-                                mPressedStateHelper
-                                        .buttonTapped(PressedStateHelper.BUTTON_DECREMENT);
                             }
                         }
                     } else {
@@ -1239,23 +1202,6 @@ public class NumberPicker extends BasePicker {
         float x = (getRight() - getLeft()) / 2;
         float y = mCurrentScrollOffset;
 
-        // draw the virtual buttons pressed state if needed
-        if (mVirtualButtonPressedDrawable != null
-                && mScrollState == OnScrollListener.SCROLL_STATE_IDLE) {
-            if (mDecrementVirtualButtonPressed) {
-                // mVirtualButtonPressedDrawable.setState(PRESSED_STATE_SET);
-                mVirtualButtonPressedDrawable.setState(PRESSED_ENABLED_STATE_SET);
-                mVirtualButtonPressedDrawable.setBounds(0, 0, getRight(), mTopSelectionDividerTop);
-                mVirtualButtonPressedDrawable.draw(canvas);
-            }
-            if (mIncrementVirtualButtonPressed) {
-                // mVirtualButtonPressedDrawable.setState(PRESSED_STATE_SET);
-                mVirtualButtonPressedDrawable.setState(PRESSED_ENABLED_STATE_SET);
-                mVirtualButtonPressedDrawable.setBounds(0, mBottomSelectionDividerBottom, getRight(), getBottom());
-                mVirtualButtonPressedDrawable.draw(canvas);
-            }
-        }
-
         // draw the selector wheel
         int[] selectorIndices = mSelectorIndices;
         for (int i = 0; i < selectorIndices.length; i++) {
@@ -1654,7 +1600,6 @@ public class NumberPicker extends BasePicker {
         if (mBeginSoftInputOnLongPressCommand != null) {
             removeCallbacks(mBeginSoftInputOnLongPressCommand);
         }
-        mPressedStateHelper.cancel();
     }
 
     /**
@@ -1897,91 +1842,6 @@ public class NumberPicker extends BasePicker {
                     }
                 }
                 return "";
-            }
-        }
-    }
-
-    class PressedStateHelper implements Runnable {
-        public static final int BUTTON_INCREMENT = 1;
-        public static final int BUTTON_DECREMENT = 2;
-
-        private final int MODE_PRESS = 1;
-        private final int MODE_TAPPED = 2;
-
-        private int mManagedButton;
-        private int mMode;
-
-        public void cancel() {
-            mMode = 0;
-            mManagedButton = 0;
-            NumberPicker.this.removeCallbacks(this);
-            if (mIncrementVirtualButtonPressed) {
-                mIncrementVirtualButtonPressed = false;
-                invalidate(0, mBottomSelectionDividerBottom, getRight(),
-                        getBottom());
-            }
-            mDecrementVirtualButtonPressed = false;
-            if (mDecrementVirtualButtonPressed) {
-                invalidate(0, 0, getRight(), mTopSelectionDividerTop);
-            }
-        }
-
-        public void buttonPressDelayed(int button) {
-            cancel();
-            mMode = MODE_PRESS;
-            mManagedButton = button;
-            NumberPicker.this.postDelayed(this,
-                    ViewConfiguration.getTapTimeout());
-        }
-
-        public void buttonTapped(int button) {
-            cancel();
-            mMode = MODE_TAPPED;
-            mManagedButton = button;
-            NumberPicker.this.post(this);
-        }
-
-        @Override
-        public void run() {
-            switch (mMode) {
-                case MODE_PRESS: {
-                    switch (mManagedButton) {
-                        case BUTTON_INCREMENT: {
-                            mIncrementVirtualButtonPressed = true;
-                            invalidate(0, mBottomSelectionDividerBottom, getRight(),
-                                    getBottom());
-                        }
-                        break;
-                        case BUTTON_DECREMENT: {
-                            mDecrementVirtualButtonPressed = true;
-                            invalidate(0, 0, getRight(), mTopSelectionDividerTop);
-                        }
-                    }
-                }
-                break;
-                case MODE_TAPPED: {
-                    switch (mManagedButton) {
-                        case BUTTON_INCREMENT: {
-                            if (!mIncrementVirtualButtonPressed) {
-                                NumberPicker.this.postDelayed(this,
-                                        ViewConfiguration.getPressedStateDuration());
-                            }
-                            mIncrementVirtualButtonPressed ^= true;
-                            invalidate(0, mBottomSelectionDividerBottom, getRight(),
-                                    getBottom());
-                        }
-                        break;
-                        case BUTTON_DECREMENT: {
-                            if (!mDecrementVirtualButtonPressed) {
-                                NumberPicker.this.postDelayed(this,
-                                        ViewConfiguration.getPressedStateDuration());
-                            }
-                            mDecrementVirtualButtonPressed ^= true;
-                            invalidate(0, 0, getRight(), mTopSelectionDividerTop);
-                        }
-                    }
-                }
-                break;
             }
         }
     }

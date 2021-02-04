@@ -1,5 +1,6 @@
 package com.github.lany192.samples;
 
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -10,42 +11,35 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.github.lany192.picker.DatePicker;
 import com.github.lany192.picker.DateTimePicker;
 import com.github.lany192.picker.HourMinutePicker;
+import com.github.lany192.picker.NumberPicker;
 import com.github.lany192.picker.TimePicker;
 
 
 public class MainActivity extends AppCompatActivity {
-    DatePicker datePicker1;
-    DatePicker datePicker2;
-    TimePicker timePicker;
-    HourMinutePicker hourMinutePicker;
-    DateTimePicker dateTimePicker;
-
-    TextView datePickerShowText;
-    TextView timePickerShowText;
-    TextView hourMinutePickerShowText;
-    TextView dateTimePickerShowText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findView();
-        init();
-    }
+        NumberPicker numberPicker1 = findViewById(R.id.number_picker_1);
 
-    private void findView() {
-        datePickerShowText = findViewById(R.id.date_picker_show_text);
-        datePicker1 = findViewById(R.id.date_picker_1);
-        datePicker2 = findViewById(R.id.date_picker_2);
-        timePickerShowText = findViewById(R.id.time_picker_show_text);
-        timePicker = findViewById(R.id.time_picker);
-        hourMinutePickerShowText = findViewById(R.id.hour_minute_picker_show_text);
-        hourMinutePicker = findViewById(R.id.hour_minute_picker);
-        dateTimePickerShowText = findViewById(R.id.date_time_picker_show_text);
-        dateTimePicker = findViewById(R.id.dateTimePicker);
-    }
+        TextView datePickerShowText = findViewById(R.id.date_picker_show_text);
+        DatePicker datePicker1 = findViewById(R.id.date_picker_1);
+        DatePicker datePicker2 = findViewById(R.id.date_picker_2);
+        TextView timePickerShowText = findViewById(R.id.time_picker_show_text);
+        TimePicker timePicker = findViewById(R.id.time_picker);
+        TextView hourMinutePickerShowText = findViewById(R.id.hour_minute_picker_show_text);
+        HourMinutePicker hourMinutePicker = findViewById(R.id.hour_minute_picker);
+        TextView dateTimePickerShowText = findViewById(R.id.date_time_picker_show_text);
+        DateTimePicker dateTimePicker = findViewById(R.id.dateTimePicker);
 
-    private void init() {
+
+        numberPicker1.setSelectionDivider(new ColorDrawable(0xff3300ff));
+        numberPicker1.setSelectionDividerHeight(4);
+        numberPicker1.setMaxValue(100);
+        numberPicker1.setMinValue(1);
+        numberPicker1.setFormatter(value -> value + "个");
+
         datePicker1.setSelectionDivider(new ColorDrawable(0xffff0000));
         datePicker1.setSelectionDividerHeight(2);
         //datePicker1.setDayViewShown(false);
@@ -72,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 .append(minuteOfHour).append("分")
                 .append(scd).append("秒")));
 
-        hourMinutePicker.setIs24HourView(true);
+        hourMinutePicker.setIs24HourView(false);
         hourMinutePicker.setSelectionDivider(new ColorDrawable(0xff436EEE));
         hourMinutePicker.setSelectionDividerHeight(4);
         hourMinutePicker.setOnTimeChangedListener((view, hourOfDay, minute) -> hourMinutePickerShowText.setText(new StringBuilder()

@@ -38,6 +38,7 @@ import java.util.TimeZone;
 public class DatePicker extends BasePicker {
     private static final int DEFAULT_START_YEAR = 1900;
     private static final int DEFAULT_END_YEAR = 2100;
+    private static final boolean DEFAULT_NPickerS_SHOWN = true;
     private static final boolean DEFAULT_DAY_VIEW_SHOWN = true;
     private static final boolean DEFAULT_ENABLED_STATE = true;
     private final LinearLayout mNPickers;
@@ -64,7 +65,7 @@ public class DatePicker extends BasePicker {
     private boolean mIsEnabled = DEFAULT_ENABLED_STATE;
 
     public DatePicker(Context context) {
-        this(context, null,0);
+        this(context, null);
     }
 
     public DatePicker(Context context, AttributeSet attrs) {
@@ -78,32 +79,32 @@ public class DatePicker extends BasePicker {
         setCurrentLocale(Locale.getDefault());
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.DatePicker, defStyle, 0);
-        boolean dayViewShown = typedArray.getBoolean(R.styleable.DatePicker_picker_showDay, DEFAULT_DAY_VIEW_SHOWN);
+        boolean spinnersShown = typedArray.getBoolean(R.styleable.DatePicker_picker_spinnersShown, DEFAULT_NPickerS_SHOWN);
+        boolean dayViewShown = typedArray.getBoolean(R.styleable.DatePicker_picker_dayViewShown, DEFAULT_DAY_VIEW_SHOWN);
 
         int startYear = typedArray.getInt(R.styleable.DatePicker_picker_startYear, DEFAULT_START_YEAR);
         int endYear = typedArray.getInt(R.styleable.DatePicker_picker_endYear, DEFAULT_END_YEAR);
         String minDate = typedArray.getString(R.styleable.DatePicker_picker_minDate);
         String maxDate = typedArray.getString(R.styleable.DatePicker_picker_maxDate);
-        int layoutResourceId = typedArray.getResourceId(R.styleable.DatePicker_picker_internalLayout, R.layout.picker_date);
+        int layoutResourceId = typedArray.getResourceId(R.styleable.DatePicker_picker_picker_internalLayout, R.layout.picker_date);
 
 
-        int solidColor = typedArray.getColor(R.styleable.DatePicker_picker_solidColor, 0);
-        Drawable selectionDivider = typedArray.getDrawable(R.styleable.DatePicker_picker_selectionDivider);
-        int selectionDividerHeight = typedArray.getDimensionPixelSize(R.styleable.DatePicker_picker_selectionDividerHeight, dp2px(2));
-        int selectionDividersDistance = typedArray.getDimensionPixelSize(R.styleable.DatePicker_picker_selectionDividersDistance, dp2px(2));
-        int minHeight = typedArray.getDimensionPixelSize(R.styleable.DatePicker_picker_internalMinHeight, SIZE_UNSPECIFIED);
-        int maxHeight = typedArray.getDimensionPixelSize(R.styleable.DatePicker_picker_internalMaxHeight, SIZE_UNSPECIFIED);
+        int solidColor = typedArray.getColor(R.styleable.DateTimePicker_picker_solidColor, 0);
+        Drawable selectionDivider = typedArray.getDrawable(R.styleable.DateTimePicker_picker_selectionDivider);
+        int selectionDividerHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_selectionDividerHeight, dp2px(2));
+        int selectionDividersDistance = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_selectionDividersDistance, dp2px(2));
+        int minHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMinHeight, SIZE_UNSPECIFIED);
+        int maxHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMaxHeight, SIZE_UNSPECIFIED);
         if (minHeight != SIZE_UNSPECIFIED && maxHeight != SIZE_UNSPECIFIED && minHeight > maxHeight) {
             throw new IllegalArgumentException("minHeight > maxHeight");
         }
-        int mMinWidth = typedArray.getDimensionPixelSize(R.styleable.DatePicker_picker_internalMinWidth, SIZE_UNSPECIFIED);
-        int mMaxWidth = typedArray.getDimensionPixelSize(R.styleable.DatePicker_picker_internalMaxWidth, SIZE_UNSPECIFIED);
+        int mMinWidth = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMinWidth, SIZE_UNSPECIFIED);
+        int mMaxWidth = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMaxWidth, SIZE_UNSPECIFIED);
         if (mMinWidth != SIZE_UNSPECIFIED && mMaxWidth != SIZE_UNSPECIFIED && mMinWidth > mMaxWidth) {
             throw new IllegalArgumentException("minWidth > maxWidth");
         }
-        Drawable virtualButtonPressedDrawable = typedArray.getDrawable(R.styleable.DatePicker_picker_virtualButtonPressedDrawable);
-        int selectionTextSize = (int) typedArray.getDimension(R.styleable.DatePicker_picker_selectionTextSize, SIZE_UNSPECIFIED);
-        int selectionTextColor = typedArray.getColor(R.styleable.DatePicker_picker_selectionTextColor, Color.BLACK);
+        int selectionTextSize = (int) typedArray.getDimension(R.styleable.DateTimePicker_picker_selectionTextSize, SIZE_UNSPECIFIED);
+        int selectionTextColor = typedArray.getColor(R.styleable.DateTimePicker_picker_selectionTextColor, Color.BLACK);
 
 
         typedArray.recycle();
@@ -156,7 +157,12 @@ public class DatePicker extends BasePicker {
         dayNumberPicker.setOnValueChangedListener(onChangeListener);
         mDayEditText = dayNumberPicker.findViewById(R.id.number_picker_edit_text);
 
-        if (dayViewShown) {
+        // show only what the user required but make sure we
+        // show something and the NPickers have higher priority
+        if (!spinnersShown && !dayViewShown) {
+            setspinnersShown(true);
+        } else {
+            setspinnersShown(spinnersShown);
             setDayViewShown(dayViewShown);
         }
 
@@ -175,6 +181,14 @@ public class DatePicker extends BasePicker {
         yearNumberPicker.setOnLongPressUpdateInterval(100);
         yearNumberPicker.setOnValueChangedListener(onChangeListener);
         mYearEditText = yearNumberPicker.findViewById(R.id.number_picker_edit_text);
+
+        // show only what the user required but make sure we
+        // show something and the NPickers have higher priority
+        if (!spinnersShown) {
+            setspinnersShown(true);
+        } else {
+            setspinnersShown(spinnersShown);
+        }
 
         // set the min date giving priority of the minDate over startYear
         mTempDate.clear();
@@ -323,6 +337,24 @@ public class DatePicker extends BasePicker {
      */
     public void setDayViewShown(boolean shown) {
         dayNumberPicker.setVisibility(shown ? VISIBLE : GONE);
+    }
+
+    /**
+     * Gets whether the NPickers are shown.
+     *
+     * @return True if the NPickers are shown.
+     */
+    public boolean getspinnersShown() {
+        return mNPickers.isShown();
+    }
+
+    /**
+     * Sets whether the NPickers are shown.
+     *
+     * @param shown True if the NPickers are to be shown.
+     */
+    public void setspinnersShown(boolean shown) {
+        mNPickers.setVisibility(shown ? VISIBLE : GONE);
     }
 
     /**

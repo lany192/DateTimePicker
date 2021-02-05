@@ -2,7 +2,6 @@ package com.github.lany192.picker;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -15,8 +14,9 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.ColorInt;
 
 import com.github.lany192.R;
 
@@ -35,9 +35,7 @@ public class HourMinutePicker extends BasePicker {
     private final NumberPicker mHourNPicker;
     private final NumberPicker mMinuteNPicker;
     private final NumberPicker mAmPmNPicker;
-    private final EditText mHourEditText;
-    private final EditText mMinuteEditText;
-    private final EditText mAmPmEditText;
+
     private final TextView mDivider;
     // Note that the legacy implementation of the TimePicker is
     // using a button for toggling between AM/PM while the new
@@ -89,8 +87,7 @@ public class HourMinutePicker extends BasePicker {
                 onTimeChanged();
             }
         });
-        mHourEditText = mHourNPicker.findViewById(R.id.number_picker_edit_text);
-        mHourEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        mHourNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 
         // divider (only for the new widget style)
         mDivider = findViewById(R.id.divider);
@@ -129,8 +126,7 @@ public class HourMinutePicker extends BasePicker {
                 onTimeChanged();
             }
         });
-        mMinuteEditText = mMinuteNPicker.findViewById(R.id.number_picker_edit_text);
-        mMinuteEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        mMinuteNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 
         /* Get the localized am/pm strings and use them in the NPicker */
         mAmPmStrings = new DateFormatSymbols().getAmPmStrings();
@@ -139,7 +135,6 @@ public class HourMinutePicker extends BasePicker {
         View amPmView = findViewById(R.id.amPm);
         if (amPmView instanceof Button) {
             mAmPmNPicker = null;
-            mAmPmEditText = null;
             mAmPmButton = (Button) amPmView;
             mAmPmButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -166,8 +161,7 @@ public class HourMinutePicker extends BasePicker {
                     onTimeChanged();
                 }
             });
-            mAmPmEditText = mAmPmNPicker.findViewById(R.id.number_picker_edit_text);
-            mAmPmEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            mAmPmNPicker.setImeOptions(EditorInfo.IME_ACTION_DONE);
         }
 
         // update controls to initial state
@@ -200,16 +194,10 @@ public class HourMinutePicker extends BasePicker {
         }
     }
 
-    public void setSelectionDivider(Drawable selectionDivider) {
-        mHourNPicker.setSelectionDivider(selectionDivider);
-        mMinuteNPicker.setSelectionDivider(selectionDivider);
-        mAmPmNPicker.setSelectionDivider(selectionDivider);
-    }
-
-    public void setSelectionDividerHeight(int selectionDividerHeight) {
-        mHourNPicker.setSelectionDividerHeight(selectionDividerHeight);
-        mMinuteNPicker.setSelectionDividerHeight(selectionDividerHeight);
-        mAmPmNPicker.setSelectionDividerHeight(selectionDividerHeight);
+    public void setDividerColor(@ColorInt int colorId) {
+        mHourNPicker.setDividerColor(colorId);
+        mMinuteNPicker.setDividerColor(colorId);
+        mAmPmNPicker.setDividerColor(colorId);
     }
 
     @Override
@@ -410,7 +398,7 @@ public class HourMinutePicker extends BasePicker {
         } else {
             mHourNPicker.setMinValue(1);
             mHourNPicker.setMaxValue(12);
-            mHourNPicker.setFormatter(null);
+            mHourNPicker.setFormatter("");
         }
     }
 
@@ -484,14 +472,14 @@ public class HourMinutePicker extends BasePicker {
         InputMethodManager inputMethodManager = (InputMethodManager) getContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) {
-            if (inputMethodManager.isActive(mHourEditText)) {
-                mHourEditText.clearFocus();
+            if (inputMethodManager.isActive(mHourNPicker)) {
+                mHourNPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mMinuteEditText)) {
-                mMinuteEditText.clearFocus();
+            } else if (inputMethodManager.isActive(mMinuteNPicker)) {
+                mMinuteNPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mAmPmEditText)) {
-                mAmPmEditText.clearFocus();
+            } else if (inputMethodManager.isActive(mAmPmNPicker)) {
+                mAmPmNPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
             }
         }

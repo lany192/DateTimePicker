@@ -2,9 +2,6 @@ package com.github.lany192.picker;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -21,9 +18,9 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CalendarView;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+
+import androidx.annotation.ColorInt;
 
 import com.github.lany192.R;
 
@@ -42,9 +39,6 @@ public class DatePicker extends BasePicker {
     private static final boolean DEFAULT_DAY_VIEW_SHOWN = true;
     private static final boolean DEFAULT_ENABLED_STATE = true;
     private final LinearLayout mNPickers;
-    private final EditText mDayEditText;
-    private final EditText mMonthEditText;
-    private final EditText mYearEditText;
 
     private final NumberPicker dayNumberPicker;
     private final NumberPicker monthNumberPicker;
@@ -78,38 +72,44 @@ public class DatePicker extends BasePicker {
         // initialization based on locale
         setCurrentLocale(Locale.getDefault());
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.DatePicker, defStyle, 0);
-        boolean spinnersShown = typedArray.getBoolean(R.styleable.DatePicker_picker_spinnersShown, DEFAULT_NPickerS_SHOWN);
-        boolean dayViewShown = typedArray.getBoolean(R.styleable.DatePicker_picker_dayViewShown, DEFAULT_DAY_VIEW_SHOWN);
-
-        int startYear = typedArray.getInt(R.styleable.DatePicker_picker_startYear, DEFAULT_START_YEAR);
-        int endYear = typedArray.getInt(R.styleable.DatePicker_picker_endYear, DEFAULT_END_YEAR);
-        String minDate = typedArray.getString(R.styleable.DatePicker_picker_minDate);
-        String maxDate = typedArray.getString(R.styleable.DatePicker_picker_maxDate);
-        int layoutResourceId = typedArray.getResourceId(R.styleable.DatePicker_picker_picker_internalLayout, R.layout.date_picker);
-
-
-        int solidColor = typedArray.getColor(R.styleable.DateTimePicker_picker_solidColor, 0);
-        Drawable selectionDivider = typedArray.getDrawable(R.styleable.DateTimePicker_picker_selectionDivider);
-        int selectionDividerHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_selectionDividerHeight, dp2px(2));
-        int selectionDividersDistance = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_selectionDividersDistance, dp2px(2));
-        int minHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMinHeight, SIZE_UNSPECIFIED);
-        int maxHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMaxHeight, SIZE_UNSPECIFIED);
-        if (minHeight != SIZE_UNSPECIFIED && maxHeight != SIZE_UNSPECIFIED && minHeight > maxHeight) {
-            throw new IllegalArgumentException("minHeight > maxHeight");
-        }
-        int mMinWidth = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMinWidth, SIZE_UNSPECIFIED);
-        int mMaxWidth = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMaxWidth, SIZE_UNSPECIFIED);
-        if (mMinWidth != SIZE_UNSPECIFIED && mMaxWidth != SIZE_UNSPECIFIED && mMinWidth > mMaxWidth) {
-            throw new IllegalArgumentException("minWidth > maxWidth");
-        }
-        int selectionTextSize = (int) typedArray.getDimension(R.styleable.DateTimePicker_picker_selectionTextSize, SIZE_UNSPECIFIED);
-        int selectionTextColor = typedArray.getColor(R.styleable.DateTimePicker_picker_selectionTextColor, Color.BLACK);
+//        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.DatePicker, defStyle, 0);
+//        boolean spinnersShown = typedArray.getBoolean(R.styleable.DatePicker_picker_spinnersShown, DEFAULT_NPickerS_SHOWN);
+//        boolean dayViewShown = typedArray.getBoolean(R.styleable.DatePicker_picker_dayViewShown, DEFAULT_DAY_VIEW_SHOWN);
+//
+//        int startYear = typedArray.getInt(R.styleable.DatePicker_picker_startYear, DEFAULT_START_YEAR);
+//        int endYear = typedArray.getInt(R.styleable.DatePicker_picker_endYear, DEFAULT_END_YEAR);
+//        String minDate = typedArray.getString(R.styleable.DatePicker_picker_minDate);
+//        String maxDate = typedArray.getString(R.styleable.DatePicker_picker_maxDate);
+//        int layoutResourceId = typedArray.getResourceId(R.styleable.DatePicker_picker_picker_internalLayout, R.layout.date_picker);
 
 
-        typedArray.recycle();
+        int startYear = DEFAULT_START_YEAR;
+        int endYear = DEFAULT_END_YEAR;
+        String minDate = "01/01/2021";
+        String maxDate = "01/01/2121";
 
-        LayoutInflater.from(getContext()).inflate(layoutResourceId, this);
+
+//        int solidColor = typedArray.getColor(R.styleable.DateTimePicker_picker_solidColor, 0);
+//        Drawable selectionDivider = typedArray.getDrawable(R.styleable.DateTimePicker_picker_selectionDivider);
+//        int selectionDividerHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_selectionDividerHeight, dp2px(2));
+//        int selectionDividersDistance = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_selectionDividersDistance, dp2px(2));
+//        int minHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMinHeight, SIZE_UNSPECIFIED);
+//        int maxHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMaxHeight, SIZE_UNSPECIFIED);
+//        if (minHeight != SIZE_UNSPECIFIED && maxHeight != SIZE_UNSPECIFIED && minHeight > maxHeight) {
+//            throw new IllegalArgumentException("minHeight > maxHeight");
+//        }
+//        int mMinWidth = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMinWidth, SIZE_UNSPECIFIED);
+//        int mMaxWidth = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMaxWidth, SIZE_UNSPECIFIED);
+//        if (mMinWidth != SIZE_UNSPECIFIED && mMaxWidth != SIZE_UNSPECIFIED && mMinWidth > mMaxWidth) {
+//            throw new IllegalArgumentException("minWidth > maxWidth");
+//        }
+//        int selectionTextSize = (int) typedArray.getDimension(R.styleable.DateTimePicker_picker_selectionTextSize, SIZE_UNSPECIFIED);
+//        int selectionTextColor = typedArray.getColor(R.styleable.DateTimePicker_picker_selectionTextColor, Color.BLACK);
+//
+//
+//        typedArray.recycle();
+
+        LayoutInflater.from(getContext()).inflate(R.layout.date_picker, this);
 
         NumberPicker.OnValueChangeListener onChangeListener = new NumberPicker.OnValueChangeListener() {
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -155,17 +155,6 @@ public class DatePicker extends BasePicker {
         dayNumberPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
         dayNumberPicker.setOnLongPressUpdateInterval(100);
         dayNumberPicker.setOnValueChangedListener(onChangeListener);
-        mDayEditText = dayNumberPicker.findViewById(R.id.number_picker_edit_text);
-
-        // show only what the user required but make sure we
-        // show something and the NPickers have higher priority
-        if (!spinnersShown && !dayViewShown) {
-            setspinnersShown(true);
-        } else {
-            setspinnersShown(spinnersShown);
-            setDayViewShown(dayViewShown);
-        }
-
 
         // month
         monthNumberPicker = findViewById(R.id.month);
@@ -174,21 +163,11 @@ public class DatePicker extends BasePicker {
         monthNumberPicker.setDisplayedValues(mShortMonths);
         monthNumberPicker.setOnLongPressUpdateInterval(200);
         monthNumberPicker.setOnValueChangedListener(onChangeListener);
-        mMonthEditText = monthNumberPicker.findViewById(R.id.number_picker_edit_text);
 
         // year
         yearNumberPicker = findViewById(R.id.year);
         yearNumberPicker.setOnLongPressUpdateInterval(100);
         yearNumberPicker.setOnValueChangedListener(onChangeListener);
-        mYearEditText = yearNumberPicker.findViewById(R.id.number_picker_edit_text);
-
-        // show only what the user required but make sure we
-        // show something and the NPickers have higher priority
-        if (!spinnersShown) {
-            setspinnersShown(true);
-        } else {
-            setspinnersShown(spinnersShown);
-        }
 
         // set the min date giving priority of the minDate over startYear
         mTempDate.clear();
@@ -226,18 +205,11 @@ public class DatePicker extends BasePicker {
         }
     }
 
-    public void setSelectionDivider(Drawable selectionDivider) {
-        dayNumberPicker.setSelectionDivider(selectionDivider);
-        monthNumberPicker.setSelectionDivider(selectionDivider);
-        yearNumberPicker.setSelectionDivider(selectionDivider);
+    public void setDividerColor(@ColorInt int colorId) {
+        dayNumberPicker.setDividerColor(colorId);
+        monthNumberPicker.setDividerColor(colorId);
+        yearNumberPicker.setDividerColor(colorId);
     }
-
-    public void setSelectionDividerHeight(int selectionDividerHeight) {
-        dayNumberPicker.setSelectionDividerHeight(selectionDividerHeight);
-        monthNumberPicker.setSelectionDividerHeight(selectionDividerHeight);
-        yearNumberPicker.setSelectionDividerHeight(selectionDividerHeight);
-    }
-
 
     /**
      * Sets the minimal date supported by this {@link NumberPicker} in
@@ -604,8 +576,7 @@ public class DatePicker extends BasePicker {
         } else {
             imeOptions = EditorInfo.IME_ACTION_DONE;
         }
-        TextView input = picker.findViewById(R.id.number_picker_edit_text);
-        input.setImeOptions(imeOptions);
+        picker.setImeOptions(imeOptions);
     }
 
     private void trySetContentDescription(View root, int viewId, int contDescResId) {
@@ -625,14 +596,14 @@ public class DatePicker extends BasePicker {
         // InputMethodManager.peekInstance();
         InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) {
-            if (inputMethodManager.isActive(mYearEditText)) {
-                mYearEditText.clearFocus();
+            if (inputMethodManager.isActive(yearNumberPicker)) {
+                yearNumberPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mMonthEditText)) {
-                mMonthEditText.clearFocus();
+            } else if (inputMethodManager.isActive(monthNumberPicker)) {
+                monthNumberPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mDayEditText)) {
-                mDayEditText.clearFocus();
+            } else if (inputMethodManager.isActive(dayNumberPicker)) {
+                dayNumberPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
             }
         }

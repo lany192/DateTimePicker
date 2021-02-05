@@ -43,19 +43,19 @@
     <!-- The maximal date shown by this calendar view in mm/dd/yyyy format. -->
     <attr name="maxDate" format="string" />
 
-    <declare-styleable name="NumberPicker">
-        <attr name="picker_solidColor" />
-        <attr name="picker_selectionDivider" />
-        <attr name="picker_selectionDividerHeight" />
-        <attr name="picker_selectionDividersDistance" />
-        <attr name="picker_internalMinHeight" />
-        <attr name="picker_internalMaxHeight" />
-        <attr name="picker_internalMinWidth" />
-        <attr name="picker_internalMaxWidth" />
-        <attr name="picker_internalLayout" />
-        <attr name="picker_selectionTextSize" />
-        <attr name="picker_selectionTextColor" />
-    </declare-styleable>
+<!--    <declare-styleable name="NumberPicker">-->
+<!--        <attr name="picker_solidColor" />-->
+<!--        <attr name="picker_selectionDivider" />-->
+<!--        <attr name="picker_selectionDividerHeight" />-->
+<!--        <attr name="picker_selectionDividersDistance" />-->
+<!--        <attr name="picker_internalMinHeight" />-->
+<!--        <attr name="picker_internalMaxHeight" />-->
+<!--        <attr name="picker_internalMinWidth" />-->
+<!--        <attr name="picker_internalMaxWidth" />-->
+<!--        <attr name="picker_internalLayout" />-->
+<!--        <attr name="picker_selectionTextSize" />-->
+<!--        <attr name="picker_selectionTextColor" />-->
+<!--    </declare-styleable>-->
 
     <declare-styleable name="DatePicker">
         <attr name="picker_solidColor" />

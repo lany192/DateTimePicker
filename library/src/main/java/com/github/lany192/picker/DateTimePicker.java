@@ -19,8 +19,8 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.TextView;
+
+import androidx.annotation.ColorInt;
 
 import com.github.lany192.R;
 
@@ -38,20 +38,12 @@ public class DateTimePicker extends BasePicker {
     private static final int DEFAULT_START_YEAR = 1900;
     private static final int DEFAULT_END_YEAR = 2100;
 
-    private EditText mMinuteEditText;
-    private EditText mSecondEditText;
-    private EditText mHourEditText;
-    private EditText mDayEditText;
-    private EditText mMonthEditText;
-    private EditText mYearEditText;
-
     private NumberPicker mSecondNPicker;
     private NumberPicker mMinuteNPicker;
     private NumberPicker mHourNPicker;
     private NumberPicker mDayNPicker;
     private NumberPicker mMonthNPicker;
     private NumberPicker mYearNPicker;
-
 
     private Locale mCurrentLocale;
     private OnChangedListener mOnChangedListener;
@@ -161,35 +153,11 @@ public class DateTimePicker extends BasePicker {
                 notifyDateChanged();
             }
         };
-        // minute
-        mMinuteNPicker = findViewById(R.id.minute);
-        mMinuteNPicker.setMinValue(0);
-        mMinuteNPicker.setMaxValue(59);
-        mMinuteNPicker.setOnLongPressUpdateInterval(100);
-        mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mMinuteNPicker.setOnValueChangedListener(onChangeListener);
-        mMinuteEditText = mMinuteNPicker.findViewById(R.id.number_picker_edit_text);
-        mMinuteEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-        // second
-        mSecondNPicker = findViewById(R.id.second);
-        mSecondNPicker.setMinValue(0);
-        mSecondNPicker.setMaxValue(59);
-        mMinuteNPicker.setOnLongPressUpdateInterval(100);
-        mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mSecondNPicker.setOnValueChangedListener(onChangeListener);
-        mSecondEditText = mSecondNPicker.findViewById(R.id.number_picker_edit_text);
-        mSecondEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        // hour
-        mHourNPicker = findViewById(R.id.hour);
-        mHourNPicker.setOnLongPressUpdateInterval(100);
-        mHourNPicker.setOnValueChangedListener(onChangeListener);
-        mHourEditText = mHourNPicker.findViewById(R.id.number_picker_edit_text);
-        // day
-        mDayNPicker = findViewById(R.id.day);
-        mDayNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mDayNPicker.setOnLongPressUpdateInterval(100);
-        mDayNPicker.setOnValueChangedListener(onChangeListener);
-        mDayEditText = mDayNPicker.findViewById(R.id.number_picker_edit_text);
+        // year
+        mYearNPicker = findViewById(R.id.year);
+        mYearNPicker.setOnLongPressUpdateInterval(100);
+        mYearNPicker.setOnValueChangedListener(onChangeListener);
+        mYearNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         // month
         mMonthNPicker = findViewById(R.id.month);
         mMonthNPicker.setMinValue(0);
@@ -197,13 +165,34 @@ public class DateTimePicker extends BasePicker {
         mMonthNPicker.setDisplayedValues(mShortMonths);
         mMonthNPicker.setOnLongPressUpdateInterval(200);
         mMonthNPicker.setOnValueChangedListener(onChangeListener);
-        mMonthEditText = mMonthNPicker.findViewById(R.id.number_picker_edit_text);
-
-        // year
-        mYearNPicker = findViewById(R.id.year);
-        mYearNPicker.setOnLongPressUpdateInterval(100);
-        mYearNPicker.setOnValueChangedListener(onChangeListener);
-        mYearEditText = mYearNPicker.findViewById(R.id.number_picker_edit_text);
+        mMonthNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        // day
+        mDayNPicker = findViewById(R.id.day);
+        mDayNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
+        mDayNPicker.setOnLongPressUpdateInterval(100);
+        mDayNPicker.setOnValueChangedListener(onChangeListener);
+        mDayNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        // hour
+        mHourNPicker = findViewById(R.id.hour);
+        mHourNPicker.setOnLongPressUpdateInterval(100);
+        mHourNPicker.setOnValueChangedListener(onChangeListener);
+        mHourNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        // minute
+        mMinuteNPicker = findViewById(R.id.minute);
+        mMinuteNPicker.setMinValue(0);
+        mMinuteNPicker.setMaxValue(59);
+        mMinuteNPicker.setOnLongPressUpdateInterval(100);
+        mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
+        mMinuteNPicker.setOnValueChangedListener(onChangeListener);
+        mMinuteNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        // second
+        mSecondNPicker = findViewById(R.id.second);
+        mSecondNPicker.setMinValue(0);
+        mSecondNPicker.setMaxValue(59);
+        mMinuteNPicker.setOnLongPressUpdateInterval(100);
+        mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
+        mSecondNPicker.setOnValueChangedListener(onChangeListener);
+        mSecondNPicker.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         // set the min date giving priority of the minDate over startYear
         mTempDate.clear();
@@ -250,22 +239,13 @@ public class DateTimePicker extends BasePicker {
         mOnChangedListener = listener;
     }
 
-    public void setSelectionDivider(Drawable selectionDivider) {
-        mDayNPicker.setSelectionDivider(selectionDivider);
-        mMonthNPicker.setSelectionDivider(selectionDivider);
-        mYearNPicker.setSelectionDivider(selectionDivider);
-        mHourNPicker.setSelectionDivider(selectionDivider);
-        mMinuteNPicker.setSelectionDivider(selectionDivider);
-        mSecondNPicker.setSelectionDivider(selectionDivider);
-    }
-
-    public void setSelectionDividerHeight(int selectionDividerHeight) {
-        mDayNPicker.setSelectionDividerHeight(selectionDividerHeight);
-        mMonthNPicker.setSelectionDividerHeight(selectionDividerHeight);
-        mYearNPicker.setSelectionDividerHeight(selectionDividerHeight);
-        mHourNPicker.setSelectionDividerHeight(selectionDividerHeight);
-        mMinuteNPicker.setSelectionDividerHeight(selectionDividerHeight);
-        mSecondNPicker.setSelectionDividerHeight(selectionDividerHeight);
+    public void setDividerColor(@ColorInt int colorId) {
+        mDayNPicker.setDividerColor(colorId);
+        mMonthNPicker.setDividerColor(colorId);
+        mYearNPicker.setDividerColor(colorId);
+        mHourNPicker.setDividerColor(colorId);
+        mMinuteNPicker.setDividerColor(colorId);
+        mSecondNPicker.setDividerColor(colorId);
     }
 
     public void setMinDate(long minDate) {
@@ -579,41 +559,40 @@ public class DateTimePicker extends BasePicker {
     /**
      * Sets the IME options for a NPicker based on its ordering.
      *
-     * @param NPicker      The NPicker.
-     * @param NPickerCount The total NPicker count.
-     * @param NPickerIndex The index of the given NPicker.
+     * @param numberPicker The NPicker.
+     * @param pickerCount  The total NPicker count.
+     * @param pickerIndex  The index of the given NPicker.
      */
-    private void setImeOptions(NumberPicker NPicker, int NPickerCount, int NPickerIndex) {
+    private void setImeOptions(NumberPicker numberPicker, int pickerCount, int pickerIndex) {
         final int imeOptions;
-        if (NPickerIndex < NPickerCount - 1) {
+        if (pickerIndex < pickerCount - 1) {
             imeOptions = EditorInfo.IME_ACTION_NEXT;
         } else {
             imeOptions = EditorInfo.IME_ACTION_DONE;
         }
-        TextView input = NPicker.findViewById(R.id.number_picker_edit_text);
-        input.setImeOptions(imeOptions);
+        numberPicker.setImeOptions(imeOptions);
     }
 
     private void updateInputState() {
         InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) {
-            if (inputMethodManager.isActive(mYearEditText)) {
-                mYearEditText.clearFocus();
+            if (inputMethodManager.isActive(mYearNPicker)) {
+                mYearNPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mMonthEditText)) {
-                mMonthEditText.clearFocus();
+            } else if (inputMethodManager.isActive(mMonthNPicker)) {
+                mMonthNPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mDayEditText)) {
-                mDayEditText.clearFocus();
+            } else if (inputMethodManager.isActive(mDayNPicker)) {
+                mDayNPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mHourEditText)) {
-                mHourEditText.clearFocus();
+            } else if (inputMethodManager.isActive(mHourNPicker)) {
+                mHourNPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mMinuteEditText)) {
-                mMinuteEditText.clearFocus();
+            } else if (inputMethodManager.isActive(mMinuteNPicker)) {
+                mMinuteNPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mSecondEditText)) {
-                mSecondEditText.clearFocus();
+            } else if (inputMethodManager.isActive(mSecondNPicker)) {
+                mSecondNPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
             }
         }

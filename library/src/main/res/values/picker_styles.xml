@@ -8,7 +8,6 @@
         <item name="picker_solidColor">@android:color/transparent</item>
         <item name="picker_selectionDivider">@drawable/picker_divider</item>
         <item name="picker_selectionDividerHeight">1dp</item>
-        <item name="picker_internalLayout">@layout/picker_number_item</item>
         <item name="picker_internalMinWidth">48dp</item>
         <item name="picker_internalMaxHeight">180dp</item>
     </style>

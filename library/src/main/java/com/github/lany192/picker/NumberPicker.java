@@ -171,7 +171,7 @@ public class NumberPicker extends LinearLayout {
     /**
      * The default size of text.
      */
-    private static final float DEFAULT_TEXT_SIZE = 25f;
+    private static final float DEFAULT_TEXT_SIZE = 18.0f;
 
     /**
      * The default line spacing multiplier of text.
@@ -2885,6 +2885,10 @@ public class NumberPicker extends LinearLayout {
         mMaxFlingVelocityCoefficient = coefficient;
         mMaximumFlingVelocity = mViewConfiguration.getScaledMaximumFlingVelocity()
                 / mMaxFlingVelocityCoefficient;
+    }
+
+    public void setImeOptions(int imeOptions) {
+        mSelectedText.setImeOptions(imeOptions);
     }
 
     public void setItemSpacing(int itemSpacing) {

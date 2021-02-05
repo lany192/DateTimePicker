@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pickers"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <!-- Month -->
+
+    <com.github.lany192.picker.NumberPicker
+        android:id="@+id/month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:picker_selectionDividerHeight="1dp"
+        tools:background="@android:color/holo_orange_light" />
+
+    <!-- Day -->
+
+    <com.github.lany192.picker.NumberPicker
+        android:id="@+id/day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:picker_selectionDividerHeight="1dp"
+        tools:background="@android:color/holo_blue_light" />
+
+    <!-- Year -->
+
+    <com.github.lany192.picker.NumberPicker
+        android:id="@+id/year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:picker_selectionDividerHeight="1dp"
+        tools:background="@android:color/holo_orange_light" />
+</LinearLayout>

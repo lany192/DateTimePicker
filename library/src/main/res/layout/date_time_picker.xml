@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <!-- Year -->
+
+    <com.github.lany192.picker.NumberPicker
+        android:id="@+id/year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:picker_selectionDividerHeight="1dp" />
+    <!-- Month -->
+
+    <com.github.lany192.picker.NumberPicker
+        android:id="@+id/month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:picker_selectionDividerHeight="1dp" />
+
+    <!-- Day -->
+
+    <com.github.lany192.picker.NumberPicker
+        android:id="@+id/day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:picker_selectionDividerHeight="1dp" />
+
+    <!-- hour -->
+
+    <com.github.lany192.picker.NumberPicker
+        android:id="@+id/hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:picker_selectionDividerHeight="1dp" />
+
+    <!-- minute -->
+
+    <com.github.lany192.picker.NumberPicker
+        android:id="@+id/minute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:picker_selectionDividerHeight="1dp" />
+
+    <!-- second -->
+
+    <com.github.lany192.picker.NumberPicker
+        android:id="@+id/second"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:picker_selectionDividerHeight="1dp" />
+</LinearLayout>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:orientation="horizontal">
+
+    <!-- hour -->
+
+    <com.github.lany192.picker.NumberPicker
+        android:id="@+id/picker_time_hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+    <!-- divider -->
+
+    <TextView
+        android:id="@+id/picker_time_first_divider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:importantForAccessibility="no" />
+
+    <!-- minute -->
+
+    <com.github.lany192.picker.NumberPicker
+        android:id="@+id/picker_time_minute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+    <!-- divider -->
+
+    <TextView
+        android:id="@+id/picker_time_second_divider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:importantForAccessibility="no" />
+    <!-- second -->
+
+    <com.github.lany192.picker.NumberPicker
+        android:id="@+id/picker_time_second"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+</LinearLayout>

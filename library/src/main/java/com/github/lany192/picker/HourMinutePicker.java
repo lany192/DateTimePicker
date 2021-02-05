@@ -71,7 +71,7 @@ public class HourMinutePicker extends BasePicker {
         // initialization based on locale
         setCurrentLocale(Locale.getDefault());
 
-        LayoutInflater.from(getContext()).inflate(R.layout.picker_hour_minute, this);
+        LayoutInflater.from(getContext()).inflate(R.layout.hour_minute_picker, this);
 
         // hour
         mHourNPicker = findViewById(R.id.hour);

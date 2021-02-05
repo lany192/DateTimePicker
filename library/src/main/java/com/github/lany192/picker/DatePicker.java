@@ -86,7 +86,7 @@ public class DatePicker extends BasePicker {
         int endYear = typedArray.getInt(R.styleable.DatePicker_picker_endYear, DEFAULT_END_YEAR);
         String minDate = typedArray.getString(R.styleable.DatePicker_picker_minDate);
         String maxDate = typedArray.getString(R.styleable.DatePicker_picker_maxDate);
-        int layoutResourceId = typedArray.getResourceId(R.styleable.DatePicker_picker_picker_internalLayout, R.layout.picker_date);
+        int layoutResourceId = typedArray.getResourceId(R.styleable.DatePicker_picker_picker_internalLayout, R.layout.date_picker);
 
 
         int solidColor = typedArray.getColor(R.styleable.DateTimePicker_picker_solidColor, 0);

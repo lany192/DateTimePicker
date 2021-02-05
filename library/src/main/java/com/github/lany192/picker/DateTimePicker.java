@@ -81,7 +81,7 @@ public class DateTimePicker extends BasePicker {
     }
 
     public void init(AttributeSet attrs) {
-        LayoutInflater.from(getContext()).inflate(R.layout.picker_date_time, this);
+        LayoutInflater.from(getContext()).inflate(R.layout.date_time_picker, this);
         setCurrentLocale(Locale.getDefault());
         int startYear = DEFAULT_START_YEAR;
         int endYear = DEFAULT_END_YEAR;

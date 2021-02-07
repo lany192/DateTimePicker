@@ -54,7 +54,7 @@ public class HourMinutePicker extends BasePicker {
     private boolean mIsEnabled = DEFAULT_ENABLED_STATE;
 
     // callbacks
-    private OnTimeChangedListener mOnTimeChangedListener;
+    private OnChangedListener mOnChangedListener;
 
     private Calendar mTempCalendar;
 
@@ -78,7 +78,7 @@ public class HourMinutePicker extends BasePicker {
 
         // hour
         mHourNPicker = findViewById(R.id.hour);
-        mHourNPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        mHourNPicker.setOnChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker NPicker, int oldVal, int newVal) {
                 updateInputState();
@@ -89,7 +89,7 @@ public class HourMinutePicker extends BasePicker {
                         updateAmPmControl();
                     }
                 }
-                onTimeChanged();
+                onChanged();
             }
         });
         mHourNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -106,7 +106,7 @@ public class HourMinutePicker extends BasePicker {
         mMinuteNPicker.setMaxValue(59);
         mMinuteNPicker.setOnLongPressUpdateInterval(100);
         mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mMinuteNPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        mMinuteNPicker.setOnChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker NPicker, int oldVal, int newVal) {
                 updateInputState();
@@ -128,7 +128,7 @@ public class HourMinutePicker extends BasePicker {
                     }
                     mHourNPicker.setValue(newHour);
                 }
-                onTimeChanged();
+                onChanged();
             }
         });
         mMinuteNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -147,7 +147,7 @@ public class HourMinutePicker extends BasePicker {
                     button.requestFocus();
                     mIsAm = !mIsAm;
                     updateAmPmControl();
-                    onTimeChanged();
+                    onChanged();
                 }
             });
         } else {
@@ -156,14 +156,14 @@ public class HourMinutePicker extends BasePicker {
             mAmPmNPicker.setMinValue(0);
             mAmPmNPicker.setMaxValue(1);
             mAmPmNPicker.setDisplayedValues(mAmPmStrings);
-            mAmPmNPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            mAmPmNPicker.setOnChangedListener(new NumberPicker.OnValueChangeListener() {
                 public void onValueChange(NumberPicker picker,
                                           int oldVal, int newVal) {
                     updateInputState();
                     picker.requestFocus();
                     mIsAm = !mIsAm;
                     updateAmPmControl();
-                    onTimeChanged();
+                    onChanged();
                 }
             });
             mAmPmNPicker.setImeOptions(EditorInfo.IME_ACTION_DONE);
@@ -173,10 +173,10 @@ public class HourMinutePicker extends BasePicker {
         updateHourControl();
         updateAmPmControl();
 
-        setOnTimeChangedListener(new OnTimeChangedListener() {
+        setOnChangedListener(new OnChangedListener() {
 
             @Override
-            public void onTimeChanged(HourMinutePicker view, int hourOfDay, int minute) {
+            public void onChanged(HourMinutePicker view, int hourOfDay, int minute) {
 
             }
         });
@@ -259,10 +259,10 @@ public class HourMinutePicker extends BasePicker {
     /**
      * Set the callback that indicates the time has been adjusted by the user.
      *
-     * @param onTimeChangedListener the callback, should not be null.
+     * @param OnChangedListener the callback, should not be null.
      */
-    public void setOnTimeChangedListener(OnTimeChangedListener onTimeChangedListener) {
-        mOnTimeChangedListener = onTimeChangedListener;
+    public void setOnChangedListener(OnChangedListener OnChangedListener) {
+        mOnChangedListener = OnChangedListener;
     }
 
     /**
@@ -303,7 +303,7 @@ public class HourMinutePicker extends BasePicker {
             updateAmPmControl();
         }
         mHourNPicker.setValue(currentHour);
-        onTimeChanged();
+        onChanged();
     }
 
     /**
@@ -346,7 +346,7 @@ public class HourMinutePicker extends BasePicker {
             return;
         }
         mMinuteNPicker.setValue(currentMinute);
-        onTimeChanged();
+        onChanged();
     }
 
     @Override
@@ -421,10 +421,10 @@ public class HourMinutePicker extends BasePicker {
         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
     }
 
-    private void onTimeChanged() {
+    private void onChanged() {
         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
-        if (mOnTimeChangedListener != null) {
-            mOnTimeChangedListener.onTimeChanged(this, getCurrentHour(),
+        if (mOnChangedListener != null) {
+            mOnChangedListener.onChanged(this, getCurrentHour(),
                     getCurrentMinute());
         }
     }
@@ -487,14 +487,14 @@ public class HourMinutePicker extends BasePicker {
     /**
      * The callback interface used to indicate the time has been adjusted.
      */
-    public interface OnTimeChangedListener {
+    public interface OnChangedListener {
 
         /**
-         * @param view      The view associated with this listener.
+         * @param picker    The view associated with this listener.
          * @param hourOfDay The current hour.
          * @param minute    The current minute.
          */
-        void onTimeChanged(HourMinutePicker view, int hourOfDay, int minute);
+        void onChanged(HourMinutePicker picker, int hourOfDay, int minute);
     }
 
     /**

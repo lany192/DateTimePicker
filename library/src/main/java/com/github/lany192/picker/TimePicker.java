@@ -41,7 +41,7 @@ public class TimePicker extends BasePicker {
 
     private boolean mIsEnabled = DEFAULT_ENABLED_STATE;
 
-    private OnTimeChangedListener mOnTimeChangedListener;
+    private OnChangedListener mOnChangedListener;
 
     private Calendar mTempCalendar;
 
@@ -63,9 +63,9 @@ public class TimePicker extends BasePicker {
 
         // hour
         mHourNPicker = findViewById(R.id.picker_time_hour);
-        mHourNPicker.setOnValueChangedListener((NPicker, oldVal, newVal) -> {
+        mHourNPicker.setOnChangedListener((NPicker, oldVal, newVal) -> {
             updateInputState();
-            onTimeChanged();
+            onChanged();
         });
         mHourNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         //divider
@@ -83,7 +83,7 @@ public class TimePicker extends BasePicker {
         mMinuteNPicker.setMaxValue(59);
         mMinuteNPicker.setOnLongPressUpdateInterval(100);
         mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mMinuteNPicker.setOnValueChangedListener((NPicker, oldVal, newVal) -> {
+        mMinuteNPicker.setOnChangedListener((NPicker, oldVal, newVal) -> {
             updateInputState();
             int minValue = mMinuteNPicker.getMinValue();
             int maxValue = mMinuteNPicker.getMaxValue();
@@ -94,7 +94,7 @@ public class TimePicker extends BasePicker {
                 int newHour = mHourNPicker.getValue() - 1;
                 mHourNPicker.setValue(newHour);
             }
-            onTimeChanged();
+            onChanged();
         });
         mMinuteNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         // second
@@ -103,11 +103,11 @@ public class TimePicker extends BasePicker {
         mSecondNPicker.setMaxValue(59);
         mMinuteNPicker.setOnLongPressUpdateInterval(100);
         mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mSecondNPicker.setOnValueChangedListener((picker, oldVal, newVal) -> {
+        mSecondNPicker.setOnChangedListener((picker, oldVal, newVal) -> {
             updateInputState();
             picker.requestFocus();
             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
-            onTimeChanged();
+            onChanged();
         });
         mSecondNPicker.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
@@ -183,8 +183,8 @@ public class TimePicker extends BasePicker {
         setCurrentSecond(ss.getSecond());
     }
 
-    public void setOnTimeChangedListener(OnTimeChangedListener listener) {
-        mOnTimeChangedListener = listener;
+    public void setOnChangedListener(OnChangedListener listener) {
+        mOnChangedListener = listener;
     }
 
     /**
@@ -203,7 +203,7 @@ public class TimePicker extends BasePicker {
             return;
         }
         mHourNPicker.setValue(currentHour);
-        onTimeChanged();
+        onChanged();
     }
 
     /**
@@ -221,7 +221,7 @@ public class TimePicker extends BasePicker {
             return;
         }
         mMinuteNPicker.setValue(currentMinute);
-        onTimeChanged();
+        onChanged();
     }
 
     /**
@@ -239,7 +239,7 @@ public class TimePicker extends BasePicker {
             return;
         }
         mSecondNPicker.setValue(currentSecond);
-        onTimeChanged();
+        onChanged();
     }
 
     @Override
@@ -283,10 +283,10 @@ public class TimePicker extends BasePicker {
         mHourNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
     }
 
-    private void onTimeChanged() {
+    private void onChanged() {
         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
-        if (mOnTimeChangedListener != null) {
-            mOnTimeChangedListener.onTimeChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSecond());
+        if (mOnChangedListener != null) {
+            mOnChangedListener.onChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSecond());
         }
     }
 
@@ -306,9 +306,8 @@ public class TimePicker extends BasePicker {
         }
     }
 
-    public interface OnTimeChangedListener {
-        void onTimeChanged(TimePicker view, int hourOfDay, int minute,
-                           int second);
+    public interface OnChangedListener {
+        void onChanged(TimePicker picker, int hourOfDay, int minute, int second);
     }
 
     /**

@@ -49,7 +49,7 @@ public class DatePicker extends BasePicker {
     private final NumberPicker mMonthNPicker;
     private final NumberPicker mYearNPicker;
     private Locale mCurrentLocale;
-    private OnDateChangedListener mOnDateChangedListener;
+    private OnChangedListener mOnChangedListener;
     private String[] mShortMonths;
     private int mNumberOfMonths;
 
@@ -159,7 +159,7 @@ public class DatePicker extends BasePicker {
         mDayNPicker = findViewById(R.id.day);
         mDayNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
         mDayNPicker.setOnLongPressUpdateInterval(100);
-        mDayNPicker.setOnValueChangedListener(onChangeListener);
+        mDayNPicker.setOnChangedListener(onChangeListener);
 
         // month
         mMonthNPicker = findViewById(R.id.month);
@@ -167,12 +167,12 @@ public class DatePicker extends BasePicker {
         mMonthNPicker.setMaxValue(mNumberOfMonths - 1);
         mMonthNPicker.setDisplayedValues(mShortMonths);
         mMonthNPicker.setOnLongPressUpdateInterval(200);
-        mMonthNPicker.setOnValueChangedListener(onChangeListener);
+        mMonthNPicker.setOnChangedListener(onChangeListener);
 
         // year
         mYearNPicker = findViewById(R.id.year);
         mYearNPicker.setOnLongPressUpdateInterval(100);
-        mYearNPicker.setOnValueChangedListener(onChangeListener);
+        mYearNPicker.setOnChangedListener(onChangeListener);
 
         // set the min date giving priority of the minDate over startYear
         mTempDate.clear();
@@ -556,8 +556,8 @@ public class DatePicker extends BasePicker {
      */
     private void notifyDateChanged() {
         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
-        if (mOnDateChangedListener != null) {
-            mOnDateChangedListener.onDateChanged(this, getYear(), getMonth(), getDayOfMonth());
+        if (mOnChangedListener != null) {
+            mOnChangedListener.onChanged(this, getYear(), getMonth(), getDayOfMonth());
         }
     }
 
@@ -608,25 +608,25 @@ public class DatePicker extends BasePicker {
         }
     }
 
-    public void setOnDateChangedListener(OnDateChangedListener listener) {
-        mOnDateChangedListener = listener;
+    public void setOnChangedListener(OnChangedListener listener) {
+        mOnChangedListener = listener;
     }
 
     /**
      * The callback used to indicate the user changes\d the date.
      */
-    public interface OnDateChangedListener {
+    public interface OnChangedListener {
 
         /**
          * Called upon a date change.
          *
-         * @param view        The view associated with this listener.
+         * @param picker      The view associated with this listener.
          * @param year        The year that was set.
          * @param monthOfYear The month that was set (0-11) for compatibility with
          *                    {@link Calendar}.
          * @param dayOfMonth  The day of the month that was set.
          */
-        void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth);
+        void onChanged(DatePicker picker, int year, int monthOfYear, int dayOfMonth);
     }
 
     /**

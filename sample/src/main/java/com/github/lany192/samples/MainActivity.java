@@ -1,7 +1,6 @@
 package com.github.lany192.samples;
 
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -39,11 +38,15 @@ public class MainActivity extends AppCompatActivity {
         numberPicker1.setMaxValue(100);
         numberPicker1.setMinValue(1);
         numberPicker1.setFormatter(value -> value + "个");
+        numberPicker1.setDividerThickness(1);
+        numberPicker1.setDividerColor(Color.RED);
+        numberPicker1.setTextColor(Color.GREEN);
+        numberPicker1.setSelectedTextColor(Color.BLACK);
 
 //        datePicker1.setSelectionDivider(new ColorDrawable(0xffff0000));
 //        datePicker1.setSelectionDividerHeight(2);
         //datePicker1.setDayViewShown(false);
-        datePicker1.setOnDateChangedListener((view, year, monthOfYear, dayOfMonth) -> datePickerShowText.setText(new StringBuilder()
+        datePicker1.setOnChangedListener((view, year, monthOfYear, dayOfMonth) -> datePickerShowText.setText(new StringBuilder()
                 .append("DatePicker:")
                 .append(year).append("年")
                 .append(monthOfYear + 1).append("月")
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 //        datePicker2.setSelectionDivider(new ColorDrawable(0xff008B00));
 //        datePicker2.setSelectionDividerHeight(4);
         //datePicker2.setDayViewShown(false);
-        datePicker2.setOnDateChangedListener((view, year, monthOfYear, dayOfMonth) -> datePickerShowText.setText(new StringBuilder()
+        datePicker2.setOnChangedListener((view, year, monthOfYear, dayOfMonth) -> datePickerShowText.setText(new StringBuilder()
                 .append("DatePicker:")
                 .append(year).append("年")
                 .append(monthOfYear + 1).append("月")
@@ -60,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        timePicker.setSelectionDivider(new ColorDrawable(0xff000000));
 //        timePicker.setSelectionDividerHeight(2);
-        timePicker.setOnTimeChangedListener((view, hourOfDay, minuteOfHour, scd) -> timePickerShowText.setText(new StringBuilder()
+        timePicker.setOnChangedListener((view, hourOfDay, minuteOfHour, scd) -> timePickerShowText.setText(new StringBuilder()
                 .append("TimePicker:")
                 .append(hourOfDay).append("时")
                 .append(minuteOfHour).append("分")
@@ -69,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         hourMinutePicker.setIs24HourView(false);
 //        hourMinutePicker.setSelectionDivider(new ColorDrawable(0xff436EEE));
 //        hourMinutePicker.setSelectionDividerHeight(4);
-        hourMinutePicker.setOnTimeChangedListener((view, hourOfDay, minute) -> hourMinutePickerShowText.setText(new StringBuilder()
+        hourMinutePicker.setOnChangedListener((view, hourOfDay, minute) -> hourMinutePickerShowText.setText(new StringBuilder()
                 .append("HourMinutePicker:")
                 .append(hourOfDay).append("时")
                 .append(minute).append("分")));

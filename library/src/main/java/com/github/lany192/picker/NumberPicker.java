@@ -1416,10 +1416,10 @@ public class NumberPicker extends LinearLayout {
     /**
      * Sets the listener to be notified on change of the current value.
      *
-     * @param onValueChangedListener The listener.
+     * @param OnChangedListener The listener.
      */
-    public void setOnValueChangedListener(OnValueChangeListener onValueChangedListener) {
-        mOnValueChangeListener = onValueChangedListener;
+    public void setOnChangedListener(OnValueChangeListener OnChangedListener) {
+        mOnValueChangeListener = OnChangedListener;
     }
 
     /**

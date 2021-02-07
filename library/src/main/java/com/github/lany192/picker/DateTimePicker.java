@@ -161,7 +161,7 @@ public class DateTimePicker extends BasePicker {
         // year
         mYearNPicker = findViewById(R.id.year);
         mYearNPicker.setOnLongPressUpdateInterval(100);
-        mYearNPicker.setOnValueChangedListener(onChangeListener);
+        mYearNPicker.setOnChangedListener(onChangeListener);
         mYearNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         // month
         mMonthNPicker = findViewById(R.id.month);
@@ -169,18 +169,18 @@ public class DateTimePicker extends BasePicker {
         mMonthNPicker.setMaxValue(mNumberOfMonths - 1);
         mMonthNPicker.setDisplayedValues(mShortMonths);
         mMonthNPicker.setOnLongPressUpdateInterval(200);
-        mMonthNPicker.setOnValueChangedListener(onChangeListener);
+        mMonthNPicker.setOnChangedListener(onChangeListener);
         mMonthNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         // day
         mDayNPicker = findViewById(R.id.day);
         mDayNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
         mDayNPicker.setOnLongPressUpdateInterval(100);
-        mDayNPicker.setOnValueChangedListener(onChangeListener);
+        mDayNPicker.setOnChangedListener(onChangeListener);
         mDayNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         // hour
         mHourNPicker = findViewById(R.id.hour);
         mHourNPicker.setOnLongPressUpdateInterval(100);
-        mHourNPicker.setOnValueChangedListener(onChangeListener);
+        mHourNPicker.setOnChangedListener(onChangeListener);
         mHourNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         // minute
         mMinuteNPicker = findViewById(R.id.minute);
@@ -188,7 +188,7 @@ public class DateTimePicker extends BasePicker {
         mMinuteNPicker.setMaxValue(59);
         mMinuteNPicker.setOnLongPressUpdateInterval(100);
         mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mMinuteNPicker.setOnValueChangedListener(onChangeListener);
+        mMinuteNPicker.setOnChangedListener(onChangeListener);
         mMinuteNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         // second
         mSecondNPicker = findViewById(R.id.second);
@@ -196,7 +196,7 @@ public class DateTimePicker extends BasePicker {
         mSecondNPicker.setMaxValue(59);
         mMinuteNPicker.setOnLongPressUpdateInterval(100);
         mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mSecondNPicker.setOnValueChangedListener(onChangeListener);
+        mSecondNPicker.setOnChangedListener(onChangeListener);
         mSecondNPicker.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         // set the min date giving priority of the minDate over startYear

@@ -704,12 +704,24 @@ public class DateTimePicker extends BasePicker {
         super.setWheelItemCount(count, mYearNPicker, mMonthNPicker, mDayNPicker, mHourNPicker, mMinuteNPicker, mSecondNPicker);
     }
 
-    public void setFormatter(final String formatter) {
-        super.setFormatter(formatter, mYearNPicker, mMonthNPicker, mDayNPicker, mHourNPicker, mMinuteNPicker, mSecondNPicker);
+    public void setFormatter(String yearFormatter, String monthFormatter, String dayFormatter,
+                             String hourFormatter, String minuteFormatter, String secondFormatter) {
+        mYearNPicker.setFormatter(yearFormatter);
+        mMonthNPicker.setFormatter(monthFormatter);
+        mDayNPicker.setFormatter(dayFormatter);
+        mHourNPicker.setFormatter(hourFormatter);
+        mMinuteNPicker.setFormatter(minuteFormatter);
+        mSecondNPicker.setFormatter(secondFormatter);
     }
 
-    public void setFormatter(@StringRes int stringId) {
-        super.setFormatter(getResources().getString(stringId), mYearNPicker, mMonthNPicker, mDayNPicker, mHourNPicker, mMinuteNPicker, mSecondNPicker);
+    public void setFormatter(@StringRes int yearFormatterId, @StringRes int monthFormatterId, @StringRes int dayFormatterId,
+                             @StringRes int hourFormatterId, @StringRes int minuteFormatterId, @StringRes int secondFormatterId) {
+        mYearNPicker.setFormatter(getResources().getString(yearFormatterId));
+        mMonthNPicker.setFormatter(getResources().getString(monthFormatterId));
+        mDayNPicker.setFormatter(getResources().getString(dayFormatterId));
+        mHourNPicker.setFormatter(getResources().getString(hourFormatterId));
+        mMinuteNPicker.setFormatter(getResources().getString(minuteFormatterId));
+        mSecondNPicker.setFormatter(getResources().getString(secondFormatterId));
     }
 
     public void setFadingEdgeEnabled(boolean fadingEdgeEnabled) {

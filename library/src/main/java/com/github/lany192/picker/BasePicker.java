@@ -13,8 +13,6 @@ import androidx.annotation.DimenRes;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 
-import java.util.Arrays;
-
 public abstract class BasePicker extends FrameLayout {
     protected final String TAG = getClass().getSimpleName();
     /**
@@ -101,18 +99,6 @@ public abstract class BasePicker extends FrameLayout {
     protected void setWheelItemCount(int count, NumberPicker... pickers) {
         for (NumberPicker picker : pickers) {
             picker.setWheelItemCount(count);
-        }
-    }
-
-    protected void setFormatter(final String formatter, NumberPicker... pickers) {
-        for (NumberPicker picker : pickers) {
-            picker.setFormatter(formatter);
-        }
-    }
-
-    protected void setFormatter(@StringRes int stringId, NumberPicker... pickers) {
-        for (NumberPicker picker : pickers) {
-            picker.setFormatter(getResources().getString(stringId));
         }
     }
 

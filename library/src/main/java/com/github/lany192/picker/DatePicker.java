@@ -723,12 +723,16 @@ public class DatePicker extends BasePicker {
         super.setWheelItemCount(count, mYearNPicker, mMonthNPicker, mDayNPicker);
     }
 
-    public void setFormatter(final String formatter) {
-        super.setFormatter(formatter, mYearNPicker, mMonthNPicker, mDayNPicker);
+    public void setFormatter(String yearFormatter, String monthFormatter, String dayFormatter) {
+        mYearNPicker.setFormatter(yearFormatter);
+        mMonthNPicker.setFormatter(monthFormatter);
+        mDayNPicker.setFormatter(dayFormatter);
     }
 
-    public void setFormatter(@StringRes int stringId) {
-        super.setFormatter(getResources().getString(stringId), mYearNPicker, mMonthNPicker, mDayNPicker);
+    public void setFormatter(@StringRes int yearFormatterId, @StringRes int monthFormatterId, @StringRes int dayFormatterId) {
+        mYearNPicker.setFormatter(getResources().getString(yearFormatterId));
+        mMonthNPicker.setFormatter(getResources().getString(monthFormatterId));
+        mDayNPicker.setFormatter(getResources().getString(dayFormatterId));
     }
 
     public void setFadingEdgeEnabled(boolean fadingEdgeEnabled) {

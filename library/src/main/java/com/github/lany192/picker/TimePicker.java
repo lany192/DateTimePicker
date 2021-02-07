@@ -399,12 +399,16 @@ public class TimePicker extends BasePicker {
         super.setWheelItemCount(count, mHourNPicker, mMinuteNPicker, mSecondNPicker);
     }
 
-    public void setFormatter(final String formatter) {
-        super.setFormatter(formatter, mHourNPicker, mMinuteNPicker, mSecondNPicker);
+    public void setFormatter(String hourFormatter, String minuteFormatter, String secondFormatter) {
+        mHourNPicker.setFormatter(hourFormatter);
+        mMinuteNPicker.setFormatter(minuteFormatter);
+        mSecondNPicker.setFormatter(secondFormatter);
     }
 
-    public void setFormatter(@StringRes int stringId) {
-        super.setFormatter(getResources().getString(stringId), mHourNPicker, mMinuteNPicker, mSecondNPicker);
+    public void setFormatter(@StringRes int hourFormatterId, @StringRes int minuteFormatterId, @StringRes int secondFormatterId) {
+        mHourNPicker.setFormatter(getResources().getString(hourFormatterId));
+        mMinuteNPicker.setFormatter(getResources().getString(minuteFormatterId));
+        mSecondNPicker.setFormatter(getResources().getString(secondFormatterId));
     }
 
     public void setFadingEdgeEnabled(boolean fadingEdgeEnabled) {

@@ -587,12 +587,14 @@ public class HourMinutePicker extends BasePicker {
         super.setWheelItemCount(count, mHourNPicker, mMinuteNPicker);
     }
 
-    public void setFormatter(final String formatter) {
-        super.setFormatter(formatter, mHourNPicker, mMinuteNPicker);
+    public void setFormatter(String hourFormatter, String minuteFormatter) {
+        mHourNPicker.setFormatter(hourFormatter);
+        mMinuteNPicker.setFormatter(minuteFormatter);
     }
 
-    public void setFormatter(@StringRes int stringId) {
-        super.setFormatter(getResources().getString(stringId), mHourNPicker, mMinuteNPicker);
+    public void setFormatter(@StringRes int hourFormatterId, @StringRes int minuteFormatterId) {
+        mHourNPicker.setFormatter(getResources().getString(hourFormatterId));
+        mMinuteNPicker.setFormatter(getResources().getString(minuteFormatterId));
     }
 
     public void setFadingEdgeEnabled(boolean fadingEdgeEnabled) {

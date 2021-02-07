@@ -13,6 +13,8 @@ import com.github.lany192.picker.HourMinutePicker;
 import com.github.lany192.picker.NumberPicker;
 import com.github.lany192.picker.TimePicker;
 
+import java.util.Calendar;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,12 +36,19 @@ public class MainActivity extends AppCompatActivity {
 
         numberPicker1.setMaxValue(100);
         numberPicker1.setMinValue(1);
+        numberPicker1.setValue(8);
         numberPicker1.setFormatter(value -> value + "个");
         numberPicker1.setDividerThickness(1);
         numberPicker1.setDividerColor(Color.RED);
-        numberPicker1.setTextColor(Color.GREEN);
+        numberPicker1.setTextColor(Color.MAGENTA);
         numberPicker1.setSelectedTextColor(Color.BLACK);
 
+        Calendar calendar= Calendar.getInstance();
+        calendar.set(2000,1,1);
+        datePicker1.setMinDate(calendar.getTimeInMillis());
+        calendar.set(2100,1,1);
+        datePicker1.setMaxDate(calendar.getTimeInMillis());
+        datePicker1.setDayViewShown(false);
         datePicker1.setFormatter("%02d年", "%02d月", "%02d日");
         datePicker1.setSelectedTextColor(Color.BLUE);
         datePicker1.setOnChangedListener((view, year, monthOfYear, dayOfMonth) -> datePickerShowText.setText(new StringBuilder()

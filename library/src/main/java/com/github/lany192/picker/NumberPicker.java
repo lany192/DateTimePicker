@@ -683,7 +683,7 @@ public class NumberPicker extends LinearLayout {
          *                    {@link #SCROLL_STATE_TOUCH_SCROLL} or
          *                    {@link #SCROLL_STATE_IDLE}.
          */
-        public void onScrollStateChange(NumberPicker view, @ScrollState int scrollState);
+        void onScrollStateChange(NumberPicker view, @ScrollState int scrollState);
     }
 
     /**
@@ -697,7 +697,7 @@ public class NumberPicker extends LinearLayout {
          * @param value The currently selected value.
          * @return A formatted string representation.
          */
-        public String format(int value);
+        String format(int value);
     }
 
     /**
@@ -782,7 +782,7 @@ public class NumberPicker extends LinearLayout {
         mSelectedTextColor = attributes.getColor(R.styleable.NumberPicker_np_selectedTextColor,
                 mSelectedTextColor);
         mSelectedTextSize = attributes.getDimension(R.styleable.NumberPicker_np_selectedTextSize,
-                spToPx(mSelectedTextSize));
+                sp2px(mSelectedTextSize));
         mSelectedTextStrikeThru = attributes.getBoolean(
                 R.styleable.NumberPicker_np_selectedTextStrikeThru, mSelectedTextStrikeThru);
         mSelectedTextUnderline = attributes.getBoolean(
@@ -792,7 +792,7 @@ public class NumberPicker extends LinearLayout {
         mTextAlign = attributes.getInt(R.styleable.NumberPicker_np_textAlign, mTextAlign);
         mTextColor = attributes.getColor(R.styleable.NumberPicker_np_textColor, mTextColor);
         mTextSize = attributes.getDimension(R.styleable.NumberPicker_np_textSize,
-                spToPx(mTextSize));
+                sp2px(mTextSize));
         mTextStrikeThru = attributes.getBoolean(
                 R.styleable.NumberPicker_np_textStrikeThru, mTextStrikeThru);
         mTextUnderline = attributes.getBoolean(
@@ -2630,22 +2630,22 @@ public class NumberPicker extends LinearLayout {
         return mNumberFormatter.format(value);
     }
 
-    private float dpToPx(float dp) {
+    private float dp2px(float dp) {
         return dp * getResources().getDisplayMetrics().density;
     }
 
-    private float pxToDp(float px) {
+    private float px2dp(float px) {
         return px / getResources().getDisplayMetrics().density;
     }
 
-    private float spToPx(float sp) {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp,
-                getResources().getDisplayMetrics());
+    private float sp2px(float sp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, getResources().getDisplayMetrics());
     }
 
-    private float pxToSp(float px) {
+    private float px2sp(float px) {
         return px / getResources().getDisplayMetrics().scaledDensity;
     }
+
 
     private Formatter stringToFormatter(final String formatter) {
         if (TextUtils.isEmpty(formatter)) {
@@ -2663,13 +2663,13 @@ public class NumberPicker extends LinearLayout {
     private void setWidthAndHeight() {
         if (isHorizontalMode()) {
             mMinHeight = SIZE_UNSPECIFIED;
-            mMaxHeight = (int) dpToPx(DEFAULT_MIN_WIDTH);
-            mMinWidth = (int) dpToPx(DEFAULT_MAX_HEIGHT);
+            mMaxHeight = (int) dp2px(DEFAULT_MIN_WIDTH);
+            mMinWidth = (int) dp2px(DEFAULT_MAX_HEIGHT);
             mMaxWidth = SIZE_UNSPECIFIED;
         } else {
             mMinHeight = SIZE_UNSPECIFIED;
-            mMaxHeight = (int) dpToPx(DEFAULT_MAX_HEIGHT);
-            mMinWidth = (int) dpToPx(DEFAULT_MIN_WIDTH);
+            mMaxHeight = (int) dp2px(DEFAULT_MAX_HEIGHT);
+            mMinWidth = (int) dp2px(DEFAULT_MIN_WIDTH);
             mMaxWidth = SIZE_UNSPECIFIED;
         }
     }
@@ -2773,7 +2773,7 @@ public class NumberPicker extends LinearLayout {
 
     public void setSelectedTextSize(float textSize) {
         mSelectedTextSize = textSize;
-        mSelectedText.setTextSize(pxToSp(mSelectedTextSize));
+        mSelectedText.setTextSize(px2sp(mSelectedTextSize));
     }
 
     public void setSelectedTextSize(@DimenRes int dimenId) {
@@ -2912,11 +2912,11 @@ public class NumberPicker extends LinearLayout {
     }
 
     public float getDividerDistance() {
-        return pxToDp(mDividerDistance);
+        return px2dp(mDividerDistance);
     }
 
     public float getDividerThickness() {
-        return pxToDp(mDividerThickness);
+        return px2dp(mDividerThickness);
     }
 
     public int getOrder() {
@@ -2976,7 +2976,7 @@ public class NumberPicker extends LinearLayout {
     }
 
     public float getTextSize() {
-        return spToPx(mTextSize);
+        return sp2px(mTextSize);
     }
 
     public boolean getTextStrikeThru() {

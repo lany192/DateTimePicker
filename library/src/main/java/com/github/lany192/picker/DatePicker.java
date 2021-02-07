@@ -2,6 +2,7 @@ package com.github.lany192.picker;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -21,6 +22,10 @@ import android.widget.CalendarView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DimenRes;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 
 import com.github.lany192.R;
 
@@ -203,12 +208,6 @@ public class DatePicker extends BasePicker {
                 && getImportantForAccessibility() == IMPORTANT_FOR_ACCESSIBILITY_AUTO) {
             setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
         }
-    }
-
-    public void setDividerColor(@ColorInt int colorId) {
-        dayNumberPicker.setDividerColor(colorId);
-        monthNumberPicker.setDividerColor(colorId);
-        yearNumberPicker.setDividerColor(colorId);
     }
 
     /**
@@ -678,5 +677,271 @@ public class DatePicker extends BasePicker {
             dest.writeInt(mMonth);
             dest.writeInt(mDay);
         }
+    }
+
+
+
+    public void setAccessibilityDescriptionEnabled(boolean enabled) {
+        dayNumberPicker.setAccessibilityDescriptionEnabled(enabled);
+        monthNumberPicker.setAccessibilityDescriptionEnabled(enabled);
+        yearNumberPicker.setAccessibilityDescriptionEnabled(enabled);
+    }
+
+    public void setDividerColor(@ColorInt int color) {
+        dayNumberPicker.setDividerColor(color);
+        monthNumberPicker.setDividerColor(color);
+        yearNumberPicker.setDividerColor(color);
+    }
+
+    public void setDividerColorResource(@ColorRes int colorId) {
+        dayNumberPicker.setDividerColor(ContextCompat.getColor(getContext(), colorId));
+        monthNumberPicker.setDividerColor(ContextCompat.getColor(getContext(), colorId));
+        yearNumberPicker.setDividerColor(ContextCompat.getColor(getContext(), colorId));
+    }
+
+    public void setDividerDistance(int distance) {
+        dayNumberPicker.setDividerDistance(distance);
+        monthNumberPicker.setDividerDistance(distance);
+        yearNumberPicker.setDividerDistance(distance);
+    }
+
+    public void setDividerDistanceResource(@DimenRes int dimenId) {
+        dayNumberPicker.setDividerDistanceResource(dimenId);
+        monthNumberPicker.setDividerDistanceResource(dimenId);
+        yearNumberPicker.setDividerDistanceResource(dimenId);
+    }
+
+    public void setDividerType(@NumberPicker.DividerType int dividerType) {
+        dayNumberPicker.setDividerType(dividerType);
+        monthNumberPicker.setDividerType(dividerType);
+        yearNumberPicker.setDividerType(dividerType);
+    }
+
+    public void setDividerThickness(int thickness) {
+        dayNumberPicker.setDividerThickness(thickness);
+        monthNumberPicker.setDividerThickness(thickness);
+        yearNumberPicker.setDividerThickness(thickness);
+    }
+
+    public void setDividerThicknessResource(@DimenRes int dimenId) {
+        dayNumberPicker.setDividerThicknessResource(dimenId);
+        monthNumberPicker.setDividerThicknessResource(dimenId);
+        yearNumberPicker.setDividerThicknessResource(dimenId);
+    }
+
+    public void setOrder(@NumberPicker.Order int order) {
+        dayNumberPicker.setOrder(order);
+        monthNumberPicker.setOrder(order);
+        yearNumberPicker.setOrder(order);
+    }
+
+    public void setOrientation(@NumberPicker.Orientation int orientation) {
+        dayNumberPicker.setOrientation(orientation);
+        monthNumberPicker.setOrientation(orientation);
+        yearNumberPicker.setOrientation(orientation);
+    }
+
+    public void setWheelItemCount(int count) {
+        dayNumberPicker.setWheelItemCount(count);
+        monthNumberPicker.setWheelItemCount(count);
+        yearNumberPicker.setWheelItemCount(count);
+    }
+
+    public void setFormatter(final String formatter) {
+        dayNumberPicker.setFormatter(formatter);
+        monthNumberPicker.setFormatter(formatter);
+        yearNumberPicker.setFormatter(formatter);
+    }
+
+    public void setFormatter(@StringRes int stringId) {
+        dayNumberPicker.setFormatter(getResources().getString(stringId));
+        monthNumberPicker.setFormatter(getResources().getString(stringId));
+        yearNumberPicker.setFormatter(getResources().getString(stringId));
+    }
+
+    public void setFadingEdgeEnabled(boolean fadingEdgeEnabled) {
+        dayNumberPicker.setFadingEdgeEnabled(fadingEdgeEnabled);
+        monthNumberPicker.setFadingEdgeEnabled(fadingEdgeEnabled);
+        yearNumberPicker.setFadingEdgeEnabled(fadingEdgeEnabled);
+    }
+
+    public void setFadingEdgeStrength(float strength) {
+        dayNumberPicker.setFadingEdgeStrength(strength);
+        monthNumberPicker.setFadingEdgeStrength(strength);
+        yearNumberPicker.setFadingEdgeStrength(strength);
+    }
+
+    public void setScrollerEnabled(boolean scrollerEnabled) {
+        dayNumberPicker.setScrollerEnabled(scrollerEnabled);
+        monthNumberPicker.setScrollerEnabled(scrollerEnabled);
+        yearNumberPicker.setScrollerEnabled(scrollerEnabled);
+    }
+
+    public void setSelectedTextAlign(@NumberPicker.Align int align) {
+        dayNumberPicker.setSelectedTextAlign(align);
+        monthNumberPicker.setSelectedTextAlign(align);
+        yearNumberPicker.setSelectedTextAlign(align);
+    }
+
+    public void setSelectedTextColor(@ColorInt int color) {
+        dayNumberPicker.setSelectedTextColor(color);
+        monthNumberPicker.setSelectedTextColor(color);
+        yearNumberPicker.setSelectedTextColor(color);
+    }
+
+    public void setSelectedTextColorResource(@ColorRes int colorId) {
+        dayNumberPicker.setSelectedTextColorResource(colorId);
+        monthNumberPicker.setSelectedTextColorResource(colorId);
+        yearNumberPicker.setSelectedTextColorResource(colorId);
+    }
+
+    public void setSelectedTextSize(float textSize) {
+        dayNumberPicker.setSelectedTextSize(textSize);
+        monthNumberPicker.setSelectedTextSize(textSize);
+        yearNumberPicker.setSelectedTextSize(textSize);
+    }
+
+    public void setSelectedTextSize(@DimenRes int dimenId) {
+        dayNumberPicker.setSelectedTextSize(getResources().getDimension(dimenId));
+        monthNumberPicker.setSelectedTextSize(getResources().getDimension(dimenId));
+        yearNumberPicker.setSelectedTextSize(getResources().getDimension(dimenId));
+    }
+
+    public void setSelectedTextStrikeThru(boolean strikeThruText) {
+        dayNumberPicker.setSelectedTextStrikeThru(strikeThruText);
+        monthNumberPicker.setSelectedTextStrikeThru(strikeThruText);
+        yearNumberPicker.setSelectedTextStrikeThru(strikeThruText);
+    }
+
+    public void setSelectedTextUnderline(boolean underlineText) {
+        dayNumberPicker.setSelectedTextUnderline(underlineText);
+        monthNumberPicker.setSelectedTextUnderline(underlineText);
+        yearNumberPicker.setSelectedTextUnderline(underlineText);
+    }
+
+    public void setSelectedTypeface(Typeface typeface) {
+        dayNumberPicker.setSelectedTypeface(typeface);
+        monthNumberPicker.setSelectedTypeface(typeface);
+        yearNumberPicker.setSelectedTypeface(typeface);
+    }
+
+    public void setSelectedTypeface(String string, int style) {
+        dayNumberPicker.setSelectedTypeface(string, style);
+        monthNumberPicker.setSelectedTypeface(string, style);
+        yearNumberPicker.setSelectedTypeface(string, style);
+    }
+
+    public void setSelectedTypeface(String string) {
+        dayNumberPicker.setSelectedTypeface(string, Typeface.NORMAL);
+        monthNumberPicker.setSelectedTypeface(string, Typeface.NORMAL);
+        yearNumberPicker.setSelectedTypeface(string, Typeface.NORMAL);
+    }
+
+    public void setSelectedTypeface(@StringRes int stringId, int style) {
+        dayNumberPicker.setSelectedTypeface(getResources().getString(stringId), style);
+        monthNumberPicker.setSelectedTypeface(getResources().getString(stringId), style);
+        yearNumberPicker.setSelectedTypeface(getResources().getString(stringId), style);
+    }
+
+    public void setSelectedTypeface(@StringRes int stringId) {
+        dayNumberPicker.setSelectedTypeface(stringId, Typeface.NORMAL);
+        monthNumberPicker.setSelectedTypeface(stringId, Typeface.NORMAL);
+        yearNumberPicker.setSelectedTypeface(stringId, Typeface.NORMAL);
+    }
+
+    public void setTextAlign(@NumberPicker.Align int align) {
+        dayNumberPicker.setTextAlign(align);
+        monthNumberPicker.setTextAlign(align);
+        yearNumberPicker.setTextAlign(align);
+    }
+
+    public void setTextColor(@ColorInt int color) {
+        dayNumberPicker.setTextColor(color);
+        monthNumberPicker.setTextColor(color);
+        yearNumberPicker.setTextColor(color);
+    }
+
+    public void setTextColorResource(@ColorRes int colorId) {
+        dayNumberPicker.setTextColorResource(colorId);
+        monthNumberPicker.setTextColorResource(colorId);
+        yearNumberPicker.setTextColorResource(colorId);
+    }
+
+    public void setTextSize(float textSize) {
+        dayNumberPicker.setTextSize(textSize);
+        monthNumberPicker.setTextSize(textSize);
+        yearNumberPicker.setTextSize(textSize);
+    }
+
+    public void setTextSize(@DimenRes int dimenId) {
+        dayNumberPicker.setTextSize(dimenId);
+        monthNumberPicker.setTextSize(dimenId);
+        yearNumberPicker.setTextSize(dimenId);
+    }
+
+    public void setTextStrikeThru(boolean strikeThruText) {
+        dayNumberPicker.setTextStrikeThru(strikeThruText);
+        monthNumberPicker.setTextStrikeThru(strikeThruText);
+        yearNumberPicker.setTextStrikeThru(strikeThruText);
+    }
+
+    public void setTextUnderline(boolean underlineText) {
+        dayNumberPicker.setTextUnderline(underlineText);
+        monthNumberPicker.setTextUnderline(underlineText);
+        yearNumberPicker.setTextUnderline(underlineText);
+    }
+
+    public void setTypeface(Typeface typeface) {
+        dayNumberPicker.setTypeface(typeface);
+        monthNumberPicker.setTypeface(typeface);
+        yearNumberPicker.setTypeface(typeface);
+    }
+
+    public void setTypeface(String string, int style) {
+        dayNumberPicker.setTypeface(string, style);
+        monthNumberPicker.setTypeface(string, style);
+        yearNumberPicker.setTypeface(string, style);
+    }
+
+    public void setTypeface(String string) {
+        dayNumberPicker.setTypeface(string);
+        monthNumberPicker.setTypeface(string);
+        yearNumberPicker.setTypeface(string);
+    }
+
+    public void setTypeface(@StringRes int stringId, int style) {
+        dayNumberPicker.setTypeface(stringId, style);
+        monthNumberPicker.setTypeface(stringId, style);
+        yearNumberPicker.setTypeface(stringId, style);
+    }
+
+    public void setTypeface(@StringRes int stringId) {
+        dayNumberPicker.setTypeface(stringId);
+        monthNumberPicker.setTypeface(stringId);
+        yearNumberPicker.setTypeface(stringId);
+    }
+
+    public void setLineSpacingMultiplier(float multiplier) {
+        dayNumberPicker.setLineSpacingMultiplier(multiplier);
+        monthNumberPicker.setLineSpacingMultiplier(multiplier);
+        yearNumberPicker.setLineSpacingMultiplier(multiplier);
+    }
+
+    public void setMaxFlingVelocityCoefficient(int coefficient) {
+        dayNumberPicker.setMaxFlingVelocityCoefficient(coefficient);
+        monthNumberPicker.setMaxFlingVelocityCoefficient(coefficient);
+        yearNumberPicker.setMaxFlingVelocityCoefficient(coefficient);
+    }
+
+    public void setImeOptions(int imeOptions) {
+        dayNumberPicker.setImeOptions(imeOptions);
+        monthNumberPicker.setImeOptions(imeOptions);
+        yearNumberPicker.setImeOptions(imeOptions);
+    }
+
+    public void setItemSpacing(int itemSpacing) {
+        dayNumberPicker.setItemSpacing(itemSpacing);
+        monthNumberPicker.setItemSpacing(itemSpacing);
+        yearNumberPicker.setItemSpacing(itemSpacing);
     }
 }

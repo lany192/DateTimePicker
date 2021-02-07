@@ -2,6 +2,7 @@ package com.github.lany192.picker;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -15,6 +16,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DimenRes;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 
 import com.github.lany192.R;
 
@@ -123,12 +128,6 @@ public class TimePicker extends BasePicker {
                 && getImportantForAccessibility() == IMPORTANT_FOR_ACCESSIBILITY_AUTO) {
             setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
         }
-    }
-
-    public void setDividerColor(@ColorInt int colorId) {
-        mHourNPicker.setDividerColor(colorId);
-        mMinuteNPicker.setDividerColor(colorId);
-        mSecondNPicker.setDividerColor(colorId);
     }
 
     @Override
@@ -353,5 +352,270 @@ public class TimePicker extends BasePicker {
             dest.writeInt(mMinute);
             dest.writeInt(mSecond);
         }
+    }
+
+
+    public void setAccessibilityDescriptionEnabled(boolean enabled) {
+        mHourNPicker.setAccessibilityDescriptionEnabled(enabled);
+        mMinuteNPicker.setAccessibilityDescriptionEnabled(enabled);
+        mSecondNPicker.setAccessibilityDescriptionEnabled(enabled);
+    }
+
+    public void setDividerColor(@ColorInt int color) {
+        mHourNPicker.setDividerColor(color);
+        mMinuteNPicker.setDividerColor(color);
+        mSecondNPicker.setDividerColor(color);
+    }
+
+    public void setDividerColorResource(@ColorRes int colorId) {
+        mHourNPicker.setDividerColor(ContextCompat.getColor(getContext(), colorId));
+        mMinuteNPicker.setDividerColor(ContextCompat.getColor(getContext(), colorId));
+        mSecondNPicker.setDividerColor(ContextCompat.getColor(getContext(), colorId));
+    }
+
+    public void setDividerDistance(int distance) {
+        mHourNPicker.setDividerDistance(distance);
+        mMinuteNPicker.setDividerDistance(distance);
+        mSecondNPicker.setDividerDistance(distance);
+    }
+
+    public void setDividerDistanceResource(@DimenRes int dimenId) {
+        mHourNPicker.setDividerDistanceResource(dimenId);
+        mMinuteNPicker.setDividerDistanceResource(dimenId);
+        mSecondNPicker.setDividerDistanceResource(dimenId);
+    }
+
+    public void setDividerType(@NumberPicker.DividerType int dividerType) {
+        mHourNPicker.setDividerType(dividerType);
+        mMinuteNPicker.setDividerType(dividerType);
+        mSecondNPicker.setDividerType(dividerType);
+    }
+
+    public void setDividerThickness(int thickness) {
+        mHourNPicker.setDividerThickness(thickness);
+        mMinuteNPicker.setDividerThickness(thickness);
+        mSecondNPicker.setDividerThickness(thickness);
+    }
+
+    public void setDividerThicknessResource(@DimenRes int dimenId) {
+        mHourNPicker.setDividerThicknessResource(dimenId);
+        mMinuteNPicker.setDividerThicknessResource(dimenId);
+        mSecondNPicker.setDividerThicknessResource(dimenId);
+    }
+
+    public void setOrder(@NumberPicker.Order int order) {
+        mHourNPicker.setOrder(order);
+        mMinuteNPicker.setOrder(order);
+        mSecondNPicker.setOrder(order);
+    }
+
+    public void setOrientation(@NumberPicker.Orientation int orientation) {
+        mHourNPicker.setOrientation(orientation);
+        mMinuteNPicker.setOrientation(orientation);
+        mSecondNPicker.setOrientation(orientation);
+    }
+
+    public void setWheelItemCount(int count) {
+        mHourNPicker.setWheelItemCount(count);
+        mMinuteNPicker.setWheelItemCount(count);
+        mSecondNPicker.setWheelItemCount(count);
+    }
+
+    public void setFormatter(final String formatter) {
+        mHourNPicker.setFormatter(formatter);
+        mMinuteNPicker.setFormatter(formatter);
+        mSecondNPicker.setFormatter(formatter);
+    }
+
+    public void setFormatter(@StringRes int stringId) {
+        mHourNPicker.setFormatter(getResources().getString(stringId));
+        mMinuteNPicker.setFormatter(getResources().getString(stringId));
+        mSecondNPicker.setFormatter(getResources().getString(stringId));
+    }
+
+    public void setFadingEdgeEnabled(boolean fadingEdgeEnabled) {
+        mHourNPicker.setFadingEdgeEnabled(fadingEdgeEnabled);
+        mMinuteNPicker.setFadingEdgeEnabled(fadingEdgeEnabled);
+        mSecondNPicker.setFadingEdgeEnabled(fadingEdgeEnabled);
+    }
+
+    public void setFadingEdgeStrength(float strength) {
+        mHourNPicker.setFadingEdgeStrength(strength);
+        mMinuteNPicker.setFadingEdgeStrength(strength);
+        mSecondNPicker.setFadingEdgeStrength(strength);
+    }
+
+    public void setScrollerEnabled(boolean scrollerEnabled) {
+        mHourNPicker.setScrollerEnabled(scrollerEnabled);
+        mMinuteNPicker.setScrollerEnabled(scrollerEnabled);
+        mSecondNPicker.setScrollerEnabled(scrollerEnabled);
+    }
+
+    public void setSelectedTextAlign(@NumberPicker.Align int align) {
+        mHourNPicker.setSelectedTextAlign(align);
+        mMinuteNPicker.setSelectedTextAlign(align);
+        mSecondNPicker.setSelectedTextAlign(align);
+    }
+
+    public void setSelectedTextColor(@ColorInt int color) {
+        mHourNPicker.setSelectedTextColor(color);
+        mMinuteNPicker.setSelectedTextColor(color);
+        mSecondNPicker.setSelectedTextColor(color);
+    }
+
+    public void setSelectedTextColorResource(@ColorRes int colorId) {
+        mHourNPicker.setSelectedTextColorResource(colorId);
+        mMinuteNPicker.setSelectedTextColorResource(colorId);
+        mSecondNPicker.setSelectedTextColorResource(colorId);
+    }
+
+    public void setSelectedTextSize(float textSize) {
+        mHourNPicker.setSelectedTextSize(textSize);
+        mMinuteNPicker.setSelectedTextSize(textSize);
+        mSecondNPicker.setSelectedTextSize(textSize);
+    }
+
+    public void setSelectedTextSize(@DimenRes int dimenId) {
+        mHourNPicker.setSelectedTextSize(getResources().getDimension(dimenId));
+        mMinuteNPicker.setSelectedTextSize(getResources().getDimension(dimenId));
+        mSecondNPicker.setSelectedTextSize(getResources().getDimension(dimenId));
+    }
+
+    public void setSelectedTextStrikeThru(boolean strikeThruText) {
+        mHourNPicker.setSelectedTextStrikeThru(strikeThruText);
+        mMinuteNPicker.setSelectedTextStrikeThru(strikeThruText);
+        mSecondNPicker.setSelectedTextStrikeThru(strikeThruText);
+    }
+
+    public void setSelectedTextUnderline(boolean underlineText) {
+        mHourNPicker.setSelectedTextUnderline(underlineText);
+        mMinuteNPicker.setSelectedTextUnderline(underlineText);
+        mSecondNPicker.setSelectedTextUnderline(underlineText);
+    }
+
+    public void setSelectedTypeface(Typeface typeface) {
+        mHourNPicker.setSelectedTypeface(typeface);
+        mMinuteNPicker.setSelectedTypeface(typeface);
+        mSecondNPicker.setSelectedTypeface(typeface);
+    }
+
+    public void setSelectedTypeface(String string, int style) {
+        mHourNPicker.setSelectedTypeface(string, style);
+        mMinuteNPicker.setSelectedTypeface(string, style);
+        mSecondNPicker.setSelectedTypeface(string, style);
+    }
+
+    public void setSelectedTypeface(String string) {
+        mHourNPicker.setSelectedTypeface(string, Typeface.NORMAL);
+        mMinuteNPicker.setSelectedTypeface(string, Typeface.NORMAL);
+        mSecondNPicker.setSelectedTypeface(string, Typeface.NORMAL);
+    }
+
+    public void setSelectedTypeface(@StringRes int stringId, int style) {
+        mHourNPicker.setSelectedTypeface(getResources().getString(stringId), style);
+        mMinuteNPicker.setSelectedTypeface(getResources().getString(stringId), style);
+        mSecondNPicker.setSelectedTypeface(getResources().getString(stringId), style);
+    }
+
+    public void setSelectedTypeface(@StringRes int stringId) {
+        mHourNPicker.setSelectedTypeface(stringId, Typeface.NORMAL);
+        mMinuteNPicker.setSelectedTypeface(stringId, Typeface.NORMAL);
+        mSecondNPicker.setSelectedTypeface(stringId, Typeface.NORMAL);
+    }
+
+    public void setTextAlign(@NumberPicker.Align int align) {
+        mHourNPicker.setTextAlign(align);
+        mMinuteNPicker.setTextAlign(align);
+        mSecondNPicker.setTextAlign(align);
+    }
+
+    public void setTextColor(@ColorInt int color) {
+        mHourNPicker.setTextColor(color);
+        mMinuteNPicker.setTextColor(color);
+        mSecondNPicker.setTextColor(color);
+    }
+
+    public void setTextColorResource(@ColorRes int colorId) {
+        mHourNPicker.setTextColorResource(colorId);
+        mMinuteNPicker.setTextColorResource(colorId);
+        mSecondNPicker.setTextColorResource(colorId);
+    }
+
+    public void setTextSize(float textSize) {
+        mHourNPicker.setTextSize(textSize);
+        mMinuteNPicker.setTextSize(textSize);
+        mSecondNPicker.setTextSize(textSize);
+    }
+
+    public void setTextSize(@DimenRes int dimenId) {
+        mHourNPicker.setTextSize(dimenId);
+        mMinuteNPicker.setTextSize(dimenId);
+        mSecondNPicker.setTextSize(dimenId);
+    }
+
+    public void setTextStrikeThru(boolean strikeThruText) {
+        mHourNPicker.setTextStrikeThru(strikeThruText);
+        mMinuteNPicker.setTextStrikeThru(strikeThruText);
+        mSecondNPicker.setTextStrikeThru(strikeThruText);
+    }
+
+    public void setTextUnderline(boolean underlineText) {
+        mHourNPicker.setTextUnderline(underlineText);
+        mMinuteNPicker.setTextUnderline(underlineText);
+        mSecondNPicker.setTextUnderline(underlineText);
+    }
+
+    public void setTypeface(Typeface typeface) {
+        mHourNPicker.setTypeface(typeface);
+        mMinuteNPicker.setTypeface(typeface);
+        mSecondNPicker.setTypeface(typeface);
+    }
+
+    public void setTypeface(String string, int style) {
+        mHourNPicker.setTypeface(string, style);
+        mMinuteNPicker.setTypeface(string, style);
+        mSecondNPicker.setTypeface(string, style);
+    }
+
+    public void setTypeface(String string) {
+        mHourNPicker.setTypeface(string);
+        mMinuteNPicker.setTypeface(string);
+        mSecondNPicker.setTypeface(string);
+    }
+
+    public void setTypeface(@StringRes int stringId, int style) {
+        mHourNPicker.setTypeface(stringId, style);
+        mMinuteNPicker.setTypeface(stringId, style);
+        mSecondNPicker.setTypeface(stringId, style);
+    }
+
+    public void setTypeface(@StringRes int stringId) {
+        mHourNPicker.setTypeface(stringId);
+        mMinuteNPicker.setTypeface(stringId);
+        mSecondNPicker.setTypeface(stringId);
+    }
+
+    public void setLineSpacingMultiplier(float multiplier) {
+        mHourNPicker.setLineSpacingMultiplier(multiplier);
+        mMinuteNPicker.setLineSpacingMultiplier(multiplier);
+        mSecondNPicker.setLineSpacingMultiplier(multiplier);
+    }
+
+    public void setMaxFlingVelocityCoefficient(int coefficient) {
+        mHourNPicker.setMaxFlingVelocityCoefficient(coefficient);
+        mMinuteNPicker.setMaxFlingVelocityCoefficient(coefficient);
+        mSecondNPicker.setMaxFlingVelocityCoefficient(coefficient);
+    }
+
+    public void setImeOptions(int imeOptions) {
+        mHourNPicker.setImeOptions(imeOptions);
+        mMinuteNPicker.setImeOptions(imeOptions);
+        mSecondNPicker.setImeOptions(imeOptions);
+    }
+
+    public void setItemSpacing(int itemSpacing) {
+        mHourNPicker.setItemSpacing(itemSpacing);
+        mMinuteNPicker.setItemSpacing(itemSpacing);
+        mSecondNPicker.setItemSpacing(itemSpacing);
     }
 }

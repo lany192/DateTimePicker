@@ -2,10 +2,7 @@ package com.github.lany192.picker;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -84,33 +81,6 @@ public class DateTimePicker extends BasePicker {
         int endYear = DEFAULT_END_YEAR;
         String minDate = "";
         String maxDate = "";
-        if (attrs != null) {
-            TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.DateTimePicker);
-            startYear = typedArray.getInt(R.styleable.DateTimePicker_picker_startYear, DEFAULT_START_YEAR);
-            endYear = typedArray.getInt(R.styleable.DateTimePicker_picker_endYear, DEFAULT_END_YEAR);
-            minDate = typedArray.getString(R.styleable.DateTimePicker_picker_minDate);
-            maxDate = typedArray.getString(R.styleable.DateTimePicker_picker_maxDate);
-
-
-            int solidColor = typedArray.getColor(R.styleable.DateTimePicker_picker_solidColor, 0);
-            Drawable selectionDivider = typedArray.getDrawable(R.styleable.DateTimePicker_picker_selectionDivider);
-            int selectionDividerHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_selectionDividerHeight, dp2px(2));
-            int selectionDividersDistance = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_selectionDividersDistance, dp2px(2));
-            int minHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMinHeight, SIZE_UNSPECIFIED);
-            int maxHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMaxHeight, SIZE_UNSPECIFIED);
-            if (minHeight != SIZE_UNSPECIFIED && maxHeight != SIZE_UNSPECIFIED && minHeight > maxHeight) {
-                throw new IllegalArgumentException("minHeight > maxHeight");
-            }
-            int mMinWidth = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMinWidth, SIZE_UNSPECIFIED);
-            int mMaxWidth = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMaxWidth, SIZE_UNSPECIFIED);
-            if (mMinWidth != SIZE_UNSPECIFIED && mMaxWidth != SIZE_UNSPECIFIED && mMinWidth > mMaxWidth) {
-                throw new IllegalArgumentException("minWidth > maxWidth");
-            }
-            int selectionTextSize = (int) typedArray.getDimension(R.styleable.DateTimePicker_picker_selectionTextSize, SIZE_UNSPECIFIED);
-            int selectionTextColor = typedArray.getColor(R.styleable.DateTimePicker_picker_selectionTextColor, Color.BLACK);
-
-            typedArray.recycle();
-        }
 
         NumberPicker.OnValueChangeListener onChangeListener = new NumberPicker.OnValueChangeListener() {
             public void onValueChange(NumberPicker picker, int oldValue, int newValue) {

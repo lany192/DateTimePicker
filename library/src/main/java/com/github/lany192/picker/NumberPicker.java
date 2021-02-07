@@ -116,12 +116,12 @@ public class NumberPicker extends LinearLayout {
     /**
      * The default unscaled height of the divider.
      */
-    private static final int UNSCALED_DEFAULT_DIVIDER_THICKNESS = 2;
+    private static final int UNSCALED_DEFAULT_DIVIDER_THICKNESS = 1;
 
     /**
      * The default unscaled distance between the dividers.
      */
-    private static final int UNSCALED_DEFAULT_DIVIDER_DISTANCE = 48;
+    private static final int UNSCALED_DEFAULT_DIVIDER_DISTANCE = 44;
 
     /**
      * Constant for unspecified size.
@@ -171,7 +171,7 @@ public class NumberPicker extends LinearLayout {
     /**
      * The default size of text.
      */
-    private static final float DEFAULT_TEXT_SIZE = 18.0f;
+    private static final float DEFAULT_TEXT_SIZE = 16.0f;
 
     /**
      * The default line spacing multiplier of text.

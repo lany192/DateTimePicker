@@ -21,8 +21,6 @@ import androidx.annotation.DimenRes;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 
-import com.github.lany192.R;
-
 import java.util.Calendar;
 import java.util.Locale;
 

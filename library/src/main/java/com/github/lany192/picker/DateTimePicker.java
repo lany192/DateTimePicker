@@ -24,8 +24,6 @@ import androidx.annotation.DimenRes;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 
-import com.github.lany192.R;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;

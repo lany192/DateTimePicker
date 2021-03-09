@@ -47,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
         calendar.set(2000,1,1);
         datePicker1.setMinDate(calendar.getTimeInMillis());
         calendar.set(2100,1,1);
+
+
+        datePicker1.setDividerThickness(1);
+        datePicker1.setDividerColor(Color.RED);
+        datePicker1.setTextColor(Color.MAGENTA);
+        datePicker1.setSelectedTextColor(Color.BLACK);
         datePicker1.setMaxDate(calendar.getTimeInMillis());
         datePicker1.setDayViewShown(false);
         datePicker1.setFormatter("%02d年", "%02d月", "%02d日");
@@ -65,6 +71,10 @@ public class MainActivity extends AppCompatActivity {
                 .append(monthOfYear + 1).append("月")
                 .append(dayOfMonth).append("日")));
 
+        timePicker.setDividerThickness(1);
+        timePicker.setDividerColor(Color.RED);
+        timePicker.setTextColor(Color.MAGENTA);
+        timePicker.setSelectedTextColor(Color.BLACK);
         timePicker.setFormatter("%02d时", "%02d分", "%02d秒");
         timePicker.setOnChangedListener((view, hourOfDay, minuteOfHour, scd) -> timePickerShowText.setText(new StringBuilder()
                 .append("TimePicker:")
@@ -72,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
                 .append(minuteOfHour).append("分")
                 .append(scd).append("秒")));
 
+        hourMinutePicker.setDividerThickness(1);
+        hourMinutePicker.setDividerColor(Color.RED);
+        hourMinutePicker.setTextColor(Color.MAGENTA);
+        hourMinutePicker.setSelectedTextColor(Color.BLACK);
         hourMinutePicker.setIs24HourView(true);
         hourMinutePicker.setFormatter("%02d时", "%02d分");
         hourMinutePicker.setOnChangedListener((view, hourOfDay, minute) -> hourMinutePickerShowText.setText(new StringBuilder()
@@ -79,6 +93,10 @@ public class MainActivity extends AppCompatActivity {
                 .append(hourOfDay).append("时")
                 .append(minute).append("分")));
 
+        dateTimePicker.setDividerThickness(1);
+        dateTimePicker.setDividerColor(Color.RED);
+        dateTimePicker.setTextColor(Color.MAGENTA);
+        dateTimePicker.setSelectedTextColor(Color.BLACK);
         dateTimePicker.setFormatter("%02d年", "%02d月", "%02d日", "%02d时", "%02d分", "%02d秒");
         dateTimePicker.setOnChangedListener((view, year, monthOfYear, dayOfMonth, hourOfDay, minute, second) -> dateTimePickerShowText.setText(new StringBuilder()
                 .append("DateTimePicker:")

@@ -17,7 +17,7 @@
 
 # Preview
 
-![image](https://github.com/lany192/DateTimePicker/raw/master/preview/a.png)
+![image](https://github.com/lany192/DateTimePicker/raw/master/preview/a.webp)
 
 # License
 

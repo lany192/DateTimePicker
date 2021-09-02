@@ -2,7 +2,7 @@ package com.github.lany192.picker;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -15,10 +15,15 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.github.lany192.R;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DimenRes;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
+
+import com.github.lany192.picker.R;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
@@ -36,9 +41,7 @@ public class HourMinutePicker extends BasePicker {
     private final NumberPicker mHourNPicker;
     private final NumberPicker mMinuteNPicker;
     private final NumberPicker mAmPmNPicker;
-    private final EditText mHourEditText;
-    private final EditText mMinuteEditText;
-    private final EditText mAmPmEditText;
+
     private final TextView mDivider;
     // Note that the legacy implementation of the TimePicker is
     // using a button for toggling between AM/PM while the new
@@ -53,7 +56,7 @@ public class HourMinutePicker extends BasePicker {
     private boolean mIsAutoScroll = DEFAULT_AUTO_SCROLL_STATE;
 
     // callbacks
-    private OnTimeChangedListener mOnTimeChangedListener;
+    private OnChangedListener mOnChangedListener;
 
     private Calendar mTempCalendar;
 
@@ -73,11 +76,11 @@ public class HourMinutePicker extends BasePicker {
         // initialization based on locale
         setCurrentLocale(Locale.getDefault());
 
-        LayoutInflater.from(getContext()).inflate(R.layout.picker_hour_minute, this);
+        LayoutInflater.from(getContext()).inflate(R.layout.hour_minute_picker, this);
 
         // hour
         mHourNPicker = findViewById(R.id.hour);
-        mHourNPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        mHourNPicker.setOnChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker NPicker, int oldVal, int newVal) {
                 updateInputState();
@@ -88,11 +91,10 @@ public class HourMinutePicker extends BasePicker {
                         updateAmPmControl();
                     }
                 }
-                onTimeChanged();
+                onChanged();
             }
         });
-        mHourEditText = mHourNPicker.findViewById(R.id.number_picker_edit_text);
-        mHourEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        mHourNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 
         // divider (only for the new widget style)
         mDivider = findViewById(R.id.divider);
@@ -106,7 +108,7 @@ public class HourMinutePicker extends BasePicker {
         mMinuteNPicker.setMaxValue(59);
         mMinuteNPicker.setOnLongPressUpdateInterval(100);
         mMinuteNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
-        mMinuteNPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        mMinuteNPicker.setOnChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker NPicker, int oldVal, int newVal) {
                 updateInputState();
@@ -128,11 +130,10 @@ public class HourMinutePicker extends BasePicker {
                     }
                     mHourNPicker.setValue(newHour);
                 }
-                onTimeChanged();
+                onChanged();
             }
         });
-        mMinuteEditText = mMinuteNPicker.findViewById(R.id.number_picker_edit_text);
-        mMinuteEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        mMinuteNPicker.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 
         /* Get the localized am/pm strings and use them in the NPicker */
         mAmPmStrings = new DateFormatSymbols().getAmPmStrings();
@@ -141,7 +142,6 @@ public class HourMinutePicker extends BasePicker {
         View amPmView = findViewById(R.id.amPm);
         if (amPmView instanceof Button) {
             mAmPmNPicker = null;
-            mAmPmEditText = null;
             mAmPmButton = (Button) amPmView;
             mAmPmButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -149,7 +149,7 @@ public class HourMinutePicker extends BasePicker {
                     button.requestFocus();
                     mIsAm = !mIsAm;
                     updateAmPmControl();
-                    onTimeChanged();
+                    onChanged();
                 }
             });
         } else {
@@ -158,28 +158,27 @@ public class HourMinutePicker extends BasePicker {
             mAmPmNPicker.setMinValue(0);
             mAmPmNPicker.setMaxValue(1);
             mAmPmNPicker.setDisplayedValues(mAmPmStrings);
-            mAmPmNPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            mAmPmNPicker.setOnChangedListener(new NumberPicker.OnValueChangeListener() {
                 public void onValueChange(NumberPicker picker,
                                           int oldVal, int newVal) {
                     updateInputState();
                     picker.requestFocus();
                     mIsAm = !mIsAm;
                     updateAmPmControl();
-                    onTimeChanged();
+                    onChanged();
                 }
             });
-            mAmPmEditText = mAmPmNPicker.findViewById(R.id.number_picker_edit_text);
-            mAmPmEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            mAmPmNPicker.setImeOptions(EditorInfo.IME_ACTION_DONE);
         }
 
         // update controls to initial state
         updateHourControl();
         updateAmPmControl();
 
-        setOnTimeChangedListener(new OnTimeChangedListener() {
+        setOnChangedListener(new OnChangedListener() {
 
             @Override
-            public void onTimeChanged(HourMinutePicker view, int hourOfDay, int minute) {
+            public void onChanged(HourMinutePicker view, int hourOfDay, int minute) {
 
             }
         });
@@ -200,18 +199,6 @@ public class HourMinutePicker extends BasePicker {
                 && getImportantForAccessibility() == IMPORTANT_FOR_ACCESSIBILITY_AUTO) {
             setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
         }
-    }
-
-    public void setSelectionDivider(Drawable selectionDivider) {
-        mHourNPicker.setSelectionDivider(selectionDivider);
-        mMinuteNPicker.setSelectionDivider(selectionDivider);
-        mAmPmNPicker.setSelectionDivider(selectionDivider);
-    }
-
-    public void setSelectionDividerHeight(int selectionDividerHeight) {
-        mHourNPicker.setSelectionDividerHeight(selectionDividerHeight);
-        mMinuteNPicker.setSelectionDividerHeight(selectionDividerHeight);
-        mAmPmNPicker.setSelectionDividerHeight(selectionDividerHeight);
     }
 
     @Override
@@ -288,10 +275,10 @@ public class HourMinutePicker extends BasePicker {
     /**
      * Set the callback that indicates the time has been adjusted by the user.
      *
-     * @param onTimeChangedListener the callback, should not be null.
+     * @param OnChangedListener the callback, should not be null.
      */
-    public void setOnTimeChangedListener(OnTimeChangedListener onTimeChangedListener) {
-        mOnTimeChangedListener = onTimeChangedListener;
+    public void setOnChangedListener(OnChangedListener OnChangedListener) {
+        mOnChangedListener = OnChangedListener;
     }
 
     /**
@@ -332,7 +319,7 @@ public class HourMinutePicker extends BasePicker {
             updateAmPmControl();
         }
         mHourNPicker.setValue(currentHour);
-        onTimeChanged();
+        onChanged();
     }
 
     /**
@@ -375,7 +362,7 @@ public class HourMinutePicker extends BasePicker {
             return;
         }
         mMinuteNPicker.setValue(currentMinute);
-        onTimeChanged();
+        onChanged();
     }
 
     @Override
@@ -426,7 +413,7 @@ public class HourMinutePicker extends BasePicker {
         } else {
             mHourNPicker.setMinValue(1);
             mHourNPicker.setMaxValue(12);
-            mHourNPicker.setFormatter(null);
+            mHourNPicker.setFormatter("");
         }
     }
 
@@ -450,10 +437,10 @@ public class HourMinutePicker extends BasePicker {
         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
     }
 
-    private void onTimeChanged() {
+    private void onChanged() {
         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
-        if (mOnTimeChangedListener != null) {
-            mOnTimeChangedListener.onTimeChanged(this, getCurrentHour(),
+        if (mOnChangedListener != null) {
+            mOnChangedListener.onChanged(this, getCurrentHour(),
                     getCurrentMinute());
         }
     }
@@ -500,14 +487,14 @@ public class HourMinutePicker extends BasePicker {
         InputMethodManager inputMethodManager = (InputMethodManager) getContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) {
-            if (inputMethodManager.isActive(mHourEditText)) {
-                mHourEditText.clearFocus();
+            if (inputMethodManager.isActive(mHourNPicker)) {
+                mHourNPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mMinuteEditText)) {
-                mMinuteEditText.clearFocus();
+            } else if (inputMethodManager.isActive(mMinuteNPicker)) {
+                mMinuteNPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mAmPmEditText)) {
-                mAmPmEditText.clearFocus();
+            } else if (inputMethodManager.isActive(mAmPmNPicker)) {
+                mAmPmNPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
             }
         }
@@ -516,14 +503,14 @@ public class HourMinutePicker extends BasePicker {
     /**
      * The callback interface used to indicate the time has been adjusted.
      */
-    public interface OnTimeChangedListener {
+    public interface OnChangedListener {
 
         /**
-         * @param view      The view associated with this listener.
+         * @param picker    The view associated with this listener.
          * @param hourOfDay The current hour.
          * @param minute    The current minute.
          */
-        void onTimeChanged(HourMinutePicker view, int hourOfDay, int minute);
+        void onChanged(HourMinutePicker picker, int hourOfDay, int minute);
     }
 
     /**
@@ -570,5 +557,183 @@ public class HourMinutePicker extends BasePicker {
             dest.writeInt(mHour);
             dest.writeInt(mMinute);
         }
+    }
+
+    public void setAccessibilityDescriptionEnabled(boolean enabled) {
+        super.setAccessibilityDescriptionEnabled(enabled, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setDividerColor(@ColorInt int color) {
+        super.setDividerColor(color, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setDividerColorResource(@ColorRes int colorId) {
+        super.setDividerColor(ContextCompat.getColor(getContext(), colorId), mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setDividerDistance(int distance) {
+        super.setDividerDistance(distance, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setDividerDistanceResource(@DimenRes int dimenId) {
+        super.setDividerDistanceResource(dimenId, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setDividerType(@NumberPicker.DividerType int dividerType) {
+        super.setDividerType(dividerType, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setDividerThickness(int thickness) {
+        super.setDividerThickness(thickness, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setDividerThicknessResource(@DimenRes int dimenId) {
+        super.setDividerThicknessResource(dimenId, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setOrder(@NumberPicker.Order int order) {
+        super.setOrder(order, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setOrientation(@NumberPicker.Orientation int orientation) {
+        super.setOrientation(orientation, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setWheelItemCount(int count) {
+        super.setWheelItemCount(count, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setFormatter(String hourFormatter, String minuteFormatter) {
+        mHourNPicker.setFormatter(hourFormatter);
+        mMinuteNPicker.setFormatter(minuteFormatter);
+    }
+
+    public void setFormatter(@StringRes int hourFormatterId, @StringRes int minuteFormatterId) {
+        mHourNPicker.setFormatter(getResources().getString(hourFormatterId));
+        mMinuteNPicker.setFormatter(getResources().getString(minuteFormatterId));
+    }
+
+    public void setFadingEdgeEnabled(boolean fadingEdgeEnabled) {
+        super.setFadingEdgeEnabled(fadingEdgeEnabled, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setFadingEdgeStrength(float strength) {
+        super.setFadingEdgeStrength(strength, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setScrollerEnabled(boolean scrollerEnabled) {
+        super.setScrollerEnabled(scrollerEnabled, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setSelectedTextAlign(@NumberPicker.Align int align) {
+        super.setSelectedTextAlign(align, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setSelectedTextColor(@ColorInt int color) {
+        super.setSelectedTextColor(color, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setSelectedTextColorResource(@ColorRes int colorId) {
+        super.setSelectedTextColorResource(colorId, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setSelectedTextSize(float textSize) {
+        super.setSelectedTextSize(textSize, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setSelectedTextSize(@DimenRes int dimenId) {
+        super.setSelectedTextSize(getResources().getDimension(dimenId), mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setSelectedTextStrikeThru(boolean strikeThruText) {
+        super.setSelectedTextStrikeThru(strikeThruText, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setSelectedTextUnderline(boolean underlineText) {
+        super.setSelectedTextUnderline(underlineText, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setSelectedTypeface(Typeface typeface) {
+        super.setSelectedTypeface(typeface, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setSelectedTypeface(String string, int style) {
+        super.setSelectedTypeface(string, style, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setSelectedTypeface(String string) {
+        super.setSelectedTypeface(string, Typeface.NORMAL, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setSelectedTypeface(@StringRes int stringId, int style) {
+        super.setSelectedTypeface(getResources().getString(stringId), style, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setSelectedTypeface(@StringRes int stringId) {
+        super.setSelectedTypeface(stringId, Typeface.NORMAL, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setTextAlign(@NumberPicker.Align int align) {
+        super.setTextAlign(align, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setTextColor(@ColorInt int color) {
+        super.setTextColor(color, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setTextColorResource(@ColorRes int colorId) {
+        super.setTextColorResource(colorId, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setTextSize(float textSize) {
+        super.setTextSize(textSize, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setTextSize(@DimenRes int dimenId) {
+        super.setTextSize(dimenId, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setTextStrikeThru(boolean strikeThruText) {
+        super.setTextStrikeThru(strikeThruText, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setTextUnderline(boolean underlineText) {
+        super.setTextUnderline(underlineText, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setTypeface(Typeface typeface) {
+        super.setTypeface(typeface, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setTypeface(String string, int style) {
+        super.setTypeface(string, style, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setTypeface(String string) {
+        super.setTypeface(string, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setTypeface(@StringRes int stringId, int style) {
+        super.setTypeface(stringId, style, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setTypeface(@StringRes int stringId) {
+        super.setTypeface(stringId, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setLineSpacingMultiplier(float multiplier) {
+        super.setLineSpacingMultiplier(multiplier, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setMaxFlingVelocityCoefficient(int coefficient) {
+        super.setMaxFlingVelocityCoefficient(coefficient, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setImeOptions(int imeOptions) {
+        super.setImeOptions(imeOptions, mHourNPicker, mMinuteNPicker);
+    }
+
+    public void setItemSpacing(int itemSpacing) {
+        super.setItemSpacing(itemSpacing, mHourNPicker, mMinuteNPicker);
     }
 }

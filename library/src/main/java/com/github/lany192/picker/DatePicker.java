@@ -2,9 +2,7 @@ package com.github.lany192.picker;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -21,11 +19,15 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CalendarView;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.github.lany192.R;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DimenRes;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
+
+import com.github.lany192.picker.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,20 +40,15 @@ import java.util.TimeZone;
 public class DatePicker extends BasePicker {
     private static final int DEFAULT_START_YEAR = 1900;
     private static final int DEFAULT_END_YEAR = 2100;
-    private static final boolean DEFAULT_NPickerS_SHOWN = true;
-    private static final boolean DEFAULT_DAY_VIEW_SHOWN = true;
     private static final boolean DEFAULT_ENABLED_STATE = true;
     private static final boolean DEFAULT_AUTO_SCROLL_STATE = true;
     private final LinearLayout mNPickers;
-    private final EditText mDayEditText;
-    private final EditText mMonthEditText;
-    private final EditText mYearEditText;
 
-    private final NumberPicker dayNumberPicker;
-    private final NumberPicker monthNumberPicker;
-    private final NumberPicker yearNumberPicker;
+    private final NumberPicker mDayNPicker;
+    private final NumberPicker mMonthNPicker;
+    private final NumberPicker mYearNPicker;
     private Locale mCurrentLocale;
-    private OnDateChangedListener mOnDateChangedListener;
+    private OnChangedListener mOnChangedListener;
     private String[] mShortMonths;
     private int mNumberOfMonths;
 
@@ -77,42 +74,14 @@ public class DatePicker extends BasePicker {
 
     public DatePicker(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
-        // initialization based on locale
         setCurrentLocale(Locale.getDefault());
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.DatePicker, defStyle, 0);
-        boolean spinnersShown = typedArray.getBoolean(R.styleable.DatePicker_picker_spinnersShown, DEFAULT_NPickerS_SHOWN);
-        boolean dayViewShown = typedArray.getBoolean(R.styleable.DatePicker_picker_dayViewShown, DEFAULT_DAY_VIEW_SHOWN);
+        int startYear = DEFAULT_START_YEAR;
+        int endYear = DEFAULT_END_YEAR;
+        String minDate = "01/01/2021";
+        String maxDate = "01/01/2121";
 
-        int startYear = typedArray.getInt(R.styleable.DatePicker_picker_startYear, DEFAULT_START_YEAR);
-        int endYear = typedArray.getInt(R.styleable.DatePicker_picker_endYear, DEFAULT_END_YEAR);
-        String minDate = typedArray.getString(R.styleable.DatePicker_picker_minDate);
-        String maxDate = typedArray.getString(R.styleable.DatePicker_picker_maxDate);
-        int layoutResourceId = typedArray.getResourceId(R.styleable.DatePicker_picker_picker_internalLayout, R.layout.picker_date);
-
-
-        int solidColor = typedArray.getColor(R.styleable.DateTimePicker_picker_solidColor, 0);
-        Drawable selectionDivider = typedArray.getDrawable(R.styleable.DateTimePicker_picker_selectionDivider);
-        int selectionDividerHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_selectionDividerHeight, dp2px(2));
-        int selectionDividersDistance = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_selectionDividersDistance, dp2px(2));
-        int minHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMinHeight, SIZE_UNSPECIFIED);
-        int maxHeight = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMaxHeight, SIZE_UNSPECIFIED);
-        if (minHeight != SIZE_UNSPECIFIED && maxHeight != SIZE_UNSPECIFIED && minHeight > maxHeight) {
-            throw new IllegalArgumentException("minHeight > maxHeight");
-        }
-        int mMinWidth = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMinWidth, SIZE_UNSPECIFIED);
-        int mMaxWidth = typedArray.getDimensionPixelSize(R.styleable.DateTimePicker_picker_internalMaxWidth, SIZE_UNSPECIFIED);
-        if (mMinWidth != SIZE_UNSPECIFIED && mMaxWidth != SIZE_UNSPECIFIED && mMinWidth > mMaxWidth) {
-            throw new IllegalArgumentException("minWidth > maxWidth");
-        }
-        int selectionTextSize = (int) typedArray.getDimension(R.styleable.DateTimePicker_picker_selectionTextSize, SIZE_UNSPECIFIED);
-        int selectionTextColor = typedArray.getColor(R.styleable.DateTimePicker_picker_selectionTextColor, Color.BLACK);
-
-
-        typedArray.recycle();
-
-        LayoutInflater.from(getContext()).inflate(layoutResourceId, this);
+        LayoutInflater.from(getContext()).inflate(R.layout.date_picker, this);
 
         NumberPicker.OnValueChangeListener onChangeListener = new NumberPicker.OnValueChangeListener() {
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -120,7 +89,7 @@ public class DatePicker extends BasePicker {
                 mTempDate.setTimeInMillis(mCurrentDate.getTimeInMillis());
                 // take care of wrapping of days and months to update greater
                 // fields
-                if (picker == dayNumberPicker) {
+                if (picker == mDayNPicker) {
                     int maxDayOfMonth = mTempDate
                             .getActualMaximum(Calendar.DAY_OF_MONTH);
                     if (oldVal == maxDayOfMonth && newVal == 1 && isAutoScrollState()) {
@@ -130,7 +99,7 @@ public class DatePicker extends BasePicker {
                     } else {
                         mTempDate.add(Calendar.DAY_OF_MONTH, newVal - oldVal);
                     }
-                } else if (picker == monthNumberPicker) {
+                } else if (picker == mMonthNPicker) {
                     if (oldVal == 11 && newVal == 0 && isAutoScrollState()) {
                         mTempDate.add(Calendar.MONTH, 1);
                     } else if (oldVal == 0 && newVal == 11 && isAutoScrollState()) {
@@ -138,7 +107,7 @@ public class DatePicker extends BasePicker {
                     } else {
                         mTempDate.add(Calendar.MONTH, newVal - oldVal);
                     }
-                } else if (picker == yearNumberPicker) {
+                } else if (picker == mYearNPicker) {
                     mTempDate.set(Calendar.YEAR, newVal);
                 } else {
                     throw new IllegalArgumentException();
@@ -154,44 +123,23 @@ public class DatePicker extends BasePicker {
 
         mNPickers = findViewById(R.id.pickers);
         // day
-        dayNumberPicker = findViewById(R.id.day);
-        dayNumberPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
-        dayNumberPicker.setOnLongPressUpdateInterval(100);
-        dayNumberPicker.setOnValueChangedListener(onChangeListener);
-        mDayEditText = dayNumberPicker.findViewById(R.id.number_picker_edit_text);
-
-        // show only what the user required but make sure we
-        // show something and the NPickers have higher priority
-        if (!spinnersShown && !dayViewShown) {
-            setspinnersShown(true);
-        } else {
-            setspinnersShown(spinnersShown);
-            setDayViewShown(dayViewShown);
-        }
-
+        mDayNPicker = findViewById(R.id.day);
+        mDayNPicker.setFormatter(NumberPicker.getTwoDigitFormatter());
+        mDayNPicker.setOnLongPressUpdateInterval(100);
+        mDayNPicker.setOnChangedListener(onChangeListener);
 
         // month
-        monthNumberPicker = findViewById(R.id.month);
-        monthNumberPicker.setMinValue(0);
-        monthNumberPicker.setMaxValue(mNumberOfMonths - 1);
-        monthNumberPicker.setDisplayedValues(mShortMonths);
-        monthNumberPicker.setOnLongPressUpdateInterval(200);
-        monthNumberPicker.setOnValueChangedListener(onChangeListener);
-        mMonthEditText = monthNumberPicker.findViewById(R.id.number_picker_edit_text);
+        mMonthNPicker = findViewById(R.id.month);
+        mMonthNPicker.setMinValue(0);
+        mMonthNPicker.setMaxValue(mNumberOfMonths - 1);
+        mMonthNPicker.setDisplayedValues(mShortMonths);
+        mMonthNPicker.setOnLongPressUpdateInterval(200);
+        mMonthNPicker.setOnChangedListener(onChangeListener);
 
         // year
-        yearNumberPicker = findViewById(R.id.year);
-        yearNumberPicker.setOnLongPressUpdateInterval(100);
-        yearNumberPicker.setOnValueChangedListener(onChangeListener);
-        mYearEditText = yearNumberPicker.findViewById(R.id.number_picker_edit_text);
-
-        // show only what the user required but make sure we
-        // show something and the NPickers have higher priority
-        if (!spinnersShown) {
-            setspinnersShown(true);
-        } else {
-            setspinnersShown(spinnersShown);
-        }
+        mYearNPicker = findViewById(R.id.year);
+        mYearNPicker.setOnLongPressUpdateInterval(100);
+        mYearNPicker.setOnChangedListener(onChangeListener);
 
         // set the min date giving priority of the minDate over startYear
         mTempDate.clear();
@@ -228,19 +176,6 @@ public class DatePicker extends BasePicker {
             setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
         }
     }
-
-    public void setSelectionDivider(Drawable selectionDivider) {
-        dayNumberPicker.setSelectionDivider(selectionDivider);
-        monthNumberPicker.setSelectionDivider(selectionDivider);
-        yearNumberPicker.setSelectionDivider(selectionDivider);
-    }
-
-    public void setSelectionDividerHeight(int selectionDividerHeight) {
-        dayNumberPicker.setSelectionDividerHeight(selectionDividerHeight);
-        monthNumberPicker.setSelectionDividerHeight(selectionDividerHeight);
-        yearNumberPicker.setSelectionDividerHeight(selectionDividerHeight);
-    }
-
 
     /**
      * Sets the minimal date supported by this {@link NumberPicker} in
@@ -295,9 +230,9 @@ public class DatePicker extends BasePicker {
             return;
         }
         super.setEnabled(enabled);
-        dayNumberPicker.setEnabled(enabled);
-        monthNumberPicker.setEnabled(enabled);
-        yearNumberPicker.setEnabled(enabled);
+        mDayNPicker.setEnabled(enabled);
+        mMonthNPicker.setEnabled(enabled);
+        mYearNPicker.setEnabled(enabled);
         mIsEnabled = enabled;
     }
 
@@ -353,7 +288,7 @@ public class DatePicker extends BasePicker {
      * @param shown True if the calendar view is to be shown.
      */
     public void setDayViewShown(boolean shown) {
-        dayNumberPicker.setVisibility(shown ? VISIBLE : GONE);
+        mDayNPicker.setVisibility(shown ? VISIBLE : GONE);
     }
 
     /**
@@ -433,16 +368,16 @@ public class DatePicker extends BasePicker {
         for (int i = 0; i < NPickerCount; i++) {
             switch (order[i]) {
                 case 'd':
-                    mNPickers.addView(dayNumberPicker);
-                    setImeOptions(dayNumberPicker, NPickerCount, i);
+                    mNPickers.addView(mDayNPicker);
+                    setImeOptions(mDayNPicker, NPickerCount, i);
                     break;
                 case 'M':
-                    mNPickers.addView(monthNumberPicker);
-                    setImeOptions(monthNumberPicker, NPickerCount, i);
+                    mNPickers.addView(mMonthNPicker);
+                    setImeOptions(mMonthNPicker, NPickerCount, i);
                     break;
                 case 'y':
-                    mNPickers.addView(yearNumberPicker);
-                    setImeOptions(yearNumberPicker, NPickerCount, i);
+                    mNPickers.addView(mYearNPicker);
+                    setImeOptions(mYearNPicker, NPickerCount, i);
                     break;
                 default:
                     throw new IllegalArgumentException();
@@ -535,45 +470,45 @@ public class DatePicker extends BasePicker {
     private void updateNPickers() {
         // set the NPicker ranges respecting the min and max dates
         if (mCurrentDate.equals(mMinDate)) {
-            dayNumberPicker.setMinValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
-            dayNumberPicker.setMaxValue(mCurrentDate.getActualMaximum(Calendar.DAY_OF_MONTH));
-            dayNumberPicker.setWrapSelectorWheel(false);
-            monthNumberPicker.setDisplayedValues(null);
-            monthNumberPicker.setMinValue(mCurrentDate.get(Calendar.MONTH));
-            monthNumberPicker.setMaxValue(mCurrentDate.getActualMaximum(Calendar.MONTH));
-            monthNumberPicker.setWrapSelectorWheel(false);
+            mDayNPicker.setMinValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
+            mDayNPicker.setMaxValue(mCurrentDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+            mDayNPicker.setWrapSelectorWheel(false);
+            mMonthNPicker.setDisplayedValues(null);
+            mMonthNPicker.setMinValue(mCurrentDate.get(Calendar.MONTH));
+            mMonthNPicker.setMaxValue(mCurrentDate.getActualMaximum(Calendar.MONTH));
+            mMonthNPicker.setWrapSelectorWheel(false);
         } else if (mCurrentDate.equals(mMaxDate)) {
-            dayNumberPicker.setMinValue(mCurrentDate.getActualMinimum(Calendar.DAY_OF_MONTH));
-            dayNumberPicker.setMaxValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
-            dayNumberPicker.setWrapSelectorWheel(false);
-            monthNumberPicker.setDisplayedValues(null);
-            monthNumberPicker.setMinValue(mCurrentDate.getActualMinimum(Calendar.MONTH));
-            monthNumberPicker.setMaxValue(mCurrentDate.get(Calendar.MONTH));
-            monthNumberPicker.setWrapSelectorWheel(false);
+            mDayNPicker.setMinValue(mCurrentDate.getActualMinimum(Calendar.DAY_OF_MONTH));
+            mDayNPicker.setMaxValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
+            mDayNPicker.setWrapSelectorWheel(false);
+            mMonthNPicker.setDisplayedValues(null);
+            mMonthNPicker.setMinValue(mCurrentDate.getActualMinimum(Calendar.MONTH));
+            mMonthNPicker.setMaxValue(mCurrentDate.get(Calendar.MONTH));
+            mMonthNPicker.setWrapSelectorWheel(false);
         } else {
-            dayNumberPicker.setMinValue(1);
-            dayNumberPicker.setMaxValue(mCurrentDate.getActualMaximum(Calendar.DAY_OF_MONTH));
-            dayNumberPicker.setWrapSelectorWheel(true);
-            monthNumberPicker.setDisplayedValues(null);
-            monthNumberPicker.setMinValue(0);
-            monthNumberPicker.setMaxValue(11);
-            monthNumberPicker.setWrapSelectorWheel(true);
+            mDayNPicker.setMinValue(1);
+            mDayNPicker.setMaxValue(mCurrentDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+            mDayNPicker.setWrapSelectorWheel(true);
+            mMonthNPicker.setDisplayedValues(null);
+            mMonthNPicker.setMinValue(0);
+            mMonthNPicker.setMaxValue(11);
+            mMonthNPicker.setWrapSelectorWheel(true);
         }
 
         // make sure the month names are a zero based array
         // with the months in the month NPicker
-        String[] displayedValues = Arrays.copyOfRange(mShortMonths, monthNumberPicker.getMinValue(), monthNumberPicker.getMaxValue() + 1);
-        monthNumberPicker.setDisplayedValues(displayedValues);
+        String[] displayedValues = Arrays.copyOfRange(mShortMonths, mMonthNPicker.getMinValue(), mMonthNPicker.getMaxValue() + 1);
+        mMonthNPicker.setDisplayedValues(displayedValues);
 
         // year NPicker range does not change based on the current date
-        yearNumberPicker.setMinValue(mMinDate.get(Calendar.YEAR));
-        yearNumberPicker.setMaxValue(mMaxDate.get(Calendar.YEAR));
-        yearNumberPicker.setWrapSelectorWheel(false);
+        mYearNPicker.setMinValue(mMinDate.get(Calendar.YEAR));
+        mYearNPicker.setMaxValue(mMaxDate.get(Calendar.YEAR));
+        mYearNPicker.setWrapSelectorWheel(false);
 
         // set the NPicker values
-        yearNumberPicker.setValue(mCurrentDate.get(Calendar.YEAR));
-        monthNumberPicker.setValue(mCurrentDate.get(Calendar.MONTH));
-        dayNumberPicker.setValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
+        mYearNPicker.setValue(mCurrentDate.get(Calendar.YEAR));
+        mMonthNPicker.setValue(mCurrentDate.get(Calendar.MONTH));
+        mDayNPicker.setValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
     }
 
     /**
@@ -602,8 +537,8 @@ public class DatePicker extends BasePicker {
      */
     private void notifyDateChanged() {
         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
-        if (mOnDateChangedListener != null) {
-            mOnDateChangedListener.onDateChanged(this, getYear(), getMonth(), getDayOfMonth());
+        if (mOnChangedListener != null) {
+            mOnChangedListener.onChanged(this, getYear(), getMonth(), getDayOfMonth());
         }
     }
 
@@ -621,8 +556,7 @@ public class DatePicker extends BasePicker {
         } else {
             imeOptions = EditorInfo.IME_ACTION_DONE;
         }
-        TextView input = picker.findViewById(R.id.number_picker_edit_text);
-        input.setImeOptions(imeOptions);
+        picker.setImeOptions(imeOptions);
     }
 
     private void trySetContentDescription(View root, int viewId, int contDescResId) {
@@ -642,38 +576,38 @@ public class DatePicker extends BasePicker {
         // InputMethodManager.peekInstance();
         InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) {
-            if (inputMethodManager.isActive(mYearEditText)) {
-                mYearEditText.clearFocus();
+            if (inputMethodManager.isActive(mYearNPicker)) {
+                mYearNPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mMonthEditText)) {
-                mMonthEditText.clearFocus();
+            } else if (inputMethodManager.isActive(mMonthNPicker)) {
+                mMonthNPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            } else if (inputMethodManager.isActive(mDayEditText)) {
-                mDayEditText.clearFocus();
+            } else if (inputMethodManager.isActive(mDayNPicker)) {
+                mDayNPicker.clearFocus();
                 inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
             }
         }
     }
 
-    public void setOnDateChangedListener(OnDateChangedListener listener) {
-        mOnDateChangedListener = listener;
+    public void setOnChangedListener(OnChangedListener listener) {
+        mOnChangedListener = listener;
     }
 
     /**
      * The callback used to indicate the user changes\d the date.
      */
-    public interface OnDateChangedListener {
+    public interface OnChangedListener {
 
         /**
          * Called upon a date change.
          *
-         * @param view        The view associated with this listener.
+         * @param picker      The view associated with this listener.
          * @param year        The year that was set.
          * @param monthOfYear The month that was set (0-11) for compatibility with
          *                    {@link Calendar}.
          * @param dayOfMonth  The day of the month that was set.
          */
-        void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth);
+        void onChanged(DatePicker picker, int year, int monthOfYear, int dayOfMonth);
     }
 
     /**
@@ -724,5 +658,185 @@ public class DatePicker extends BasePicker {
             dest.writeInt(mMonth);
             dest.writeInt(mDay);
         }
+    }
+
+    public void setAccessibilityDescriptionEnabled(boolean enabled) {
+        super.setAccessibilityDescriptionEnabled(enabled, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setDividerColor(@ColorInt int color) {
+        super.setDividerColor(color, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setDividerColorResource(@ColorRes int colorId) {
+        super.setDividerColor(ContextCompat.getColor(getContext(), colorId), mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setDividerDistance(int distance) {
+        super.setDividerDistance(distance, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setDividerDistanceResource(@DimenRes int dimenId) {
+        super.setDividerDistanceResource(dimenId, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setDividerType(@NumberPicker.DividerType int dividerType) {
+        super.setDividerType(dividerType, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setDividerThickness(int thickness) {
+        super.setDividerThickness(thickness, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setDividerThicknessResource(@DimenRes int dimenId) {
+        super.setDividerThicknessResource(dimenId, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setOrder(@NumberPicker.Order int order) {
+        super.setOrder(order, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setOrientation(@NumberPicker.Orientation int orientation) {
+        super.setOrientation(orientation, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setWheelItemCount(int count) {
+        super.setWheelItemCount(count, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setFormatter(String yearFormatter, String monthFormatter, String dayFormatter) {
+        mYearNPicker.setFormatter(yearFormatter);
+        mMonthNPicker.setFormatter(monthFormatter);
+        mDayNPicker.setFormatter(dayFormatter);
+    }
+
+    public void setFormatter(@StringRes int yearFormatterId, @StringRes int monthFormatterId, @StringRes int dayFormatterId) {
+        mYearNPicker.setFormatter(getResources().getString(yearFormatterId));
+        mMonthNPicker.setFormatter(getResources().getString(monthFormatterId));
+        mDayNPicker.setFormatter(getResources().getString(dayFormatterId));
+    }
+
+    public void setFadingEdgeEnabled(boolean fadingEdgeEnabled) {
+        super.setFadingEdgeEnabled(fadingEdgeEnabled, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setFadingEdgeStrength(float strength) {
+        super.setFadingEdgeStrength(strength, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setScrollerEnabled(boolean scrollerEnabled) {
+        super.setScrollerEnabled(scrollerEnabled, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setSelectedTextAlign(@NumberPicker.Align int align) {
+        super.setSelectedTextAlign(align, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setSelectedTextColor(@ColorInt int color) {
+        super.setSelectedTextColor(color, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setSelectedTextColorResource(@ColorRes int colorId) {
+        super.setSelectedTextColorResource(colorId, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setSelectedTextSize(float textSize) {
+        super.setSelectedTextSize(textSize, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setSelectedTextSize(@DimenRes int dimenId) {
+        super.setSelectedTextSize(getResources().getDimension(dimenId), mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setSelectedTextStrikeThru(boolean strikeThruText) {
+        super.setSelectedTextStrikeThru(strikeThruText, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setSelectedTextUnderline(boolean underlineText) {
+        super.setSelectedTextUnderline(underlineText, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setSelectedTypeface(Typeface typeface) {
+        super.setSelectedTypeface(typeface, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setSelectedTypeface(String string, int style) {
+        super.setSelectedTypeface(string, style, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setSelectedTypeface(String string) {
+        super.setSelectedTypeface(string, Typeface.NORMAL, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setSelectedTypeface(@StringRes int stringId, int style) {
+        super.setSelectedTypeface(getResources().getString(stringId), style, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setSelectedTypeface(@StringRes int stringId) {
+        super.setSelectedTypeface(stringId, Typeface.NORMAL, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setTextAlign(@NumberPicker.Align int align) {
+        super.setTextAlign(align, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setTextColor(@ColorInt int color) {
+        super.setTextColor(color, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setTextColorResource(@ColorRes int colorId) {
+        super.setTextColorResource(colorId, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setTextSize(float textSize) {
+        super.setTextSize(textSize, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setTextSize(@DimenRes int dimenId) {
+        super.setTextSize(dimenId, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setTextStrikeThru(boolean strikeThruText) {
+        super.setTextStrikeThru(strikeThruText, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setTextUnderline(boolean underlineText) {
+        super.setTextUnderline(underlineText, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setTypeface(Typeface typeface) {
+        super.setTypeface(typeface, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setTypeface(String string, int style) {
+        super.setTypeface(string, style, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setTypeface(String string) {
+        super.setTypeface(string, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setTypeface(@StringRes int stringId, int style) {
+        super.setTypeface(stringId, style, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setTypeface(@StringRes int stringId) {
+        super.setTypeface(stringId, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setLineSpacingMultiplier(float multiplier) {
+        super.setLineSpacingMultiplier(multiplier, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setMaxFlingVelocityCoefficient(int coefficient) {
+        super.setMaxFlingVelocityCoefficient(coefficient, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setImeOptions(int imeOptions) {
+        super.setImeOptions(imeOptions, mYearNPicker, mMonthNPicker, mDayNPicker);
+    }
+
+    public void setItemSpacing(int itemSpacing) {
+        super.setItemSpacing(itemSpacing, mYearNPicker, mMonthNPicker, mDayNPicker);
     }
 }

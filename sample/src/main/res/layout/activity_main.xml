@@ -28,6 +28,7 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
+
         <TextView
             android:id="@+id/date_picker_show_text"
             android:layout_width="wrap_content"
@@ -36,29 +37,21 @@
             android:text="DatePicker:"
             android:textSize="14sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.github.lany192.picker.DatePicker
+            android:id="@+id/date_picker_1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="16dp">
+            app:picker_showDay="false" />
 
-            <com.github.lany192.picker.DatePicker
-                android:id="@+id/date_picker_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:picker_dayViewShown="false" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="#dddddd" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <com.github.lany192.picker.DatePicker
-                android:id="@+id/date_picker_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+        <com.github.lany192.picker.DatePicker
+            android:id="@+id/date_picker_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <View
             android:layout_width="match_parent"

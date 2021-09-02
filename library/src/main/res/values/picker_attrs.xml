@@ -21,22 +21,19 @@
     <attr name="picker_selectionTextSize" format="dimension" />
     <!--  textColor-->
     <attr name="picker_selectionTextColor" format="color|reference" />
-
+    <!-- The unit of the number picker. -->
+    <attr name="picker_number_unit" format="string" />
     <!-- ################################################## -->
     <!-- The first year (inclusive), for example "1940".-->
     <attr name="picker_startYear" format="integer" />
     <!-- The last year (inclusive), for example "2010".-->
     <attr name="picker_endYear" format="integer" />
-    <!-- Whether the spinners are shown. -->
-    <attr name="picker_spinnersShown" format="boolean" />
     <!-- Whether the day view is shown. -->
-    <attr name="picker_dayViewShown" format="boolean" />
+    <attr name="picker_showDay" format="boolean" />
     <!-- The minimal date shown by this calendar view in mm/dd/yyyy format. -->
     <attr name="picker_minDate" format="string" />
     <!-- The maximal date shown by this calendar view in mm/dd/yyyy format. -->
     <attr name="picker_maxDate" format="string" />
-    <!-- @hide The layout of the date picker. -->
-    <attr name="picker_picker_internalLayout" format="reference" />
     <!--开始年份-->
     <attr name="startYear" format="integer" />
     <!--结束年份-->
@@ -46,19 +43,19 @@
     <!-- The maximal date shown by this calendar view in mm/dd/yyyy format. -->
     <attr name="maxDate" format="string" />
 
-    <declare-styleable name="NumberPicker">
-        <attr name="picker_solidColor" />
-        <attr name="picker_selectionDivider" />
-        <attr name="picker_selectionDividerHeight" />
-        <attr name="picker_selectionDividersDistance" />
-        <attr name="picker_internalMinHeight" />
-        <attr name="picker_internalMaxHeight" />
-        <attr name="picker_internalMinWidth" />
-        <attr name="picker_internalMaxWidth" />
-        <attr name="picker_internalLayout" />
-        <attr name="picker_selectionTextSize" />
-        <attr name="picker_selectionTextColor" />
-    </declare-styleable>
+<!--    <declare-styleable name="NumberPicker">-->
+<!--        <attr name="picker_solidColor" />-->
+<!--        <attr name="picker_selectionDivider" />-->
+<!--        <attr name="picker_selectionDividerHeight" />-->
+<!--        <attr name="picker_selectionDividersDistance" />-->
+<!--        <attr name="picker_internalMinHeight" />-->
+<!--        <attr name="picker_internalMaxHeight" />-->
+<!--        <attr name="picker_internalMinWidth" />-->
+<!--        <attr name="picker_internalMaxWidth" />-->
+<!--        <attr name="picker_internalLayout" />-->
+<!--        <attr name="picker_selectionTextSize" />-->
+<!--        <attr name="picker_selectionTextColor" />-->
+<!--    </declare-styleable>-->
 
     <declare-styleable name="DatePicker">
         <attr name="picker_solidColor" />
@@ -75,11 +72,9 @@
 
         <attr name="picker_startYear" />
         <attr name="picker_endYear" />
-        <attr name="picker_spinnersShown" />
-        <attr name="picker_dayViewShown" />
+        <attr name="picker_showDay" />
         <attr name="picker_minDate" />
         <attr name="picker_maxDate" />
-        <attr name="picker_picker_internalLayout" />
     </declare-styleable>
 
     <declare-styleable name="DateTimePicker">

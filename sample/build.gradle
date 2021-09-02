@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "com.github.lany192.samples"
         minSdkVersion 16
-        targetSdkVersion 30
+        targetSdkVersion 31
     }
 
     buildTypes {
@@ -24,6 +24,6 @@ android {
 dependencies {
     implementation project(':library')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation 'junit:junit:4.13.1'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    testImplementation 'junit:junit:4.13.2'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
 }

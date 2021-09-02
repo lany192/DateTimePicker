@@ -1,5 +1,6 @@
 package com.github.lany192.samples;
 
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -49,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
         calendar.set(2100,1,1);
 
 
+        datePicker1.setSelectionDivider(new ColorDrawable(0xffff0000));
+        datePicker1.setSelectionDividerHeight(2);
+//        datePicker1.setIsAutoScrollState(false);
+        //datePicker1.setDayViewShown(false);
         datePicker1.setDividerThickness(1);
         datePicker1.setDividerColor(Color.RED);
         datePicker1.setTextColor(Color.MAGENTA);
@@ -61,8 +66,12 @@ public class MainActivity extends AppCompatActivity {
                 .append("DatePicker:")
                 .append(year).append("年")
                 .append(monthOfYear + 1).append("月")
-                .append(dayOfMonth).append("日")));
-
+                .append(dayOfMonth).append("日")))
+          
+        datePicker2.setSelectionDivider(new ColorDrawable(0xff008B00));
+        datePicker2.setSelectionDividerHeight(4);
+//        datePicker2.setIsAutoScrollState(false);
+        //datePicker2.setDayViewShown(false);
         datePicker2.setFormatter("%02d年", "%02d月", "%02d日");
         datePicker2.setSelectedTextColor(Color.GREEN);
         datePicker2.setOnChangedListener((view, year, monthOfYear, dayOfMonth) -> datePickerShowText.setText(new StringBuilder()
@@ -71,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
                 .append(monthOfYear + 1).append("月")
                 .append(dayOfMonth).append("日")));
 
+        timePicker.setSelectionDivider(new ColorDrawable(0xff000000));
+        timePicker.setSelectionDividerHeight(2);
+//        timePicker.setIsAutoScrollState(false);
         timePicker.setDividerThickness(1);
         timePicker.setDividerColor(Color.RED);
         timePicker.setTextColor(Color.MAGENTA);
@@ -82,6 +94,10 @@ public class MainActivity extends AppCompatActivity {
                 .append(minuteOfHour).append("分")
                 .append(scd).append("秒")));
 
+        hourMinutePicker.setIs24HourView(false);
+        hourMinutePicker.setSelectionDivider(new ColorDrawable(0xff436EEE));
+        hourMinutePicker.setSelectionDividerHeight(4);
+//        hourMinutePicker.setIsAutoScrollState(false);
         hourMinutePicker.setDividerThickness(1);
         hourMinutePicker.setDividerColor(Color.RED);
         hourMinutePicker.setTextColor(Color.MAGENTA);
@@ -93,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
                 .append(hourOfDay).append("时")
                 .append(minute).append("分")));
 
+        dateTimePicker.setSelectionDivider(new ColorDrawable(0xff000000));
+        dateTimePicker.setSelectionDividerHeight(2);
+//        dateTimePicker.setIsAutoScrollState(false);
         dateTimePicker.setDividerThickness(1);
         dateTimePicker.setDividerColor(Color.RED);
         dateTimePicker.setTextColor(Color.MAGENTA);

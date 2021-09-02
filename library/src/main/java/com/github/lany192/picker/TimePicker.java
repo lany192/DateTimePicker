@@ -29,6 +29,7 @@ import java.util.Locale;
  */
 public class TimePicker extends BasePicker {
     private static final boolean DEFAULT_ENABLED_STATE = true;
+    private static final boolean DEFAULT_AUTO_SCROLL_STATE = true;
 
     private final NumberPicker mHourNPicker;
     private final NumberPicker mMinuteNPicker;
@@ -38,6 +39,8 @@ public class TimePicker extends BasePicker {
     private final TextView mSecondDivider;
 
     private boolean mIsEnabled = DEFAULT_ENABLED_STATE;
+
+    private boolean mIsAutoScroll = DEFAULT_AUTO_SCROLL_STATE;
 
     private OnChangedListener mOnChangedListener;
 
@@ -85,10 +88,10 @@ public class TimePicker extends BasePicker {
             updateInputState();
             int minValue = mMinuteNPicker.getMinValue();
             int maxValue = mMinuteNPicker.getMaxValue();
-            if (oldVal == maxValue && newVal == minValue) {
+            if (oldVal == maxValue && newVal == minValue && mIsAutoScroll) {
                 int newHour = mHourNPicker.getValue() + 1;
                 mHourNPicker.setValue(newHour);
-            } else if (oldVal == minValue && newVal == maxValue) {
+            } else if (oldVal == minValue && newVal == maxValue && mIsAutoScroll) {
                 int newHour = mHourNPicker.getValue() - 1;
                 mHourNPicker.setValue(newHour);
             }
@@ -145,6 +148,16 @@ public class TimePicker extends BasePicker {
         mSecondDivider.setEnabled(enabled);
         mSecondNPicker.setEnabled(enabled);
         mIsEnabled = enabled;
+    }
+
+    /**
+     * Sets the automatic scrolling of items in the picker.
+     */
+    public void setIsAutoScrollState(Boolean isAutoScrollState) {
+        if (mIsAutoScroll == isAutoScrollState) {
+            return;
+        }
+        mIsAutoScroll = isAutoScrollState;
     }
 
     @Override

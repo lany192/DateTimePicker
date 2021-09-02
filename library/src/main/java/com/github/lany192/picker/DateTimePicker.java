@@ -37,6 +37,7 @@ import java.util.Objects;
 public class DateTimePicker extends BasePicker {
     private static final int DEFAULT_START_YEAR = 1900;
     private static final int DEFAULT_END_YEAR = 2100;
+    private static final boolean DEFAULT_AUTO_SCROLL_STATE = true;
 
     private NumberPicker mSecondNPicker;
     private NumberPicker mMinuteNPicker;
@@ -56,6 +57,8 @@ public class DateTimePicker extends BasePicker {
     private Calendar mCurrentDate;
 
     private boolean mIsEnabled = true;
+
+    private boolean mIsAutoScroll = DEFAULT_AUTO_SCROLL_STATE;
 
     public DateTimePicker(Context context) {
         super(context);
@@ -89,17 +92,17 @@ public class DateTimePicker extends BasePicker {
                 if (picker == mDayNPicker) {
                     int maxDayOfMonth = mTempDate
                             .getActualMaximum(Calendar.DAY_OF_MONTH);
-                    if (oldValue == maxDayOfMonth && newValue == 1) {
+                    if (oldValue == maxDayOfMonth && newValue == 1 && isAutoScrollState()) {
                         mTempDate.add(Calendar.DAY_OF_MONTH, 1);
-                    } else if (oldValue == 1 && newValue == maxDayOfMonth) {
+                    } else if (oldValue == 1 && newValue == maxDayOfMonth && isAutoScrollState()) {
                         mTempDate.add(Calendar.DAY_OF_MONTH, -1);
                     } else {
                         mTempDate.add(Calendar.DAY_OF_MONTH, newValue - oldValue);
                     }
                 } else if (picker == mMonthNPicker) {
-                    if (oldValue == 11 && newValue == 0) {
+                    if (oldValue == 11 && newValue == 0 && isAutoScrollState()) {
                         mTempDate.add(Calendar.MONTH, 1);
-                    } else if (oldValue == 0 && newValue == 11) {
+                    } else if (oldValue == 0 && newValue == 11 && isAutoScrollState()) {
                         mTempDate.add(Calendar.MONTH, -1);
                     } else {
                         mTempDate.add(Calendar.MONTH, newValue - oldValue);
@@ -258,6 +261,20 @@ public class DateTimePicker extends BasePicker {
         mMinuteNPicker.setEnabled(enabled);
         mSecondNPicker.setEnabled(enabled);
         mIsEnabled = enabled;
+    }
+
+    public boolean isAutoScrollState() {
+        return mIsAutoScroll;
+    }
+
+    /**
+     * Sets the automatic scrolling of items in the picker.
+     */
+    public void setIsAutoScrollState(Boolean isAutoScrollState) {
+        if (mIsAutoScroll == isAutoScrollState) {
+            return;
+        }
+        mIsAutoScroll = isAutoScrollState;
     }
 
     @Override
